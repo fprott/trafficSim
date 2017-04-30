@@ -5,7 +5,8 @@ Credits
 Development Lead
 ----------------
 
-* Florian Prott <aroy@alum.mit.edu>
+* Florian Prott
+* Levente Balog
 
 Contributors
 ------------
