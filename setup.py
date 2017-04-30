@@ -24,7 +24,7 @@ setup(
     description="Traffic simulation - Group 7 - PS Robotik - SS2017",
     long_description=readme + '\n\n' + history,
     author="Florian Prott",
-    author_email='aroy@alum.mit.edu',
+    author_email='',
     url='https://github.com/fprott/trafficsim',
     packages=[
         'trafficsim',
