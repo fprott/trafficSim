@@ -6,7 +6,7 @@ Development Lead
 ----------------
 
 * Florian Prott
-* Levente Balog :)
+* Levente Balog
 
 Contributors
 ------------
