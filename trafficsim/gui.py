@@ -38,7 +38,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow):
         scene.addPixmap(self.myPixmap)
         self.mapDrawing_graphicsView.setScene(scene)
      #   self.drawingMatrix = [[0 for x in range(self.mapDrawing_graphicsView.width())] for y in range(self.mapDrawing_graphicsView.height())]
-        #i want to merge I REALLY WANT TO XD
+        #i want to merge I REALLY WANT TO XD AHHHHHHHHHHHHHHHHH
 
 
     def mousePressEvent(self, event):
