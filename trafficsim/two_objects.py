@@ -1,3 +1,10 @@
+# quick and dirty pyQT5 proof of concept
+"""
+GUI proof of concept with PyQT5
+
+Simple window with a graphic widget. In the widget boxes are moving arround.
+"""
+
 import sys, PyQt5
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QLCDNumber, QVBoxLayout, QSlider, QGraphicsView, QGraphicsScene, QGraphicsRectItem
 from PyQt5.QtGui import QIcon, QPen, QBrush, QColor, QPainter
@@ -35,19 +42,11 @@ class Window(QMainWindow, QGraphicsView):
         self.scene = QGraphicsScene()
         blueBrush =QBrush(QColor('blue'))
         outlinePen=QPen(QColor('black'))
-        self.myRectt = QGraphicsRectItem(100, 30, 80, 100)
-
-        self.myRectt.setBrush(blueBrush)
-        self.myRectt.setPen(outlinePen)
-        self.scene.addItem(self.myRectt)
-        self.scene.setSceneRect(0, 0, 3000, 3000)
-
-        self.myRect = QGraphicsRectItem(500, 200,80, 100)
+        self.myRect = QGraphicsRectItem(100, 30, 80, 100)
         self.myRect.setBrush(blueBrush)
         self.myRect.setPen(outlinePen)
         self.scene.addItem(self.myRect)
-
-
+        self.scene.setSceneRect(0, 0, 3000, 3000)
         self.view = QGraphicsView(self.scene,self)
         self.view.resize(3000,3000)
 
@@ -56,41 +55,21 @@ class Window(QMainWindow, QGraphicsView):
             self.close()
         elif e.key() == Qt.Key_W:
             self.statusBar().showMessage("UP pressed")
-            self.myRectt.setY(self.myRectt.y()+1)
+            self.myRect.setY(self.myRect.y()+1)
             self.show()
         elif e.key() == Qt.Key_D:
             self.statusBar().showMessage("RIGHT pressed")
-            self.myRectt.setX(self.myRectt.x()+1)
+            self.myRect.setX(self.myRect.x()+1)
             self.show()
         elif e.key() == Qt.Key_S:
             self.statusBar().showMessage("DOWN pressed")
-            self.myRectt.setY(self.myRectt.y()-1)
-            self.show()
-        elif e.key() == Qt.Key_A:
-            self.statusBar().showMessage("LEFT pressed")
-            self.myRectt.setX(self.myRectt.x()-1)
-        #    self.myRect.setPos(self.myRect.x(),self.myRect.y()-)
-            self.show()
-
-
-        elif e.key() == Qt.Key_8:
-            self.statusBar().showMessage("UP pressed")
-            self.myRect.setY(self.myRect.y()+1)
-            self.show()
-        elif e.key() == Qt.Key_6:
-            self.statusBar().showMessage("RIGHT pressed")
-            self.myRect.setX(self.myRect.x()+1)
-            self.show()
-        elif e.key() == Qt.Key_5:
-            self.statusBar().showMessage("DOWN pressed")
             self.myRect.setY(self.myRect.y()-1)
             self.show()
-        elif e.key() == Qt.Key_4:
+        elif e.key() == Qt.Key_A:
             self.statusBar().showMessage("LEFT pressed")
             self.myRect.setX(self.myRect.x()-1)
         #    self.myRect.setPos(self.myRect.x(),self.myRect.y()-)
             self.show()
-
 app = QApplication(sys.argv)
 myWindow = Window()
 
