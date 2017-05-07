@@ -42,21 +42,22 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def mousePressEvent(self, event):
-        max_x= self.mapDrawing_graphicsView.size().width()-self.mapDrawing_graphicsView.pos().x()
-        max_y=self.mapDrawing_graphicsView.size().height()-self.mapDrawing_graphicsView.pos().y()
-        self.DriveMatrix[int(100*(event.pos().x()-self.mapDrawing_graphicsView.pos().x())/max_x)][int(100*(event.pos().y()-self.mapDrawing_graphicsView.pos().y())/max_y)]=1
+        pass
+     #   max_x= self.mapDrawing_graphicsView.size().width()-self.mapDrawing_graphicsView.pos().x()
+     #   max_y=self.mapDrawing_graphicsView.size().height()-self.mapDrawing_graphicsView.pos().y()
+      #  self.DriveMatrix[int(100*(event.pos().x()-self.mapDrawing_graphicsView.pos().x())/max_x)][int(100*(event.pos().y()-self.mapDrawing_graphicsView.pos().y())/max_y)]=1
 
-        myImage = self.myPixmap.toImage()
-        myImage.setPixel((event.pos().x()-self.mapDrawing_graphicsView.pos().x()),(event.pos().y()-self.mapDrawing_graphicsView.pos().y()),255)
-        myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+1),
-                                         (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+1), 255)
-        myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+2),
-                                         (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+2), 255)
-        myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+3),
-                                         (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+3), 255)
-        myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+4),
-                                         (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+4), 255)
-        self.myPixmap= myImage.toPixmap()
+     #   myImage = self.myPixmap.toImage()
+      #  myImage.setPixel((event.pos().x()-self.mapDrawing_graphicsView.pos().x()),(event.pos().y()-self.mapDrawing_graphicsView.pos().y()),255)
+       # myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+1),
+          #                               (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+1), 255)
+      #  myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+2),
+         #                                (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+2), 255)
+      #  myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+3),
+        #                                 (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+3), 255)
+      #  myImage.setPixel((event.pos().x() - self.mapDrawing_graphicsView.pos().x()+4),
+       #                                  (event.pos().y() - self.mapDrawing_graphicsView.pos().y()+4), 255)
+      #  self.myPixmap= myImage.toPixmap()
 
         #print('PRESSED : ', event.pos())
 
