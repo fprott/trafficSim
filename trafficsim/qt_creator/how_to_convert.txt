@@ -1,0 +1,1 @@
+pyuic5 qt_design.ui -o qt_design.py
