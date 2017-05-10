@@ -10,7 +10,7 @@ def Kurve_Length(x,y):
 
 def bernstein_poly(i, n, t):
     """
-     The Bernstein polynomial of n, i as a function of t
+    df The Bernstein polynomial of n, i as a function of t
     """
     return comb(n, i) * ( t**(n-i) ) * (1 - t)**i
 
