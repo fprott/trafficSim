@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.misc import comb
 
-
 class kurve():
     def bernstein_poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
         return comb(n, i) * (t ** (n - i)) * (1 - t) ** i
