@@ -45,7 +45,7 @@ if __name__ == "__main__":
     from matplotlib import pyplot as plt
 
     nPoints = 3
-    #points = [[0, 0],[0,4],[1,5],[5 ,5]]#np.random.rand(nPoints,2)*200
+    ##points = [[0, 0],[0,4],[1,5],[5 ,5]]#np.random.rand(nPoints,2)*200
     points = np.random.rand(nPoints,2)*200
     xpoints = [p[0] for p in points]
     ypoints = [p[1] for p in points]
