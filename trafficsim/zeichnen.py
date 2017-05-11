@@ -7,7 +7,6 @@ import math
 class kurve():
     def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
         return comb(n, i) * (t ** (n - i)) * (1 - t) ** i
-
     def Bezier_Kurve(self, points, nTimes=1000):
         """
            Given a set of control points, return the
@@ -31,7 +30,6 @@ class kurve():
         yvals = np.dot(yPoints, polynomial_array)
 
         return xvals, yvals
-
     def Length(self,x, y):   #return the length of curve
         """
             length = np.zeros(len(x-1))
