@@ -148,7 +148,6 @@ def main_strasse():
         (line1_xs, line1_ys) = zip(*[Polygon_Punkte[i],Polygon_Punkte[i+1]])
     # 创建两条线，并添加
         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
-    # 展示
     plt.plot()
     #plt.show()
 
