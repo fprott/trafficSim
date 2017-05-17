@@ -68,6 +68,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
                 self.drawingBoard.streetPoints.append((drawX, drawY))
                 self.drawingBoard.drawPoint(drawX, drawY)
 
+
         if self.actionDeleteRoad.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())):
                 #wenn ein Punkt in der nähe ist
@@ -84,6 +85,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
             # self.drawingBoardWidget.show()
             # QtWidgets.QApplication.processEvents()
 
+        # Aktuallisiert die Anzeige !!!
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
         self.setCentralWidget(self.drawingBoardWidget)
 
@@ -161,6 +163,9 @@ class PyGameDrawingBoard():
             :param2 (int) : Y Kordinate auf der Map (Pixel)
         """
         pygame.draw.circle(self.surface , (0,0,255), (x, y), 3)
+
+    def drawPolygon(self, TODO):
+        pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
 
     def unDrawPoint(self, x, y):
         """
