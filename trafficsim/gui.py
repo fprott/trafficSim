@@ -15,6 +15,7 @@ import numpy
 import pygame
 from qt_design import Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
+from mathe import *
 
 
 class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_design aus dem qtDesigner
@@ -164,8 +165,8 @@ class PyGameDrawingBoard():
         """
         pygame.draw.circle(self.surface , (0,0,255), (x, y), 3)
 
-    def drawPolygon(self, TODO):
-        pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
+    #def drawPolygon(self, TODO):
+        #pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
 
     def unDrawPoint(self, x, y):
         """
@@ -180,9 +181,10 @@ class PyGameDrawingBoard():
 
 
 def main():
-    drawingBoard = PyGameDrawingBoard()
+    Strasse = StreetSystem
+    drawingBoard = PyGameDrawingBoard()     #pygame Draw Board
     app = QtWidgets.QApplication(sys.argv)
-    form = QTDesignWidget(drawingBoard)
+    form = QTDesignWidget(drawingBoard)     #QT Windows
     form.show()
     app.exec_()
 
