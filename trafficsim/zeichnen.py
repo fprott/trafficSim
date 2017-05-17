@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.misc import comb
 import math
+import pygame
 #from fahrzeug_model import Fahrzeug_Model
 #import fahrzeug_model
 
@@ -125,9 +126,10 @@ class strasse():
             grenz_punkte[k] = schnittspunkte[-1-i][1]
         grenz_punkte[k+1] = points[0][1]
         return  grenz_punkte
-    def Polygon_Zeichnen(self,points,bereite):
+    def Polygon_Punkte(self,points,bereite):
         grenz_punkte = self.Grenz_Punkte(self=self,points=points,breite=bereite)
         return self.Grenz_Punkte_Strasse(self=self,points=grenz_punkte)
+
 
 def main_strasse():
     from matplotlib import pyplot as plt
@@ -136,7 +138,7 @@ def main_strasse():
     nPoints = 10
     Strasse_Punkte = [[0,4.5],[11,5],[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
     #Strasse_Punkte = np.random.rand(nPoints,2)*20
-    Polygon_Punkte = Strasse_1.Polygon_Zeichnen(Strasse_1,points=Strasse_Punkte,bereite=2)
+    Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=2)
     print(Polygon_Punkte)
 
     figure, ax = plt.subplots()
@@ -150,7 +152,6 @@ def main_strasse():
         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
     plt.plot()
     #plt.show()
-
 #"""
     xpoints = [p[0] for p in Strasse_Punkte]#points[i]]
     ypoints = [p[1] for p in Strasse_Punkte]#points[i]]
@@ -160,6 +161,40 @@ def main_strasse():
     plt.plot(xpoints,ypoints,'ro')
     plt.show()
 #"""
+
+def main_strasse_1():
+    # constants
+    XDIM = 1000
+    YDIM = 1000
+    WINSIZE = [XDIM, YDIM]
+    EPSILON = 7.0
+    NUMNODES = 5000
+    GOAL_RADIUS = 10
+    MIN_DISTANCE_TO_ADD = 1.0
+    GAME_LEVEL = 1
+
+    pygame.init()
+    fpsClock = pygame.time.Clock()
+
+    # initialize and prepare screen
+    screen = pygame.display.set_mode(WINSIZE)
+    pygame.display.set_caption('Rapidly Exploring Random Tree')
+    white = 255, 240, 200
+    black = 20, 20, 40
+    red = 255, 0, 0
+    blue = 0, 255, 0
+    green = 0, 0, 255
+    cyan = 0, 255, 255
+    gray = 128,128,128
+
+    Strasse_1 = strasse
+    nPoints = 10
+    Strasse_Punkte = [[0,4.5],[11,5],[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]*50#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
+    #Strasse_Punkte = np.random.rand(nPoints,2)*20
+    Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=20)
+    pygame.draw.polygon(Surface=screen,color=(128,128,128), pointlist=Polygon_Punkte,width=1)
+    pygame.display.update()
+
 
 def main_kurve():
     from matplotlib import pyplot as plt

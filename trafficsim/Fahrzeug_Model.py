@@ -6,19 +6,19 @@ import math
 class Fahrzeug_Model():
     def __init__(self, Lange, Breite, v, Kurswinkel, GPS_x, GPS_y, Lenkung, Gier_Rate, a, v_max, v_min, a_max, a_min):
         self.Beschleunigung_m_s2 = a
-        Lange_m = Lange
-        Breite_m = Breite
-        Geschwindigkeit_m_s = v
-        Kurswinkel_deg = Kurswinkel
-        GPS_X_m = GPS_x
-        GPS_Y_m = GPS_y
-        Lenkung_deg = Lenkung
-        Gier_Rate_deg_s = Gier_Rate
-        Beschleunigung_m_s2 = a
-        Geschwindigkeit_max = v_max
-        Geschwindigkeit_min = v_min
-        Beschleunigung_max = a_max
-        Beschleunigung_min = a_min
+        self.Lange_m = Lange
+        self.Breite_m = Breite
+        self.Geschwindigkeit_m_s = v
+        self.Kurswinkel_deg = Kurswinkel
+        self.GPS_X_m = GPS_x
+        self.GPS_Y_m = GPS_y
+        self.Lenkung_deg = Lenkung
+        self.Gier_Rate_deg_s = Gier_Rate
+        self.Beschleunigung_m_s2 = a
+        self.Geschwindigkeit_max = v_max
+        self.Geschwindigkeit_min = v_min
+        self.Beschleunigung_max = a_max
+        self.Beschleunigung_min = a_min
 
     def Fahr_Situation_Rechnen(self):
         self.Geschwindigkeit_m_s = self.Geschwindigkeit_m_s + self.Beschleunigung_m_s2 * delta_t
