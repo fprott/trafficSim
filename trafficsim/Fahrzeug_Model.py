@@ -1,6 +1,7 @@
 delta_t = 0.01
 
 import math
+import pygame
 
 
 class Fahrzeug_Model():
@@ -20,7 +21,7 @@ class Fahrzeug_Model():
         self.Beschleunigung_max = a_max
         self.Beschleunigung_min = a_min
 
-    def Fahr_Situation_Rechnen(self):
+    def Fahr_Situation_Rechnen(self,Beschleunigung_m_s2,Lenkung_deg):
         self.Geschwindigkeit_m_s = self.Geschwindigkeit_m_s + self.Beschleunigung_m_s2 * delta_t
         self.Kurswinkel_deg = self.Kurswinkel_deg + self.Gier_Rate_deg_s * delta_t
 
@@ -30,3 +31,5 @@ class Fahrzeug_Model():
         # class Fahrzeug_Zeichnung(Fahrzeug_Model):
         # def __init__(self):
         # super(Fahrzeug_Zeichnung, self).__init__(Fahrzeug_Model)
+
+

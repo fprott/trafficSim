@@ -11,12 +11,24 @@ TODO:
 """
 import sys
 import inspect
-import numpy
+import numpy as np
 import pygame
 from qt_design import Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
 from mathe import *
+#from pygame_draw import *
+from fahrzeug_model import *
 
+Punkte_Nets = []
+
+white = (255, 255, 255)
+black = (20, 20, 40)
+red = (255, 0, 0)
+blue = (0, 255, 0)
+green = (127,255, 212)
+cyan = (0, 255, 255)
+gray = (128, 128, 128)
+BackGroundColor = (25,235,25)
 
 class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_design aus dem qtDesigner
     """
@@ -26,7 +38,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
     Das Fenster hält die Zeichenfläche.
     Wichtiges Ding
     """
-    def __init__(self, pyGameDrawingBoard, parent=None):
+    def __init__(self,pyGameDrawingBoard ,parent=None):
         super(QTDesignWidget, self).__init__(parent)
         self.setupUi(self)
         self.drawingBoard = pyGameDrawingBoard
@@ -68,7 +80,11 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
                 drawY = event.pos().y()-self.drawingBoardWidget.pos().y()
                 self.drawingBoard.streetPoints.append((drawX, drawY))
                 self.drawingBoard.drawPoint(drawX, drawY)
-
+                Punkte_Nets.append([drawX, drawY])
+                print(Punkte_Nets)
+                if (len(Punkte_Nets)>1):
+                    Polygon_Punkte = math_Strasse.Polygon_Punkte(self=math_Strasse,points=Punkte_Nets,bereite=10)
+                    self.drawingBoard.drawStrasse(Polygon_Punkte)
 
         if self.actionDeleteRoad.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())):
@@ -117,7 +133,7 @@ class PyGameDrawingBoard():
         pygame.init()
         pygame.event.pump() # sollte die pygame events handeln, wir nutzen die qt events weil die besser sind (keinen loop brauchen)
         self.surface = pygame.Surface((640, 480))
-        self.surface.fill((25,235,25)) #grüne Hintergrundsfarbe, default
+        self.surface.fill(BackGroundColor) #grüne Hintergrundsfarbe, default
         self.streetPoints = [] #liste von Punkten, bis ich besseres weiß halte ich die Punkte erstmal als tuple
 
     def scaleToWindowSize(self, width, height): # FIXME noch nicht getestet
@@ -179,12 +195,25 @@ class PyGameDrawingBoard():
         #TODO Prüfen ob man Zeichnungen enfernen kann oder übermalen muss
         pygame.draw.circle(self.surface , (25,235,25), (x, y), 3) #crapy fix but who cares
 
+    def drawStrasse(self,Polygon_Punkte):
+        self.surface.fill(BackGroundColor)
+        pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
+
+    def drawFahrzeug(self,x,y,winkel):
+        self.image_filename = 'car_' + 'red' + '.png'
+        self.image = pygame.image.load(self.image_filename)#.convert()
+        self.image = pygame.transform.scale(self.image, (25,50))
+        self.image = pygame.transform.rotate(self.image,winkel-180)
+        self.rect_def = self.image.get_rect()
+        self.rect_def.y = y
+        self.rect_def.x = x
+        self.surface.blit(self.image,self.rect_def)
 
 def main():
-    Strasse = StreetSystem
     drawingBoard = PyGameDrawingBoard()     #pygame Draw Board
     app = QtWidgets.QApplication(sys.argv)
     form = QTDesignWidget(drawingBoard)     #QT Windows
+    drawingBoard.drawFahrzeug(100,100,0)
     form.show()
     app.exec_()
 

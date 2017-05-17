@@ -57,9 +57,9 @@ class Car:
 def test_1():
     draw = Street(500, 500)
 
-    Strasse = strasse
+    Strasse = math_Strasse
     nPoints = 10
-    Strasse_Punkte = [[0, 4.5], [11, 5], [10.5, -2],[1, -6], [-5, -5], [-10, 3], [-4, 6],[0, 4.5]]
+    Strasse_Punkte = [[0, 4.5], [11, 5]]#, [10.5, -2],[1, -6], [-5, -5], [-10, 3], [-4, 6],[0, 4.5]]
     #Strasse_Punkte = np.array([[0, 4.5], [11, 5], [10.5, -2], [1, -6], [-5, -5], [-10, 3], [-4, 6],[0, 4.5]]) * 10+[XDIM/2,YDIM/2] # [[0,0],[2,2],[5,0],[5,-1],[2,-3]]
     #Strasse_Punkte = ((100,100),(100,150),(150,200),(200,400))  # [[0,0],[2,2],[5,0],[5,-1],[2,-3]]
     # Strasse_Punkte = np.random.rand(nPoints,2)*20
