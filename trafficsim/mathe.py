@@ -38,7 +38,7 @@ def calculate_pos(old_pos, dt, v):
     :param v: Geschwindigkeit
     :return:
     """
-    return old_pos+(v*dt)
+    return old_pos+((v*dt),(v*dt)) # FIXME das braucht noch ne richtungsvektor !!!
 
 #Die funktionierien und sind frei nutzbar!!!
 class Line(list):
