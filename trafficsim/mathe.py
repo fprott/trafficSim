@@ -28,6 +28,18 @@ class StreetNet:
             self.nets.append()
             # TODO : FERTIG CODEN!
 
+
+
+def calculate_pos(old_pos, dt, v):
+    """
+    Errechnet eine neue Position anhand von der alten Position und diversen Parameteren. Achtung, statische Funktion
+    :param old_pos: Alte Position
+    :param dt: Zeiteinheit
+    :param v: Geschwindigkeit
+    :return:
+    """
+    return old_pos+(v*dt)
+
 #Die funktionierien und sind frei nutzbar!!!
 class Line(list):
     """
