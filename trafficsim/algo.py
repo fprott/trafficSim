@@ -1,17 +1,58 @@
 from mathe import Point, Line, calculate_pos
 import itertools
+import functools
+
+class Shedule():
+    # Achtung noch kein echter A*, nur ein test
+    def __init__(self, cars):
+        self.shedule_steps = []
+        first_step = SheduleStep(None, 0, cars) # TODO aus cars car_ghost machen !
+        self.shedule_steps.append(first_step)
+
+    def make_shedule_step(self):
+        current_step = self.shedule_steps[-1]
+        dt = 1
+        da = 1
+        all_possible_next_steps=current_step.callculate_next_steps(dt,da)
+        for step in all_possible_next_steps:
+            print("STEP")
+            for car in step.car_ghosts:
+                print(car)
+
+        best_next_step=all_possible_next_steps[0]
+        for step in all_possible_next_steps:
+            if(step.quality_value>best_next_step.quality_value):
+                best_next_step=step
+
+        print("we choosed")
+        for car in best_next_step.car_ghosts:
+            print(car)
+    #    print(best_next_step.quality_value)
+        if(best_next_step.start_time>10):
+        #    print(self.shedule_steps)
+            return self.shedule_steps
+        if(best_next_step==None): # wenn kein weiter schrit mehr möglich/notwendig ist
+            return self.shedule_steps
+#        if(best_next_step.quality_value()==None): #wenn Unfall oder unmöglich
+#            current_step.quality_value=None
+#            return # TODO richtiger a* machen
+        self.shedule_steps.append(best_next_step)
+        self.make_shedule_step()
 
 class SheduleStep():
-    def __init__(self, start_time, car_ghosts):
+    def __init__(self, parent, start_time, car_ghosts):
+        self.parent = parent
         self.start_time = start_time
         self.car_ghosts = car_ghosts
-        self.quality_value = None
+        self.quality_value = self.callculate_quality_value()
 
-    def assign_quality_value(self, value):
-        self.quality_value = value
+    def callculate_quality_value(self): #TODO: anders maß einbringen und AUSLAGERN !
+        quality = 0
+        for car in self.car_ghosts:
+            quality += car.a
+        return quality
 
-    def callculate_next_steps(self):
-        dt, da = bulletime()
+    def callculate_next_steps(self, dt, da):
         new_time = self.start_time + dt
 
         all_possible_car_ghosts_tuples = []
@@ -20,71 +61,23 @@ class SheduleStep():
             for a in ghost.get_possible_a_range(dt,da):
                 possible_new_ghosts = possible_new_ghosts + (ghost.get_next_ghost(dt,a),) # ein tupel enhällt alle möglichen nächsten ghosts
             all_possible_car_ghosts_tuples.append(possible_new_ghosts) # List von tupeln
-            #tuple(ghost.get_possible_a_range(dt,da))
-
-        #for tuple in all_possible_car_ghosts_tuples:
-        #    print(tuple)
-        #    for ghost in tuple:
-        #        print(ghost.id, ghost.a)
 
     #    print(tuple(all_possible_car_ghosts_tuples))
         all_car_ghost_possiblites = list(itertools.product(*all_possible_car_ghosts_tuples)) # hexerei, bitte schaut euch die doku an wenn das net geht
-        print("----")
-    #    print(all_car_ghost_possiblites)
-        print("----")
+        all_possible_steps = []
         for possiblity in all_car_ghost_possiblites:
-        #    print(possiblity)
-            for ghost in possiblity:
-                print(ghost)
-            #    print(ghost.id, ghost.a)
-            print("----")
-            #list(it.product(('1', '11'), ('2', '22'), ('3', '33')))
-
-            #a_range = ghost.get_possible_a_range(dt,da)
-            #for a_step in a_range: # bessere variablennamen !
-            #    new_car = ghost.change_a_by_da(a_step)
-
-# class Step():
-#     def __init__(self, parent_step, t, car_actions):
-#         self.parent = parent_step
-#         self.t=t # jeder shedul Schrit hat eine startzeit
-#         self.car_actions=car_actions
-#
-#     def is_root(self):
-#         if(self.parent == None):
-#             return True
-#         return False
-#
-#     def make_next_steps(self, dt, da):
-#
-#
-#         possible_actions = []
-#         for car_action in self.car_actions:
-#             a_range = car_action.get_possible_a_range(self.t,da)
-#             possible_actions.append(tuple(a_range))
-#         print(tuple(possible_actions))
-#
-#         print(list(it.product(tuple(possible_actions))))
-#         list(it.product(('1', '11'), ('2', '22'), ('3', '33')))
-#
-#         new_step = Step(self, self.t+dt, )
-
-
-
-# class CarAction():
-#     def __init__(self, car_id, a):
-#         self.car_id = car_id
-#         self.a = a
-#
-#     def get_possible_a_range(self, t,da):
-#         # FIXME : Levi, ka was die Phisik macht. Bitte denk dir was schlaues aus :D
-#         a_range = range(-50, 50, 10)
-#         a_range = [x / 10 for x in a_range]
-#         return a_range
-#
-# car_actions=[CarAction("1",0),CarAction("2",0),CarAction("3",0)]
-# my_step = Step(None,0, car_actions)
-# my_step.make_next_steps(1,1)
+            all_possible_steps.append(SheduleStep(self, new_time, possiblity))
+        return all_possible_steps
+    #     print("----")
+    # #    print(all_car_ghost_possiblites)
+    #     print("----")
+    #     for possiblity in all_car_ghost_possiblites:
+    #     #    print(possiblity)
+    #         for ghost in possiblity:
+    #             print(ghost)
+    #         #    print(ghost.id, ghost.a)
+    #         print("----")
+    #         #list(it.product(('1', '11'), ('2', '22'), ('3', '33')))
 
 def bulletime(): # FIXME : implementieren !
     """
@@ -166,5 +159,10 @@ class CarGhost():
 Car1 = CarGhost("1",120,20,0,0,(0,0))
 Car2 = CarGhost("2",120,30,0,0,(0,0))
 Car3 = CarGhost("3",150,10,0,0,(0,0))
-shedule = SheduleStep(0, [Car1,Car2,Car3])
-shedule.callculate_next_steps()
+Car4 = CarGhost("4",150,55,0,0,(0,0))
+shedule = Shedule([Car1,Car2,Car3,Car4])
+shedule.make_shedule_step()
+for step in shedule.shedule_steps:
+    print("Step time : "+str(step.start_time))
+    for car in step.car_ghosts:
+        print(car)
