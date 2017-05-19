@@ -2,6 +2,16 @@ from mathe import Point, Line, calculate_pos
 import itertools
 import functools
 
+# TODO @Levi :
+# 1.) Phisk von CarGhosts anschauen und fixen
+# 2.) Bullettime algo basteln, er soll uns einen Zeitschrit und Beschleunigunsschrit (diskret) zurückgeben
+# 3.) Position der Autos berücksichtigen d.h. einen Fahrtvektor einfügen. Hier wurde noch nix gemacht d.h. freie enfaltung
+# TODO @Flo:
+# 1.) Algo auf A* Nievou bringen
+# 2.) Traceback überprüfen
+# 3.) Terminirung einführen d.h. die autos die schon durch sind irgenwie aus dem system enferen und schauen das es immer terminiert auch wenn unöglich (d.h. immer unfall)
+# 4.) Testen. Am besten grafisch auf der animation
+
 class Shedule():
     # Achtung noch kein echter A*, nur ein test
     def __init__(self, cars):
