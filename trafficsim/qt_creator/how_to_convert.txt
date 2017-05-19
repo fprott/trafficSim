@@ -1,1 +1,1 @@
-pyuic5 qt_design.ui -o qt_design.py
+pyuic5 qt_design_neu.ui -o qt_design_neu.py

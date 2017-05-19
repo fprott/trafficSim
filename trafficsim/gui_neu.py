@@ -13,7 +13,7 @@ import sys
 import inspect
 import numpy as np
 import pygame
-from qt_design import Ui_qt_design
+from qt_design_neu import *#Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
 from mathe import *
 #from pygame_draw import *
@@ -30,7 +30,7 @@ cyan = (0, 255, 255)
 gray = (128, 128, 128)
 BackGroundColor = (25,235,25)
 
-class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_design aus dem qtDesigner
+class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_design aus dem qtDesigner
     """
     QT Haupt Fenster, nutzt auto generietes qt Design
     Hier werden die Events gesteuert
@@ -38,13 +38,14 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
     Das Fenster hält die Zeichenfläche.
     Wichtiges Ding
     """
-    def __init__(self,pyGameDrawingBoard ,parent=None):
+    def __init__(self,pyGameDrawingBoard ,parent=None):#
         super(QTDesignWidget, self).__init__(parent)
         self.setupUi(self)
         self.drawingBoard = pyGameDrawingBoard
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface)
-        self.setCentralWidget(self.drawingBoardWidget)
+        #self.setCentralWidget(self.drawingBoardWidget)
         #register Buttons
+"""
         self.actionDrawStreet.triggered.connect(self.on_actionDrawStreet_triggered)
         self.actionDeleteRoad.triggered.connect(self.on_actionDeleteRoad_triggered)
 
@@ -105,7 +106,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
         # Aktuallisiert die Anzeige !!!
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
         self.setCentralWidget(self.drawingBoardWidget)
-
+"""
 class ImageWidget(QtWidgets.QWidget):
     """
     Qt Haupt Image, enhällt pygame in das wir zeichnen bzw. das wir als Zeichenfläche nutzen
@@ -213,7 +214,6 @@ def main():
     drawingBoard = PyGameDrawingBoard()     #pygame Draw Board
     app = QtWidgets.QApplication(sys.argv)
     form = QTDesignWidget(drawingBoard)     #QT Windows
-    drawingBoard.drawFahrzeug(100,100,0)
     form.show()
     app.exec_()
 

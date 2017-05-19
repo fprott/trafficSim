@@ -286,5 +286,5 @@ def main_kurve():
 
 
 if __name__ == "__main__":
-    #main_kurve();
-    main_strasse()
+    main_kurve();
+    #main_strasse()
