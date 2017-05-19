@@ -8,7 +8,7 @@ from zeichnen import *
 
 def polygon(points):
     pygame.init()
-    #fpsClock = pygame.time.Clock()
+     #fpsClock = pygame.time.Clock()
     screen = pygame.display.set_mode((640, 480), 0, 32)
 
 
