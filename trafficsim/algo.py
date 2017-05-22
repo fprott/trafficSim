@@ -185,7 +185,7 @@ class CarGhost():
         return (str(self.id) +" "+ str(self.a))
 
 
-"dick"
+
 
 
 "s ist die position entlang des Pfades, length dimension des Autos, nr_intervals dia Anzahl der Möglichen Beschleunigungen/Eingangsentscheidungen"
