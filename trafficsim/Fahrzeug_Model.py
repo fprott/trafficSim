@@ -6,8 +6,10 @@ import pygame
 class Fahrzeug_Model():
     def __init__(self, Lange, Breite, v, Kurswinkel, GPS_x, GPS_y, Lenkung, Gier_Rate, a, v_max, v_min, a_max, a_min,gier_rate_max,gier_rate_min):
         self.Parameter = [Lange, Breite]
-        self.Parameter.Lange_m = Lange
-        self.Parameter.Breite_m = Breite
+        #self.Parameter_Lange_m = Lange
+        #self.Parameter.Breite_m = Breite
+        #self.Parameter=[self.Parameter_Lange_m,self.Paraeter]
+
 
         self.Eingabe = [a, Lenkung]
         self.Eingabe.Beschleunigung_m_s2 = a

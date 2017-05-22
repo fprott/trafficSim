@@ -17,7 +17,7 @@ from qt_design import Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
 from mathe import *
 #from pygame_draw import *
-from fahrzeug_model import *
+#from fahrzeug_model import *
 
 Punkte_Nets = []
 
