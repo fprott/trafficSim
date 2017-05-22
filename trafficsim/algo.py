@@ -1,6 +1,7 @@
 from mathe import Point, Line, calculate_pos
 import itertools
 import functools
+import math
 
 # TODO @Levi :
 # 1.) Phisk von CarGhosts anschauen und fixen
@@ -89,13 +90,31 @@ class SheduleStep():
     #         print("----")
     #         #list(it.product(('1', '11'), ('2', '22'), ('3', '33')))
 
-def bulletime(): # FIXME : implementieren !
+def bulletime(cars,default_dt): #
     """
-    Diese Funktion gibt eine diskrete Zeit "dt" und eine diskrete BEschleunigung "da" zurück. Diese Differenz ist klein wenn ein Unfall warscheinlich ist und groß wenn unwarscheinlich
+   cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind  
     """
-    dt = 1
-    da = 1
-    return dt,da #dt, da
+    safe_zone=1;
+    for i in range(len(cars)):
+        for j in range(i + 1, len(cars)):
+            dist = math.hypot(cars[i].x - cars[j].x, cars[i].y - cars[j].y);    'autos werden vereinfacht als kreise modelliert'
+            if dist <= 1.4*(cars[i].length+cars[j].length):
+                safe_zone=0;
+                break
+        if safe_zone == 0:
+            break
+    'sobald ein Paar Autos welches nicht in der safe_zone ist gefunden wurde, werden die for schleifen abgebrochen...bei safe_Zone' \
+    'bleibt die Abtastzeit gleich dt_default in der danger_zone verkleinern wir die abtastzeit um das 10-fache...wert ist wilkürlich gewählt worden'
+    if  safe_zone == 1:
+        dt=default_dt;
+    else:
+        dt = default_dt / 10;          #da = bleibt gleich...wir können aber wegen dem neuen dt den kurs der Autos öfters korrigieren
+
+
+
+
+
+    return dt
 
 
 class CarGhost():
@@ -166,13 +185,73 @@ class CarGhost():
         return (str(self.id) +" "+ str(self.a))
 
 
-Car1 = CarGhost("1",120,20,0,0,(0,0))
-Car2 = CarGhost("2",120,30,0,0,(0,0))
-Car3 = CarGhost("3",150,10,0,0,(0,0))
-Car4 = CarGhost("4",150,55,0,0,(0,0))
-shedule = Shedule([Car1,Car2,Car3,Car4])
-shedule.make_shedule_step()
-for step in shedule.shedule_steps:
-    print("Step time : "+str(step.start_time))
-    for car in step.car_ghosts:
-        print(car)
+
+
+
+"s ist die position entlang des Pfades, length dimension des Autos, nr_intervals dia Anzahl der Möglichen Beschleunigungen/Eingangsentscheidungen"
+
+class Cars:
+    def __init__(self, id, a_min, a_max,s,v,a,x,y,length,nr_intervals):
+        self.id=id;
+        self.a_min = a_min;
+        self.a_max = a_max;
+        self.x=x;
+        self.y=y;
+        self.s=s;
+        self.v=v;
+        self.a=a
+        self.length=length;
+        self.nr_intervals=nr_intervals;
+
+
+    def _set_v(self, new_v):
+        if (new_v <= self.max_v):
+            self.v = new_v
+        else:
+            self.v = self.max_v
+
+    def _set_a(self, new_a):
+        if (new_a <= self.max_a):
+            self.a = new_a
+        else:
+            self.a = self.max_a
+        pass
+
+    "generiert nr_intervals äquidistante beschleunigungswerte und speichert sie in die liste a_values"
+
+    def get_possible_a_range(self):
+        da = (self.a_max-self.a_min)/(self.nr_intervals-1)
+        a_values= list();
+        for i in range(0, self.nr_intervals):
+            a_values.append(self.a_min+ da*i)
+        return a_values
+
+    "new_a ist ein Wert aus der Liste a_values"
+
+    def get_next_car(self, dt, new_a):
+        new_v = self.v + new_a * dt  # wir erechnen die neue geschwindigkeit
+        new_pos = self.s + self.v * dt +0.5*new_a*dt*dt;  # wir erechnen die neue Position
+        #new_x="";
+        #nex_y="";   to DO
+        return Cars(self.id, self.a_min, self.a_max,new_pos, new_v, new_a, new_x, new,y, self.length, self.nr_intervals)  # make the next ghost
+
+    def __str__(self):  # TODO mehr Werte
+        return (str(self.id) + " " + str(self.a))
+
+
+
+#Car1 = CarGhost("1",120,20,0,0,(0,0))
+#Car2 = CarGhost("2",120,30,0,0,(0,0))
+#Car3 = CarGhost("3",150,10,0,0,(0,0))
+#Car4 = CarGhost("4",150,55,0,0,(0,0))
+#shedule = Shedule([Car1,Car2,Car3,Car4])
+#shedule.make_shedule_step()
+
+#for step in shedule.shedule_steps:
+#    print("Step time : "+str(step.start_time))
+#    for car in step.car_ghosts:
+#       print(car)
+
+
+
+
