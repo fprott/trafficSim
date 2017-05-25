@@ -280,7 +280,7 @@ def main_kurve():
     Kurve_Points=[xvals,yvals]
     print(Kurve_Points)
     plt.plot(xvals, yvals)
-    plt.plot(xpoints, ypoints, "ro")xs
+    plt.plot(xpoints, ypoints, "ro")
     for nr in range(len(points)):
         plt.text(points[nr][0], points[nr][1], nr)
 
