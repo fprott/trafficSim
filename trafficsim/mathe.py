@@ -269,20 +269,23 @@ def main_kurve():
     from matplotlib import pyplot as plt
 
     Kurve = math_Kurve()
-    nPoints = 3
-    ##points = [[0, 0],[0,4],[1,5],[5 ,5]]#np.random.rand(nPoints,2)*200
-    points = np.random.rand(nPoints,2)*200
+    #nPoints = 10
+    points = [[0,0],[0,4],[1,5],[5 ,5]]#np.random.rand(nPoints,2)*200
+    #points = np.random.rand(nPoints,2)*200
+
     xpoints = [p[0] for p in points]
     ypoints = [p[1] for p in points]
 
-    xvals, yvals = Kurve.Bezier_Kurve(self = Kurve,points=points)
+    xvals, yvals = Kurve.Bezier_Kurve(points=points)
+    Kurve_Points=[xvals,yvals]
+    print(Kurve_Points)
     plt.plot(xvals, yvals)
-    plt.plot(xpoints, ypoints, "ro")
+    plt.plot(xpoints, ypoints, "ro")xs
     for nr in range(len(points)):
         plt.text(points[nr][0], points[nr][1], nr)
 
     plt.show()
-    print(Kurve.Length(self = Kurve,x=xvals,y=yvals))
+    print(Kurve.Length(x=xvals,y=yvals))
 
 
 if __name__ == "__main__":
