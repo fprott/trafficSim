@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8852caaf-dce1-4a88-98a3-ef1df3dfba2e" name="Default" comment="Hochladen">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/bus_white.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/bus_yellow.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_black.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_blaurot.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_blue.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_green.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_red.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/trafficsim/car_white.png" afterPath="" />
+    <list default="true" id="8852caaf-dce1-4a88-98a3-ef1df3dfba2e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trafficsim/gui.py" afterPath="$PROJECT_DIR$/trafficsim/gui.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trafficsim/gui_neu.py" afterPath="$PROJECT_DIR$/trafficsim/gui_neu.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trafficsim/polygon.py" afterPath="$PROJECT_DIR$/trafficsim/polygon.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py" afterPath="$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,31 +15,23 @@
     <SUITE FILE_PATH="coverage/trafficSim_fprott$pygame_draw.coverage" NAME="pygame_draw Coverage Results" MODIFIED="1495026845996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$qt_design_neu.coverage" NAME="qt_design_neu Coverage Results" MODIFIED="1495481622335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim/qt_creator" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$1.coverage" NAME="1 Coverage Results" MODIFIED="1495713031639" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Desktop" />
-    <SUITE FILE_PATH="coverage/trafficSim_fprott$gui_neu.coverage" NAME="gui_neu Coverage Results" MODIFIED="1495785779547" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
+    <SUITE FILE_PATH="coverage/trafficSim_fprott$gui_neu.coverage" NAME="gui_neu Coverage Results" MODIFIED="1495788925178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$zeichnen.coverage" NAME="zeichnen Coverage Results" MODIFIED="1495026767276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$pygame_qt_mix.coverage" NAME="pygame_qt_mix Coverage Results" MODIFIED="1495010235536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$polygon.coverage" NAME="polygon Coverage Results" MODIFIED="1495722590081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$qt_design.coverage" NAME="qt_design Coverage Results" MODIFIED="1495218876574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim/qt_creator" />
     <SUITE FILE_PATH="coverage/trafficSim_fprott$mathe.coverage" NAME="mathe Coverage Results" MODIFIED="1495472423613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
-    <SUITE FILE_PATH="coverage/trafficSim_fprott$gui.coverage" NAME="gui Coverage Results" MODIFIED="1495721084414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
+    <SUITE FILE_PATH="coverage/trafficSim_fprott$gui.coverage" NAME="gui Coverage Results" MODIFIED="1495788697211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trafficsim" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="DatabaseView">
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="true" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_TABLE_DETAILS" value="true" />
-    <option name="SHOW_EMPTY_GROUPS" value="true" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="trafficSim_fprott" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.43829787">
+    <splitter split-orientation="horizontal" split-proportion="0.35914895">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="pygame_draw.py" pinned="false" current-in-tab="false">
@@ -69,14 +49,14 @@
           <file leaf-file-name="qt_design_neu.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="197">
-                  <caret line="35" column="35" lean-forward="true" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
+                <state relative-caret-position="368">
+                  <caret line="44" column="37" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="37" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="qt_design.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="qt_design.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/trafficsim/qt_creator/qt_design.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="106">
@@ -93,10 +73,10 @@
                   <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
                   <folding>
                     <element signature="e#400#410#0" expanded="true" />
-                    <marker date="1495786005872" expanded="true" signature="1090:5203" ph="..." />
-                    <marker date="1495786005872" expanded="true" signature="1402:2088" ph="..." />
-                    <marker date="1495786005872" expanded="true" signature="2089:2276" ph="..." />
-                    <marker date="1495786005872" expanded="true" signature="2277:5203" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                    <marker date="1495788925096" expanded="true" signature="1090:5623" ph="..." />
+                    <marker date="1495788925096" expanded="true" signature="1402:2088" ph="..." />
+                    <marker date="1495788925096" expanded="true" signature="2089:2276" ph="..." />
+                    <marker date="1495788925096" expanded="true" signature="2277:5623" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
                   </folding>
                 </state>
               </provider>
@@ -114,11 +94,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="mathe.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="mathe.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/trafficsim/mathe.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="57">
-                  <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+                <state relative-caret-position="133">
+                  <caret line="236" column="19" lean-forward="false" selection-start-line="236" selection-start-column="19" selection-end-line="236" selection-end-column="19" />
                   <folding>
                     <element signature="e#202#220#0" expanded="true" />
                   </folding>
@@ -155,8 +135,8 @@
           <file leaf-file-name="gui.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/trafficsim/gui.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="177">
-                  <caret line="40" column="54" lean-forward="false" selection-start-line="40" selection-start-column="54" selection-end-line="40" selection-end-column="54" />
+                <state relative-caret-position="-201">
+                  <caret line="81" column="26" lean-forward="false" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
                   <folding>
                     <element signature="e#400#410#0" expanded="true" />
                   </folding>
@@ -168,7 +148,7 @@
             <entry file="file://$PROJECT_DIR$/trafficsim/polygon.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="161">
-                  <caret line="20" column="27" lean-forward="true" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
+                  <caret line="20" column="27" lean-forward="false" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -179,8 +159,8 @@
           <file leaf-file-name="gui_neu.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/trafficsim/gui_neu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="84">
-                  <caret line="59" column="18" lean-forward="false" selection-start-line="59" selection-start-column="18" selection-end-line="59" selection-end-column="18" />
+                <state relative-caret-position="312">
+                  <caret line="237" column="13" lean-forward="false" selection-start-line="237" selection-start-column="13" selection-end-line="237" selection-end-column="13" />
                   <folding>
                     <element signature="e#400#410#0" expanded="true" />
                   </folding>
@@ -202,82 +182,6 @@
       </split-second>
     </splitter>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>actionDeleteRoad</find>
-      <find>pyGameDrawingBoard</find>
-      <find>QTDesignWidget</find>
-      <find>zeichnen</find>
-      <find>mousePressEvent</find>
-      <find>draw</find>
-      <find>BACKGROUND_COLOR</find>
-      <find>qt_design</find>
-      <find>triggered</find>
-      <find>frame</find>
-      <find>setCentralWidget</find>
-      <find>QWidget</find>
-      <find>QtWidgets</find>
-      <find>Ui_MainWindow</find>
-      <find>drawingBoard</find>
-      <find>setW</find>
-      <find>Title</find>
-      <find>mainW</find>
-      <find>Widget</find>
-      <find>QtWidgets.QWidget</find>
-      <find>addTab</find>
-      <find>tabWidget</find>
-      <find>tab_Strasse</find>
-      <find>ImageWidget</find>
-      <find>QHBoxLayout</find>
-      <find>drawFahrzeug</find>
-      <find>actionDrawStreet</find>
-    </findStrings>
-  </component>
-  <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="wlkobe62" />
-        <option value="wlkobe@outlook.com" />
-        <option value="wlkobe" />
-        <option value="wlkobe &lt;wl_620@163.com&gt;" />
-        <option value="Lu WAN" />
-      </list>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="PUSH_TAGS">
-      <GitPushTagMode />
-    </option>
-    <option name="SIGN_OFF_COMMIT" value="true" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/trafficsim/Bezier_Kurve.py" />
-        <option value="$PROJECT_DIR$/trafficsim/Zeichnung.py" />
-        <option value="$PROJECT_DIR$/trafficsim/pygame_draw.py" />
-        <option value="$PROJECT_DIR$/trafficsim/test_raum.py" />
-        <option value="$PROJECT_DIR$/trafficsim/zeichnen.py" />
-        <option value="$PROJECT_DIR$/trafficsim/fahrzeug_model.py" />
-        <option value="$PROJECT_DIR$/trafficsim/qt_creator/qt_design.py" />
-        <option value="$PROJECT_DIR$/trafficsim/qt_creator/how_to_convert.txt" />
-        <option value="$PROJECT_DIR$/trafficsim/mathe.py" />
-        <option value="$PROJECT_DIR$/trafficsim/Fahrzeug_Model.py" />
-        <option value="$USER_HOME$/Desktop/1.py" />
-        <option value="$PROJECT_DIR$/trafficsim/gui.py" />
-        <option value="$PROJECT_DIR$/trafficsim/polygon.py" />
-        <option value="$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py" />
-        <option value="$PROJECT_DIR$/../Elevator-System/ElevatorGUI.py" />
-        <option value="$PROJECT_DIR$/trafficsim/gui_neu.py" />
-      </list>
-    </option>
-  </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsGulpfileManager">
@@ -289,25 +193,6 @@
     <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="784" />
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Python</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>PyArgumentListInspection</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
@@ -378,491 +263,23 @@
       <pane id="Scratches" />
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
-    <property name="js.eslint.eslintPackage" value="" />
-    <property name="editor.config.accepted" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/Programs/Python/Python35/python.exe" />
-  </component>
-  <component name="RunManager" selected="Python.gui_neu">
-    <configuration default="false" name="gui" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\wlkob\AppData\Local\Programs\Python\Python35\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trafficsim" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trafficsim/gui.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="gui_neu" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trafficsim" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trafficsim/gui_neu.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="qt_design_neu" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trafficsim/qt_creator" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="1" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="polygon" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trafficsim" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trafficsim/polygon.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="TARGET" value="" />
-      <option name="SETTINGS_FILE" value="" />
-      <option name="CUSTOM_SETTINGS" value="false" />
-      <option name="USE_OPTIONS" value="false" />
-      <option name="OPTIONS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
-      <config-file value="" />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
-    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="ADDITIONAL_ARGS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="ADDITIONAL_ARGS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Tox" factoryName="Tox">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <module name="trafficSim" />
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run" />
-      <scripts />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Nosetests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="py.test">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="trafficSim" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="" />
-      <option name="keywords" value="" />
-      <option name="params" value="" />
-      <option name="USE_PARAM" value="false" />
-      <option name="USE_KEYWORD" value="false" />
-      <method />
-    </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.gui" />
-      <item index="1" class="java.lang.String" itemvalue="Python.gui_neu" />
-      <item index="2" class="java.lang.String" itemvalue="Python.qt_design_neu" />
-      <item index="3" class="java.lang.String" itemvalue="Python.1" />
-      <item index="4" class="java.lang.String" itemvalue="Python.polygon" />
-    </list>
-    <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.gui_neu" />
-        <item index="1" class="java.lang.String" itemvalue="Python.polygon" />
-        <item index="2" class="java.lang.String" itemvalue="Python.gui" />
-        <item index="3" class="java.lang.String" itemvalue="Python.1" />
-        <item index="4" class="java.lang.String" itemvalue="Python.qt_design_neu" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="8852caaf-dce1-4a88-98a3-ef1df3dfba2e" name="Default" comment="" />
-      <created>1494149402736</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1494149402736</updated>
-    </task>
-    <task id="LOCAL-00001" summary="Fahrzeug_Model &amp; Kurve Zeichnen von Bézier Curve">
-      <created>1494405320318</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1494405320318</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Fahrzeug_Model &amp; Kurve Zeichnen von Bézier Curve">
-      <created>1494436611370</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1494436611370</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Fahrzeug_Model &amp; Kurve Zeichnen von Bézier Curve">
-      <created>1494436705222</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1494436705222</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Fahrzeug_Model &amp; Kurve Zeichnen von Bézier Curve">
-      <created>1494436800214</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1494436800214</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Kurve Zeichnen von Bézier Curve">
-      <created>1494438552452</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1494438552452</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Object-Programming of Curve Painting">
-      <created>1494444642910</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1494444642910</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Object-Programming of Curve Painting">
-      <created>1494444664336</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1494444664336</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Street Painting">
-      <created>1494497747194</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1494497747194</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Street Painting">
-      <created>1494497816668</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1494497816668</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Street Painting">
-      <created>1494497860598</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1494497860598</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Street Painting 11052017-1623">
-      <created>1494512664856</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1494512664856</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Hochladen 17052017-1041">
-      <created>1495010518233</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1495010518233</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Hochladen richtiger Kommentar bitte eingeben">
-      <created>1495012336576</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1495012336576</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Hochladen richtiger Kommentar bitte eingeben">
-      <created>1495019377475</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1495019377475</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Hochladen richtiger Kommentar bitte eingeben">
-      <created>1495040537881</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1495040537881</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Hochladen">
-      <created>1495220967137</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1495220967137</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Hochladen">
-      <created>1495221029687</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1495221029687</updated>
-    </task>
-    <option name="localTasksCounter" value="18" />
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11119516" sideWeight="0.4915254" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12859304" sideWeight="0.4915254" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.4969743" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2624" sideWeight="0.3797277" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2397882" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328" sideWeight="0.48940998" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.328" sideWeight="0.48940998" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1216" sideWeight="0.48789713" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2304" sideWeight="0.62027234" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2304" sideWeight="0.62027234" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15279879" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328" sideWeight="0.4969743" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25718608" sideWeight="0.5084746" order="2" side_tool="true" content_ui="tabs" />
@@ -895,27 +312,6 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25718608" sideWeight="0.5084746" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4144" sideWeight="0.7344932" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Fahrzeug_Model &amp; Kurve Zeichnen von Bézier Curve" />
-    <MESSAGE value="Kurve Zeichnen von Bézier Curve" />
-    <MESSAGE value="Object-Programming of Curve Painting" />
-    <MESSAGE value="Street Painting" />
-    <MESSAGE value="Street Painting 11052017-1622" />
-    <MESSAGE value="Street Painting 11052017-1623" />
-    <MESSAGE value="Street Painting 11052017-1625" />
-    <MESSAGE value="Street Painting 11052017-1651" />
-    <MESSAGE value="Hochladen 17052017-1041" />
-    <MESSAGE value="Hochladen richtiger Kommentar bitte eingeben" />
-    <MESSAGE value="Hochladen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hochladen" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1213,16 +609,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trafficsim/mathe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#202#220#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Desktop/1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1233,27 +619,9 @@
     <entry file="file://$PROJECT_DIR$/trafficsim/polygon.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
-          <caret line="20" column="27" lean-forward="true" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
+          <caret line="20" column="27" lean-forward="false" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="35" column="35" lean-forward="true" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trafficsim/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="40" column="54" lean-forward="false" selection-start-line="40" selection-start-column="54" selection-end-line="40" selection-end-column="54" />
-          <folding>
-            <element signature="e#400#410#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1274,30 +642,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trafficsim/gui_neu.py">
+    <entry file="file://$PROJECT_DIR$/trafficsim/qt_creator/qt_design_neu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="59" column="18" lean-forward="false" selection-start-line="59" selection-start-column="18" selection-end-line="59" selection-end-column="18" />
+        <state relative-caret-position="368">
+          <caret line="44" column="37" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trafficsim/mathe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="236" column="19" lean-forward="false" selection-start-line="236" selection-start-column="19" selection-end-line="236" selection-end-column="19" />
+          <folding>
+            <element signature="e#202#220#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trafficsim/gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-201">
+          <caret line="81" column="26" lean-forward="false" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
           <folding>
             <element signature="e#400#410#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <entry file="file://$PROJECT_DIR$/trafficsim/gui_neu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="237" column="13" lean-forward="false" selection-start-line="237" selection-start-column="13" selection-end-line="237" selection-end-column="13" />
+          <folding>
+            <element signature="e#400#410#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>

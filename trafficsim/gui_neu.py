@@ -64,12 +64,12 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
         self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
 
     def on_pushButton_Add_Strasse_triggered(self):
-        if(self.actionDeleteRoad.isChecked()):
+        if(self.pushButton_Losen_Strasse.isChecked()):
             self.pushButton_Add_Strasse.setChecked(False)
 
-    def on_actionDeleteRoad_triggered(self):
+    def on_pushButton_Losen_Strasse_triggered(self):
         if(self.pushButton_Add_Strasse.isChecked()):
-            self.actionDeleteRoad.setChecked(False)
+            self.pushButton_Losen_Strasse.setChecked(False)
 
     def isOnDrawingBoard(self, x, y):
         boardX = self.drawingBoardWidget.pos().x()
@@ -98,10 +98,11 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
                 Punkte_Nets.append([drawX, drawY])
                 print(Punkte_Nets)
                 if (len(Punkte_Nets)>1):
+                    print(len(Punkte_Nets))
                     Polygon_Punkte = math_Strasse.Polygon_Punkte(self=math_Strasse,points=Punkte_Nets,bereite=20)
                     self.drawingBoard.drawStrasse(Polygon_Punkte)
 
-        if self.actionDeleteRoad.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
+        if self.pushButton_Losen_Strasse.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())):
                 #wenn ein Punkt in der nähe ist
                 drawX = event.pos().x() - self.drawingBoardWidget.pos().x()
@@ -118,8 +119,14 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
             # QtWidgets.QApplication.processEvents()
 
         # Aktuallisiert die Anzeige !!!
-        self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
-        self.setCentralWidget(self.drawingBoardWidget)
+        #self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
+        #self.setCentralWidget(self.drawingBoardWidget)
+        self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface)
+        self.lable_1 = QtWidgets.QLabel(self.frame_Strasse)
+        self.lable_1.setGeometry((QtCore.QRect(0, 0, 500, 500)))
+        self.lable_1 = QVBoxLayout()
+        self.lable_1.addWidget(self.drawingBoardWidget)
+        self.frame_Strasse.setLayout(self.lable_1)
 
 class ImageWidget(QtWidgets.QWidget):
     """
@@ -215,7 +222,7 @@ class PyGameDrawingBoard():
         pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
 
     def drawFahrzeug(self,x,y,winkel):
-        self.image_filename = 'car_' + 'red' + '.png'
+        self.image_filename = 'qt_creator\icons\car_' + 'red' + '.png'
         self.image = pygame.image.load(self.image_filename)#.convert()
         self.image = pygame.transform.scale(self.image, (25,50))
         self.image = pygame.transform.rotate(self.image,winkel-180)
@@ -226,6 +233,7 @@ class PyGameDrawingBoard():
 
 def main():
     drawingBoard = PyGameDrawingBoard()     #pygame Draw Board
+    drawingBoard.drawFahrzeug(100,100,0)
     app = QtWidgets.QApplication(sys.argv)
     form = QTDesignWidget(drawingBoard)     #QT Windows
     form.show()
