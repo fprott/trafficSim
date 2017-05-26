@@ -97,7 +97,7 @@ class Point(tuple):
 class math_Kurve():
     def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
         return comb(n, i) * (t ** (n - i)) * (1 - t) ** i
-    def Bezier_Kurve(self, points, nTimes=1000):
+    def Bezier_Kurve(self, points: object, nTimes: object = 1000) -> object:
         """
            Given a set of control points, return the
            bezier curve defined by the control points.
@@ -265,29 +265,90 @@ def main_strasse():
     plt.show()
 #"""
 
-def main_kurve():
+def main_kurve(points):
     from matplotlib import pyplot as plt
 
     Kurve = math_Kurve()
-    #nPoints = 10
-    points = [[0,0],[0,4],[1,5],[5 ,5]]#np.random.rand(nPoints,2)*200
+    #nPoints = 6
     #points = np.random.rand(nPoints,2)*200
+    #points = [[0,0],[0,4],[1,5],[2,3],[5 ,5]]#np.random.rand(nPoints,2)*200
+
+    #points to define the kurve
+    xpoints = [p[0] for p in points]
+    ypoints = [p[1] for p in points]
+    Route_Points=[xpoints,ypoints]
+    print(Route_Points)
+
+    #points of the kurve
+    xvals, yvals = Kurve.Bezier_Kurve(points=points)
+
+    Kurve_Points=[xvals,yvals]
+    print(Kurve_Points)
+
+    plt.plot(xvals, yvals)
+    plt.plot(xpoints, ypoints, "ro")
+    plt.show()
+
+    for nr in range(len(points)):
+        plt.text(points[nr][0], points[nr][1], nr)
+
+    print(Kurve.Length(x=xvals,y=yvals))
+
+
+
+def bahn(points,width):
+    from matplotlib import pyplot as plt
+
+    Line1=math_Kurve()
+    Line2=math_Kurve()
+    Kurve=math_Kurve()
 
     xpoints = [p[0] for p in points]
     ypoints = [p[1] for p in points]
 
-    xvals, yvals = Kurve.Bezier_Kurve(points=points)
-    Kurve_Points=[xvals,yvals]
-    print(Kurve_Points)
-    plt.plot(xvals, yvals)
-    plt.plot(xpoints, ypoints, "ro")
-    for nr in range(len(points)):
-        plt.text(points[nr][0], points[nr][1], nr)
+    x1=xpoints[0]
+    x3=xpoints[1]
+    x5=xpoints[2]
+    y1=ypoints[0]
+    y3=ypoints[1]
+    y5=ypoints[2]
 
+    s13=((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
+    s35 = ((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
+
+    x2=x3+((width/2)*(x1-x3))/s13
+    y2=y3+((width/2)*(y1-y3))/s13
+    x4=x3+((width/2)*(x5-x3))/s35
+    y4=y3+((width/2)*(y5-y3))/s35
+
+    lpoints1=[[x1,y1],[x2,y2]]
+    lpoints2 = [[x4, y4], [x5, y5]]
+    kpoints=[[x2,y2],[x3,y3],[x4,y4]]
+
+    xpoints=[x1,x2,x3,x4,x5]
+    ypoints=[y1,y2,y3,y4,y5]
+
+    xline1, yline1 = Kurve.Bezier_Kurve(points=lpoints1)
+    xline2, yline2 = Kurve.Bezier_Kurve(points=lpoints2)
+    xkurve, ykurve = Kurve.Bezier_Kurve(points=kpoints)
+    print(xkurve,ykurve)
+
+    #xvals=list(xline1).extend(list(xkurve))
+    #yvals = list(yline1).extend((ykurve))
+    #Bahn_Points = [xvals, yvals]
+    #print(Bahn_Points)
+
+    Route_Points = [xpoints, ypoints]
+
+    plt.plot(xkurve, ykurve)
+    plt.plot(xline1, yline1)
+    plt.plot(xline2, yline2)
+    #plt.plot(Bahn_Points)
+    plt.plot(xpoints, ypoints, "ro")
     plt.show()
-    print(Kurve.Length(x=xvals,y=yvals))
+
 
 
 if __name__ == "__main__":
-    main_kurve();
+    bahn(points=[[1,4],[2,1],[5,1]],width=2);
     #main_strasse()
