@@ -92,6 +92,7 @@ class SheduleStep():
 
 def bulletime(cars,default_dt): #
     """
+    Errechnet die dt und da
    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind  
     """
     safe_zone=1;
@@ -103,8 +104,8 @@ def bulletime(cars,default_dt): #
                 break
         if safe_zone == 0:
             break
-    'sobald ein Paar Autos welches nicht in der safe_zone ist gefunden wurde, werden die for schleifen abgebrochen...bei safe_Zone' \
-    'bleibt die Abtastzeit gleich dt_default in der danger_zone verkleinern wir die abtastzeit um das 10-fache...wert ist wilkürlich gewählt worden'
+    #'sobald ein Paar Autos welches nicht in der safe_zone ist gefunden wurde, werden die for schleifen abgebrochen...bei safe_Zone' \
+    #'bleibt die Abtastzeit gleich dt_default in der danger_zone verkleinern wir die abtastzeit um das 10-fache...wert ist wilkürlich gewählt worden'
     if  safe_zone == 1:
         dt=default_dt;
     else:

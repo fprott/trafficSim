@@ -97,6 +97,7 @@ class Point(tuple):
 class math_Kurve():
     def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
         return comb(n, i) * (t ** (n - i)) * (1 - t) ** i
+
     def Bezier_Kurve(self, points: object, nTimes: object = 1000) -> object:
         """
            Given a set of control points, return the

@@ -2,7 +2,7 @@ import * from mathe
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
-    def __init__(self, id, a_min, a_max, v_max, v_min,v,a, start_pos, car_size):
+    def __init__(self, id, a_min, a_max, v_max, v_min, v, a, start_pos, car_size):
         self.id=id
         self.a_min = a_min
         self.a_max = a_max
@@ -11,6 +11,7 @@ class Car:
 
         self.a = a
         self.v = v
+        self.pos = start_pos
         self.route = Route(start_pos)
         self.size = car_size
 
@@ -27,9 +28,16 @@ class Car:
             self.a = self.max_a
         pass
 
+    def get_pos(self):
+        """
+        Gibt momentane Possition zurück
+        :return: Einen Punkt in Form von Klasse Point
+        """
+        return self.pos
+
     def get_possible_a_range(self, N):
         """
-        Gibt N äquidistante beschleunigungswerte zurück 
+        Gibt N äquidistante mögliche beschleunigungswerte zurück 
         :return: 
         """
         da = (self.a_max-self.a_min)/(N-1)
@@ -49,11 +57,24 @@ class Car:
     def __str__(self):  # TODO mehr Werte
         return (str(self.id) + " " + str(self.a))
 
+class CarSize():
+    def __init__(self):
+        pass  # TODO implement me
+
+    def get_size(self):
+        pass  # TODO implement me
 
 class Route():
+    def __init__(self):
+        pass # TODO Implement me, wang
 
-    def __init__(self, start_pos):
-        self.pos = start_pos
+    def get_new_pos(self, pos, l):
+        """Verändert die Position um den Abstand l. l ist t*v"""
 
-    def get_pos(self):
-        return Point
+    def traveled_distance_on_route(self):
+        """"Zurückgelegter Weg auf der Route d.h. wie weit wir schon gefahren sind"""
+        return s
+
+    def get_angle_of_pos(self, pos):
+        """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
+        return angle
