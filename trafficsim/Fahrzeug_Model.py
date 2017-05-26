@@ -10,7 +10,6 @@ class Fahrzeug_Model():
         #self.Parameter.Breite_m = Breite
         #self.Parameter=[self.Parameter_Lange_m,self.Paraeter]
 
-
         self.Eingabe = [a, Lenkung]
         self.Eingabe.Beschleunigung_m_s2 = a
         self.Eingabe.Lenkung_deg = Lenkung
