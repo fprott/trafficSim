@@ -15,9 +15,14 @@ import numpy as np
 import pygame
 from qt_design_neu import *#Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
+import PyQt5
 from mathe import *
 #from pygame_draw import *
 #  from fahrzeug_model import *
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QGroupBox, QDialog, QVBoxLayout, QGridLayout
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot
 
 Punkte_Nets = []
 
@@ -38,23 +43,32 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
     Das Fenster hält die Zeichenfläche.
     Wichtiges Ding
     """
-    def __init__(self,pyGameDrawingBoard ,parent=None):#
+    def __init__(self,pyGameDrawingBoard ,parent=None):
         super(QTDesignWidget, self).__init__(parent)
         self.setupUi(self)
         self.drawingBoard = pyGameDrawingBoard
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface)
-        self.setCentralWidget(self.drawingBoardWidget)
-        #register Buttons
-"""
-        self.actionDrawStreet.triggered.connect(self.on_actionDrawStreet_triggered)
-        self.actionDeleteRoad.triggered.connect(self.on_actionDeleteRoad_triggered)
 
-    def on_actionDrawStreet_triggered(self):
+        self.lable_1 = QtWidgets.QLabel(self.frame_Strasse)
+        self.lable_1.setGeometry((QtCore.QRect(0, 0, 500, 500)))
+        self.lable_1 = QVBoxLayout()
+        self.lable_1.addWidget(self.drawingBoardWidget)
+        self.frame_Strasse.setLayout(self.lable_1)
+
+        #self.pushButton1 = QtWidgets.QPushButton("PyQt5 button")'
+
+        #self.setCentralWidget(self.drawingBoardWidget)
+        #self.tabWidget.setCornerWidget(self.drawingBoardWidget)
+        #register Buttons
+        self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
+        self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
+
+    def on_pushButton_Add_Strasse_triggered(self):
         if(self.actionDeleteRoad.isChecked()):
-            self.actionDrawStreet.setChecked(False)
+            self.pushButton_Add_Strasse.setChecked(False)
 
     def on_actionDeleteRoad_triggered(self):
-        if(self.actionDrawStreet.isChecked()):
+        if(self.pushButton_Add_Strasse.isChecked()):
             self.actionDeleteRoad.setChecked(False)
 
     def isOnDrawingBoard(self, x, y):
@@ -75,7 +89,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
         return True
 
     def mousePressEvent(self, event):
-        if self.actionDrawStreet.isChecked(): # wenn wir zeichnen wollen
+        if self.pushButton_Add_Strasse.isChecked(): # wenn wir zeichnen wollen
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())==True):
                 drawX = event.pos().x()-self.drawingBoardWidget.pos().x()
                 drawY = event.pos().y()-self.drawingBoardWidget.pos().y()
@@ -106,7 +120,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_desi
         # Aktuallisiert die Anzeige !!!
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
         self.setCentralWidget(self.drawingBoardWidget)
-"""
+
 class ImageWidget(QtWidgets.QWidget):
     """
     Qt Haupt Image, enhällt pygame in das wir zeichnen bzw. das wir als Zeichenfläche nutzen

@@ -200,7 +200,7 @@ class PyGameDrawingBoard():
         pygame.draw.polygon(self.surface, gray, tuple(Polygon_Punkte[i] for i in range(len(Polygon_Punkte))))
 
     def drawFahrzeug(self,x,y,winkel):
-        self.image_filename = 'car_' + 'red' + '.png'
+        self.image_filename = 'qt_creator\icons\car_' + 'red' + '.png'
         self.image = pygame.image.load(self.image_filename)#.convert()
         self.image = pygame.transform.scale(self.image, (25,50))
         self.image = pygame.transform.rotate(self.image,winkel-180)

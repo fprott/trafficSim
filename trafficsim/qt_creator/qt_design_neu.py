@@ -14,29 +14,44 @@ class Ui_MainWindow(object):
         MainWindow.resize(789, 622)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 771, 571))
         self.tabWidget.setObjectName("tabWidget")
         self.tab_Strasse = QtWidgets.QWidget()
         self.tab_Strasse.setObjectName("tab_Strasse")
+
         self.frame_Strasse = QtWidgets.QFrame(self.tab_Strasse)
         self.frame_Strasse.setGeometry(QtCore.QRect(10, 10, 500, 500))
         self.frame_Strasse.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_Strasse.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_Strasse.setObjectName("frame_Strasse")
+        """
+        self.lable_1 = QtWidgets.QLabel(self.frame_Strasse)
+        self.lable_1.setGeometry((QtCore.QRect(0,0,500,500)))
+        self.lable_1.setText("Hallo World")
+        self.lable_1.setPixmap(QtGui.QPixmap("qt_creator\icons\Background.png"))
+        self.lable_1.setObjectName("Background")
+        """
         self.pushButton_Add_Strasse = QtWidgets.QPushButton(self.tab_Strasse)
         self.pushButton_Add_Strasse.setGeometry(QtCore.QRect(520, 10, 81, 23))
         self.pushButton_Add_Strasse.setObjectName("pushButton_Add_Strasse")
+        self.pushButton_Add_Strasse.setCheckable(True)
+
         self.treeView_Strasse = QtWidgets.QTreeView(self.tab_Strasse)
         self.treeView_Strasse.setGeometry(QtCore.QRect(520, 40, 231, 441))
         self.treeView_Strasse.setObjectName("treeView_Strasse")
+
         self.pushButton_Losen_Strasse = QtWidgets.QPushButton(self.tab_Strasse)
         self.pushButton_Losen_Strasse.setGeometry(QtCore.QRect(620, 10, 81, 23))
         self.pushButton_Losen_Strasse.setObjectName("pushButton_Losen_Strasse")
+
         self.pushButton_Speichen_Strasse = QtWidgets.QPushButton(self.tab_Strasse)
         self.pushButton_Speichen_Strasse.setGeometry(QtCore.QRect(520, 490, 75, 23))
         self.pushButton_Speichen_Strasse.setObjectName("pushButton_Speichen_Strasse")
+
         self.tabWidget.addTab(self.tab_Strasse, "")
+
         self.tab_Fahrzeug = QtWidgets.QWidget()
         self.tab_Fahrzeug.setObjectName("tab_Fahrzeug")
         self.frame_Fahrzeug = QtWidgets.QFrame(self.tab_Fahrzeug)
@@ -60,6 +75,7 @@ class Ui_MainWindow(object):
         self.pushButton_Speichen_Fahrzeug.setGeometry(QtCore.QRect(520, 490, 75, 23))
         self.pushButton_Speichen_Fahrzeug.setObjectName("pushButton_Speichen_Fahrzeug")
         self.tabWidget.addTab(self.tab_Fahrzeug, "")
+
         self.tab_Simulation = QtWidgets.QWidget()
         self.tab_Simulation.setObjectName("tab_Simulation")
         self.frame_Simulation = QtWidgets.QFrame(self.tab_Simulation)
@@ -105,6 +121,7 @@ class Ui_MainWindow(object):
         self.listWidget_Simulation.setGeometry(QtCore.QRect(520, 140, 231, 341))
         self.listWidget_Simulation.setObjectName("listWidget_Simulation")
         self.tabWidget.addTab(self.tab_Simulation, "")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 789, 21))

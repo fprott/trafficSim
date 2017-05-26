@@ -12,11 +12,14 @@ def polygon(points):
     screen = pygame.display.set_mode((640, 480), 0, 32)
 
 
-    Strasse = strasse
+    Strasse = math_Strasse
     # points=main_strasse.Polygon_Punkte
     # points=(array([  99.95459234,  105.99896854]), array([ 211.07754863,  111.05001201]), array([ 205.88605073,   38.36904131]), array([  47.49404802,  125.75773246]), array([ 100.35112344,  105.93632918]), array([  99.64887656,  104.06367082]), array([  72.50595198,  114.24226754]), array([ 204.11394927,   41.63095869]), array([ 208.92245137,  108.94998799]), array([ 100.04540766,  104.00103146]))
     Polygon_Punkte = np.array(Strasse.Polygon_Punkte(Strasse, points=points, bereite=10))  # +[640/2,480/2]
-    print(Polygon_Punkte)
+    # print(list(Polygon_Punkte)[0][1])
+    Polygon_Punkte = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    print((Polygon_Punkte))
+    print(list(Polygon_Punkte)[0:2][0])
 
     while True:
 
