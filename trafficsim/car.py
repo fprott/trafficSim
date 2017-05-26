@@ -77,4 +77,4 @@ class Route():
 
     def get_angle_of_pos(self, pos):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
-        return angle
+        return angle #
