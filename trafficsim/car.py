@@ -10,7 +10,7 @@ class Car:
         self.v_min = v_min
 
         self.a = a
-        self.v = v
+        self.v = v #
         self.pos = start_pos
         self.route = Route(start_pos)
         self.size = car_size
