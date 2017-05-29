@@ -4,14 +4,49 @@ import functools
 import math
 from car import Car, CarSize
 
+from heapq import *
+
 class Graph():
+    """
+    Der Graph enhällt als Knoten alle Senarien. Auf dem Graph wird ein A* Algo ausgeführt. Der Graph wird nur wenn notwendig angepasst.
+    """
     def __init__(self, root_senario):
         self.nodes = [] # Eine Liste von Senarios
         self.root = root_senario
 
-    def expand_graph(self):
-        pass
+        self.open_list=[]
+        heappush(self.open_list, root_senario)#geprüfte nodes achtung nicht automatisch sortiert !
 
+        self.closed_list=set() # erkannte aber noch nicht geprüfte nodes
+
+    def calluclate_best_senarios(self):
+        best_way=[]
+        node = self._do_A_star()
+        while(node != self.root):
+            best_way.append(node)
+            node = node.parent
+        best_way.reverse()
+        return best_way
+
+    def _do_A_star(self):
+        while(len(self.open_list>0)):
+            current_node = heappop(self.open_list)
+            if (current_node.target_reached() == True):
+                return current_node
+
+            self.closed_list.add(current_node)
+            self._expand_graph(current_node)
+        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad")
+
+    def _expand_graph(self, node):
+        time_step = bulletime()
+        new_nodes = node.callculate_next_senarios(time_step)
+        for node in new_nodes:
+            heappush(self.open_list, node) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
+
+class NoPathAvailableError(Exception):
+     def __init__(self, message):
+         self.message = message
 
 class Senario():
     def __init__(self, parent, start_time, cars):
@@ -21,8 +56,9 @@ class Senario():
         self.cars = cars
         self.parent = parent
         self.start_time = start_time
+    #    self.cost = self.get_node_cost()+self.get_heuristic_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
-    def get_node_costs(self): # TODO verbessern !
+    def get_node_cost(self): # TODO verbessern !
         cost=0
         for car in self.cars:
             cost+=1/car.a # sehr simpler Algo der angepasst werden sollte
@@ -33,6 +69,16 @@ class Senario():
         for car in self.cars:
             cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
         return cost
+
+    def __lt__(self, other): # Iterator !
+        return (self.get_node_cost+self.get_heuristic_cost)<(other.get_node_cost+other.get_heuristic_cost)
+        #  return self.cost < other.cost
+
+    def target_reached(self):
+        for car in self.cars:
+            if car.route.percent_of_route_still_to_travel !=0:
+                return False
+        return True
 
     def callculate_next_senarios(self, time_step):
         new_time = self.start_time + time_step
@@ -56,13 +102,35 @@ class CarMarker(Car):
     """
     Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
     """
-
     def get_next_car_marker(self, dt, da):
         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
         new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         new_a = self.get_a_by_da(da)
         return CarMarker(self.id, self.a_max, self.a_min, self.max_v,self.min_v, new_v, new_a, new_pos, self.car_size) #make the next ghost
 
+
+def bulletime(cars,default_dt): #
+    """
+    Errechnet die dt und da
+   cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
+    """
+    safe_zone=1;
+    for i in range(len(cars)):
+        for j in range(i + 1, len(cars)):
+            dist = math.hypot(cars[i].x - cars[j].x, cars[i].y - cars[j].y);    'autos werden vereinfacht als kreise modelliert'
+            if dist <= 1.4*(cars[i].length+cars[j].length):
+                safe_zone=0;
+                break
+        if safe_zone == 0:
+            break
+    #'sobald ein Paar Autos welches nicht in der safe_zone ist gefunden wurde, werden die for schleifen abgebrochen...bei safe_Zone' \
+    #'bleibt die Abtastzeit gleich dt_default in der danger_zone verkleinern wir die abtastzeit um das 10-fache...wert ist wilkürlich gewählt worden'
+    if  safe_zone == 1:
+        dt=default_dt;
+    else:
+        dt = default_dt / 10;          #da = bleibt gleich...wir können aber wegen dem neuen dt den kurs der Autos öfters korrigieren
+
+    return dt
 
 #myCar = CarMarker("test_1", 55, 20, 120, 20, 0, 0, (50,20), None)
 
