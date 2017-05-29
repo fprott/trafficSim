@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'qt_design.ui'
 #
-# Created by: PyQt5 UI code generator 5.8.1
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -40,13 +40,13 @@ class Ui_qt_design(object):
         self.actionDrawStreet = QtWidgets.QAction(qt_design)
         self.actionDrawStreet.setCheckable(True)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("qt_creator/icons/icon_road.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon.addPixmap(QtGui.QPixmap("icons/icon_road.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionDrawStreet.setIcon(icon)
         self.actionDrawStreet.setObjectName("actionDrawStreet")
         self.actionDeleteRoad = QtWidgets.QAction(qt_design)
         self.actionDeleteRoad.setCheckable(True)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("qt_creator/icons/icon_bulldozer.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon1.addPixmap(QtGui.QPixmap("icons/icon_bulldozer.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionDeleteRoad.setIcon(icon1)
         self.actionDeleteRoad.setObjectName("actionDeleteRoad")
         self.action_ber_trafficSim = QtWidgets.QAction(qt_design)
@@ -74,4 +74,14 @@ class Ui_qt_design(object):
         self.actionDeleteRoad.setToolTip(_translate("qt_design", "Lösche einen Straßenpunkt"))
         self.action_ber_trafficSim.setText(_translate("qt_design", "Über trafficSim"))
         self.actionUrheberrecht_Informationen.setText(_translate("qt_design", "Urheberrecht Informationen"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    qt_design = QtWidgets.QMainWindow()
+    ui = Ui_qt_design()
+    ui.setupUi(qt_design)
+    qt_design.show()
+    sys.exit(app.exec_())
 

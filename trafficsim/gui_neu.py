@@ -13,11 +13,16 @@ import sys
 import inspect
 import numpy as np
 import pygame
-from qt_design import Ui_qt_design
+from qt_design_neu import *#Ui_qt_design
 from PyQt5 import QtWidgets, QtGui, QtCore
+import PyQt5
 from mathe import *
 #from pygame_draw import *
-#from fahrzeug_model import *
+#  from fahrzeug_model import *
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QGroupBox, QDialog, QVBoxLayout, QGridLayout
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot
 
 Punkte_Nets = []
 
@@ -30,7 +35,7 @@ cyan = (0, 255, 255)
 gray = (128, 128, 128)
 BackGroundColor = (25,235,25)
 
-class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_design aus dem qtDesigner
+class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow): # Erbebt von qt_design aus dem qtDesigner
     """
     QT Haupt Fenster, nutzt auto generietes qt Design
     Hier werden die Events gesteuert
@@ -43,18 +48,28 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
         self.setupUi(self)
         self.drawingBoard = pyGameDrawingBoard
         self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface)
-        self.setCentralWidget(self.drawingBoardWidget)
+
+        self.lable_1 = QtWidgets.QLabel(self.frame_Strasse)
+        self.lable_1.setGeometry((QtCore.QRect(0, 0, 500, 500)))
+        self.lable_1 = QVBoxLayout()
+        self.lable_1.addWidget(self.drawingBoardWidget)
+        self.frame_Strasse.setLayout(self.lable_1)
+
+        #self.pushButton1 = QtWidgets.QPushButton("PyQt5 button")'
+
+        #self.setCentralWidget(self.drawingBoardWidget)
+        #self.tabWidget.setCornerWidget(self.drawingBoardWidget)
         #register Buttons
-        self.actionDrawStreet.triggered.connect(self.on_actionDrawStreet_triggered)
-        self.actionDeleteRoad.triggered.connect(self.on_actionDeleteRoad_triggered)
+        self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
+        self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
 
-    def on_actionDrawStreet_triggered(self):
-        if(self.actionDeleteRoad.isChecked()):
-            self.actionDrawStreet.setChecked(False)
+    def on_pushButton_Add_Strasse_triggered(self):
+        if(self.pushButton_Losen_Strasse.isChecked()):
+            self.pushButton_Add_Strasse.setChecked(False)
 
-    def on_actionDeleteRoad_triggered(self):
-        if(self.actionDrawStreet.isChecked()):
-            self.actionDeleteRoad.setChecked(False)
+    def on_pushButton_Losen_Strasse_triggered(self):
+        if(self.pushButton_Add_Strasse.isChecked()):
+            self.pushButton_Losen_Strasse.setChecked(False)
 
     def isOnDrawingBoard(self, x, y):
         boardX = self.drawingBoardWidget.pos().x()
@@ -74,7 +89,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
         return True
 
     def mousePressEvent(self, event):
-        if self.actionDrawStreet.isChecked(): # wenn wir zeichnen wollen
+        if self.pushButton_Add_Strasse.isChecked(): # wenn wir zeichnen wollen
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())==True):
                 drawX = event.pos().x()-self.drawingBoardWidget.pos().x()
                 drawY = event.pos().y()-self.drawingBoardWidget.pos().y()
@@ -83,10 +98,11 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
                 Punkte_Nets.append([drawX, drawY])
                 print(Punkte_Nets)
                 if (len(Punkte_Nets)>1):
+                    print(len(Punkte_Nets))
                     Polygon_Punkte = math_Strasse.Polygon_Punkte(self=math_Strasse,points=Punkte_Nets,bereite=20)
                     self.drawingBoard.drawStrasse(Polygon_Punkte)
 
-        if self.actionDeleteRoad.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
+        if self.pushButton_Losen_Strasse.isChecked(): # wir achten darauf das nicht beide Knöpfe gleichzeitig an sind !
             if (self.isOnDrawingBoard(event.pos().x(),event.pos().y())):
                 #wenn ein Punkt in der nähe ist
                 drawX = event.pos().x() - self.drawingBoardWidget.pos().x()
@@ -103,8 +119,14 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_qt_design): # Erbebt von qt_desig
             # QtWidgets.QApplication.processEvents()
 
         # Aktuallisiert die Anzeige !!!
-        self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
-        self.setCentralWidget(self.drawingBoardWidget)
+        #self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface) #TODO Besser machen ! Super inefektiv :D
+        #self.setCentralWidget(self.drawingBoardWidget)
+        self.drawingBoardWidget = ImageWidget(self.drawingBoard.surface)
+        self.lable_1 = QtWidgets.QLabel(self.frame_Strasse)
+        self.lable_1.setGeometry((QtCore.QRect(0, 0, 500, 500)))
+        self.lable_1 = QVBoxLayout()
+        self.lable_1.addWidget(self.drawingBoardWidget)
+        self.frame_Strasse.setLayout(self.lable_1)
 
 class ImageWidget(QtWidgets.QWidget):
     """
@@ -211,9 +233,9 @@ class PyGameDrawingBoard():
 
 def main():
     drawingBoard = PyGameDrawingBoard()     #pygame Draw Board
+    drawingBoard.drawFahrzeug(100,100,0)
     app = QtWidgets.QApplication(sys.argv)
     form = QTDesignWidget(drawingBoard)     #QT Windows
-    drawingBoard.drawFahrzeug(100,100,0)
     form.show()
     app.exec_()
 
