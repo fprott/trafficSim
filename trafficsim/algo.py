@@ -12,10 +12,10 @@ class Graph():
     """
     def __init__(self, root_senario):
         self.nodes = [] # Eine Liste von Senarios
-        self.root = root_senario
+        self.root = root_senario # wir merken uns den root da dieser unveränderlich ist
 
-        self.open_list=[]
-        heappush(self.open_list, root_senario)#geprüfte nodes achtung nicht automatisch sortiert !
+        self.open_list=[] # erkannte und geprüfte nodes
+        heappush(self.open_list, root_senario) # wir sotieren in O(1) mittels heap :D
 
         self.closed_list=set() # erkannte aber noch nicht geprüfte nodes
 
@@ -31,7 +31,7 @@ class Graph():
     def _do_A_star(self):
         while(len(self.open_list>0)):
             current_node = heappop(self.open_list)
-            if (current_node.target_reached() == True):
+            if (current_node.target_reached() == True): # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
 
             self.closed_list.add(current_node)
@@ -39,6 +39,11 @@ class Graph():
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad")
 
     def _expand_graph(self, node):
+        """
+        Erweiteret den Graphen um alle möglichen Kinder des Nodes
+        :param node:
+        :return:
+        """
         time_step = bulletime()
         new_nodes = node.callculate_next_senarios(time_step)
         for node in new_nodes:
@@ -58,16 +63,20 @@ class Senario():
         self.start_time = start_time
     #    self.cost = self.get_node_cost()+self.get_heuristic_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
-    def get_node_cost(self): # TODO verbessern !
+    def get_node_cost(self): # TODO mehr variität !
         cost=0
+        if(check_collision(self.cars)==True):
+            cost = float('inf')
+            return cost
         for car in self.cars:
             cost+=1/car.a # sehr simpler Algo der angepasst werden sollte
         return cost
 
-    def get_heuristic_cost(self): # TODO verbessern !
+    def get_heuristic_cost(self): # TODO mehr variität !
         cost=0
         for car in self.cars:
             cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
+
         return cost
 
     def __lt__(self, other): # Iterator !
@@ -109,7 +118,7 @@ class CarMarker(Car):
         return CarMarker(self.id, self.a_max, self.a_min, self.max_v,self.min_v, new_v, new_a, new_pos, self.car_size) #make the next ghost
 
 
-def bulletime(cars,default_dt): #
+def bulletime(cars, default_dt=1): #
     """
     Errechnet die dt und da
    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
@@ -117,7 +126,7 @@ def bulletime(cars,default_dt): #
     safe_zone=1;
     for i in range(len(cars)):
         for j in range(i + 1, len(cars)):
-            dist = math.hypot(cars[i].x - cars[j].x, cars[i].y - cars[j].y);    'autos werden vereinfacht als kreise modelliert'
+            dist = math.hypot(cars[i].x - cars[j].x, cars[i].y - cars[j].y);    #autos werden vereinfacht als kreise modelliert'
             if dist <= 1.4*(cars[i].length+cars[j].length):
                 safe_zone=0;
                 break

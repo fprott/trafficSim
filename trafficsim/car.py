@@ -84,8 +84,26 @@ class Car:
     def __str__(self):  # TODO mehr Werte
         return (str(self.id) + " " + str(self.a))
 
+def check_collision(cars):
+    """
+    Prüft ob 2 Autos kollidieren. Bricht ab sobald das war ist. Sagt nicht welche Autos.
+    :param cars:
+    :return:
+    """
+    for car_1 in cars:
+        for car_2 in cars:
+            if(car_1 != car_2):
+                # der folgende Algo ist abgeschrieben, ka ob das funktioniert
+                dist = math.hypot(self.pos.x - car_2.pos.x, self.pos.y - car_2.pos.y)
+                diag_1 = math.sqrt((self.size.get_width() ** 2) + (self.size.get_length() ** 2))
+                diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
+                if dist <= 0.5 * (diag_1 + diag_2):
+                    return True
+    return False
+
+
 class CarSize():
-    """die größere Zahl ist immer length"""
+    """die größere Zahl ist immer length""" # frage, wie baut man damit einen smart nach :D ?
     def __init__(self, width, length):
         if length >= width :
             self.width = width
