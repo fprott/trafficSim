@@ -59,21 +59,6 @@ class Car:
         else:
             return self.max_a
 
-    def simple_car_collision(self, car_2):
-        """Kollisionscheck das schnell ist aber nicht exakt"""
-        dist = math.hypot(self.pos.x - car_2.pos.x, self.pos.y - car_2.pos.y)
-        diag_1 = math.sqrt( (self.size.get_width() ** 2) + (self.size.get_length() ** 2 ) )
-        diag_2 = math.sqrt( (car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2) )
-        if dist <= 0.5*(diag_1+diag_2):
-            return True
-        else:
-            return False
-
-        def exact_car_collision(self, car_2):
-            """Kollision über Separating Axis Theorem ist exact aber langsam und funktioniert noch nicht richtig :D"""
-            return 0
-
-
     #def get_next_car(self, dt, new_a):
     #    """new_a ist ein Wert aus der Liste a_values"""
     #    new_v = self.v + new_a * dt  # wir erechnen die neue geschwindigkeit
@@ -86,29 +71,69 @@ class Car:
         return (str(self.id) + " " + str(self.a))
 
 class CarSize():
-    """die größere Zahl ist immer length"""
-    def __init__(self, width, length):
-        if length >= width :
-            self.width = width
-            self.length = length
-        else:
-            self.width=length
-            self.length=width
+    def __init__(self):
+        pass  # TODO implement me
 
-    def get_width(self):
-        return self.width
-
-    def get_length(self):
-        return self.length
+    def get_size(self):
+        pass  # TODO implement me
 
 class Route():
     def __init__(self):
         pass # TODO Implement me, wang
 
-    def __init__(self, start_pos):
-        pass # TODO Implement me, wang
+    def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
+        from matplotlib import pyplot as plt
 
-    def get_new_pos(self, pos, l):
+        Line1 = math_Kurve()
+        Line2 = math_Kurve()
+        Kurve = math_Kurve()
+
+        xpoints = [p[0] for p in points]
+        ypoints = [p[1] for p in points]
+
+        x1 = xpoints[0]
+        x3 = xpoints[1]
+        x5 = xpoints[2]
+        y1 = ypoints[0]
+        y3 = ypoints[1]
+        y5 = ypoints[2]
+
+        s13 = ((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
+        s35 = ((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
+
+        x2 = x3 + ((width / 2) * (x1 - x3)) / s13
+        y2 = y3 + ((width / 2) * (y1 - y3)) / s13
+        x4 = x3 + ((width / 2) * (x5 - x3)) / s35
+        y4 = y3 + ((width / 2) * (y5 - y3)) / s35
+
+        lpoints1 = [[x1, y1], [x2, y2]]
+        lpoints2 = [[x4, y4], [x5, y5]]
+        kpoints = [[x2, y2], [x3, y3], [x4, y4]]
+
+        xpoints = [x1, x2, x3, x4, x5]
+        ypoints = [y1, y2, y3, y4, y5]
+
+        xline1, yline1 = Kurve.Bezier_Kurve(points=lpoints1)
+        xline2, yline2 = Kurve.Bezier_Kurve(points=lpoints2)
+        xkurve, ykurve = Kurve.Bezier_Kurve(points=kpoints)
+        #print(xkurve, ykurve)
+
+        xvals = list(xline1) + list(xkurve) + list(xline2)
+        yvals = list(yline1) + list(ykurve) + list(yline2)
+        #connection of all 3
+
+        Route_Points = [xpoints, ypoints] #all key points to define the route
+
+        #plt.plot(xkurve, ykurve)
+        #plt.plot(xline1, yline1)
+        #plt.plot(xline2, yline2)
+
+        #plt.plot(xvals,yvals)
+        return xvals,yvals
+        #plt.plot(xpoints, ypoints, "ro")
+        #plt.show()
+
+    def get_new_pos(self, route, pos, l):
         """Verändert die Position um den Abstand l. l ist t*v"""
 
     def traveled_distance_on_route(self):
@@ -116,19 +141,9 @@ class Route():
         return s
 
     def percent_of_route_still_to_travel(self):
-        """"Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
+        """Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
         return p
 
     def get_angle_of_pos(self, pos):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
         return angle
-
-
-#Test
-#pos1 = Point(0,0)
-#pos2 = Point(500,4)
-#size1 = CarSize(10,20)
-#car1 = Car(1,1,1,1,1,1,1,pos1,size1)
-#car2 = Car(1,1,1,1,1,1,1,pos2,size1)
-#b = car1.simple_car_collision(car2)
-#print(b)
