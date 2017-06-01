@@ -36,7 +36,7 @@ class Graph():
 
             self.closed_list.add(current_node)
             self._expand_graph(current_node)
-        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad")
+        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
     def _expand_graph(self, node):
         """
