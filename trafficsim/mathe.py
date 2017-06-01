@@ -1,7 +1,7 @@
 #Diese Klassen sollen von euch nach euren Vorschlägen verfollständig werden.
 #Wenn feststeht wie der Polygonenzug aussieht kann ich das auch noch schnell fertig machen, aber erstmal gibt mir feedback !
 import numpy as np
-from scipy.misc import comb # bitte nicht benutzen, kann nicht überall einfach installiert werden. Bitte nur PIP verwenden
+#from scipy.misc import comb # bitte nicht benutzen, kann nicht überall einfach installiert werden. Bitte nur PIP verwenden
 import math
 import pygame
 #from gui import *
@@ -98,7 +98,9 @@ class Point(tuple):
 
 class math_Kurve():
      def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
-         return comb(n, i) * (t ** (n - i)) * (1 - t) ** i
+         from math import factorial as f
+
+         return (f(n) / (f(n - i) * f(i))) * (t ** (n - i)) * (1 - t) ** i
 
      def Bezier_Kurve(self,points=object, nTimes: object = 1000) ->object:
          """
@@ -337,21 +339,20 @@ def bahn(points,width):
      xline1, yline1 = Kurve.Bezier_Kurve(points=lpoints1)
      xline2, yline2 = Kurve.Bezier_Kurve(points=lpoints2)
      xkurve, ykurve = Kurve.Bezier_Kurve(points=kpoints)
-     print(xkurve,ykurve)
 
+     xvals = list(xline1) + list(xkurve) + list(xline2)
+     yvals = list(yline1) + list(ykurve) + list(yline2)
      #xvals=list(xline1).extend(list(xkurve))
      #yvals = list(yline1).extend((ykurve))
-     #Bahn_Points = [xvals, yvals]
-     #print(Bahn_Points)
 
      Route_Points = [xpoints, ypoints]
 
-     plt.plot(xkurve, ykurve)
+     """plt.plot(xkurve, ykurve)
      plt.plot(xline1, yline1)
-     plt.plot(xline2, yline2)
+     plt.plot(xline2, yline2)"""
      #plt.plot(Bahn_Points)
-     plt.plot(xpoints, ypoints, "ro")
-     plt.show()
+     #plt.plot(xpoints, ypoints, "ro")
+     #plt.show()
 
 
 
