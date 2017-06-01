@@ -122,6 +122,79 @@ class Route():
     def __init__(self):
         pass # TODO Implement me, wang
 
+    def get_one_turning_point(self,startpoint,endpoint,width):
+
+        xs=startpoint[0]
+        ys=startpoint[1]
+        xe=endpoint[0]
+        ye=endpoint[1]
+        l=math.hypot((xs-xe),(ys-ye))
+
+        x=xe + ((width / 2) * (xs - xe)) / l
+        y=ye + ((width / 2) * (ys - ye)) / l
+        #print([x,y])
+        return [x,y]
+
+
+
+    def get_two_turning_points(self,startpoint,endpoint,width):
+
+        xs = startpoint[0]
+        ys = startpoint[1]
+        xe = endpoint[0]
+        ye = endpoint[1]
+        l = math.hypot((xs - xe), (ys - ye))
+
+        x2 = xe + ((width / 2) * (xs - xe)) / l
+        y2 = ye + ((width / 2) * (ys - ye)) / l
+        x1 = xs + ((width / 2) * (xe - xs)) / l
+        y1 = ys + ((width / 2) * (ye - ys)) / l
+        p=[[x1,y1],[x2,y2]]
+        #print(p[0])
+        return (p)
+
+
+
+    def get_key_points(self,points,width):
+
+        n=len(points)
+
+        new_p = [self.get_one_turning_point(points[0],points[1],width)]
+        for i in range(n-1):
+            if i+2<n:
+                new_p = new_p+self.get_two_turning_points(points[i+1],points[i+2],width)
+            else:
+                pass
+
+        new_p.pop() #delete the last item
+
+        #print(new_p)
+        return new_p
+
+
+
+    def get_route(self,points,width):
+
+        xpoints = [p[0] for p in points]
+        ypoints = [p[1] for p in points]
+        n = len(points)
+        new_p = self.get_key_points(points,width)
+
+
+        s = math_Kurve()
+        x,y = s.Bezier_Kurve(points=[points[0],new_p[0]])
+        for i in range():
+            if :
+                x,y = x,y + s.Bezier_Kurve(points=[[],[]])
+            elif :
+                x, y = x, y + s.Bezier_Kurve(points=[[],[],[]])
+            else:
+                pass
+
+        print(x)
+        print(len(x))
+        return x,y
+
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
         from matplotlib import pyplot as plt
 
