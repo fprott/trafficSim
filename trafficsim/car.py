@@ -136,7 +136,6 @@ class Route():
         return [x,y]
 
 
-
     def get_two_turning_points(self,startpoint,endpoint,width):
 
         xs = startpoint[0]
@@ -154,7 +153,6 @@ class Route():
         return (p)
 
 
-
     def get_key_points(self,points,width):
 
         n=len(points)
@@ -166,7 +164,8 @@ class Route():
             else:
                 pass
 
-        new_p.pop() #delete the last item
+        #new_p.pop()
+        #delete the last item
 
         #print(new_p)
         return new_p
@@ -174,25 +173,44 @@ class Route():
 
 
     def get_route(self,points,width):
+        from matplotlib import pyplot as plt
 
         xpoints = [p[0] for p in points]
         ypoints = [p[1] for p in points]
         n = len(points)
         new_p = self.get_key_points(points,width)
-
+        m = len(new_p)
 
         s = math_Kurve()
-        x,y = s.Bezier_Kurve(points=[points[0],new_p[0]])
-        for i in range():
-            if :
-                x,y = x,y + s.Bezier_Kurve(points=[[],[]])
-            elif :
-                x, y = x, y + s.Bezier_Kurve(points=[[],[],[]])
-            else:
-                pass
+        x,y = s.Bezier_Kurve(points=[new_p[0],points[0]])
+        x = list(x)
+        y = list(y)
+        y.pop()
+        x.pop()
 
-        print(x)
-        print(len(x))
+        for i in range(1,n-1):
+            kpoints=[new_p[(2*i - 1)], points[i], new_p[(2*i-2)]]
+            x_new, y_new = s.Bezier_Kurve(points=kpoints) # Ablenkung
+            x_new = list(x_new)
+            y_new = list(y_new)
+            x_new.pop()
+            y_new.pop()
+            x = list(x)+x_new
+            y = list(y)+y_new
+            lpoints=[new_p[2*i],new_p[(2*i-1)]]
+            x_new, y_new = s.Bezier_Kurve(points=lpoints) #Gerade Linien
+            x_new = list(x_new)
+            y_new = list(y_new)
+            x_new.pop()
+            y_new.pop()
+            x = list(x) + x_new
+            y = list(y) + y_new
+
+        #print(new_p)
+        #print(x)
+        #print(len(x))
+        #plt.plot(x, y,"go")
+        #plt.show()
         return x,y
 
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
