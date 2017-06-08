@@ -93,7 +93,6 @@ class Point(tuple):
 
     y = property(_get_y, _set_y)
 
-
 # Bitte auslageren, die Mathe Klasse wird von allen genutzt. Eure Main Funktion macht mir Zeug kapput
 
 class math_Kurve():
