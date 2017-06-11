@@ -119,11 +119,19 @@ class CarSize():
         return self.length
 
 class Route():
-    def __init__(self):
-        pass # TODO Implement me, wang
+    #*******************************************************
+    #Please use get_route to generate the pointslist!!!
+    #*******************************************************
+
+    def __init__(self,points,width):
+        pass
+        #self.points=points
+        #self.width=width
+
+
 
     def get_one_turning_point(self,startpoint,endpoint,width):
-
+        """Find out the position to turn between 2 points"""
         xs=startpoint[0]
         ys=startpoint[1]
         xe=endpoint[0]
@@ -137,7 +145,7 @@ class Route():
 
 
     def get_two_turning_points(self,startpoint,endpoint,width):
-
+        """Find out 2 position to turn between 2 points"""
         xs = startpoint[0]
         ys = startpoint[1]
         xe = endpoint[0]
@@ -205,6 +213,14 @@ class Route():
             y_new.pop()
             x = list(x) + x_new
             y = list(y) + y_new
+
+        x_final, y_final = s.Bezier_Kurve(points=[points[n - 1], new_p[2 * (n - 2)]])
+        x_final = list(x_final)
+        y_final = list(y_final)
+        x_final.pop()
+        y_final.pop()
+        x = x + x_final
+        y = y + y_final
 
         #print(new_p)
         #print(x)
@@ -281,7 +297,11 @@ class Route():
         return angle
 
 
+#**********Beispiel****************
+#if __name__ == "__main__":
 
+#    Route1=Route()
+#   Route1.get_route([[1,0],[3,5],[5,4],[8,10],[10,2]],width=1)
 
 
 
