@@ -124,10 +124,10 @@ class Route():
     #*******************************************************
 
     def __init__(self,points,width):
-        pass
-        #self.points=points
-        #self.width=width
-
+        self.points=points #The points to define the street
+        self.width=width
+        self.routepoints=self.get_route(self.points,self.width)
+        self.point_iterator = 0
 
 
     def get_one_turning_point(self,startpoint,endpoint,width):
@@ -222,12 +222,20 @@ class Route():
         x = x + x_final
         y = y + y_final
 
+        k = len(x)
+        r = []
+
+        for i in range(0, k):
+            r = r + [[x[i],y[i]]]
+
         #print(new_p)
         #print(x)
         #print(len(x))
+        #print (r)
+        #print (len(r))
         #plt.plot(x, y,"go")
         #plt.show()
-        return x,y
+        return r
 
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
         from matplotlib import pyplot as plt
@@ -281,20 +289,32 @@ class Route():
         #plt.plot(xpoints, ypoints, "ro")
         #plt.show()
 
-    def get_new_pos(self, route, pos, l):
+    def get_current_pos(self):
+        return self.points[self.point_iterator]
+
+    def get_step(self):
+        #s=步长 只和现在的位置有关
+        return s
+
+    def get_new_pos(self, l):
         """Verändert die Position um den Abstand l. l ist t*v"""
+        k=1/self.get_step(l)
+        self.point_iterator+=int(k)
+        return self.routepoints[self.point_iterator]
 
     def traveled_distance_on_route(self):
         """"Zurückgelegter Weg auf der Route d.h. wie weit wir schon gefahren sind"""
+        self.point_iterator #跑到了第几个点
+        #关键在于步长不相等
         return s
 
     def percent_of_route_still_to_travel(self):
         """Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
-        return p
+        return 100-(100*self.point_iterator/(len(self.routepoints)))
 
     def get_angle_of_pos(self, pos):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
-        return angle
+        #return angle
 
 
 #**********Beispiel****************
