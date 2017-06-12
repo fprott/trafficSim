@@ -74,6 +74,20 @@ class Senario():
             cost+=1/car.a # sehr simpler Algo der angepasst werden sollte
         return cost
 
+
+    def get_node_cost_2(self):
+        cost=0
+        if (check_collision(self.cars) == True):
+            cost = float('inf')
+            return cost
+        return len(self.cars)*self.start_time      #ist start_time die aktuelle Zeit? hiermit würde man die summe der vergangenen Zeiten der Autos berechnen also die Entfernung vom Startpunk kostenmäßig
+
+    def get_heuristic_cost_2(self):
+        cost=0;
+        for car in self.cars:
+            cost +=(car.route.percent_of_route_still_to_travel())/(car.v_max+car.v)  # mal route.länge_der_Strecke 
+        return cost
+
     def get_heuristic_cost(self): # TODO mehr variität !
         cost=0
         for car in self.cars:
