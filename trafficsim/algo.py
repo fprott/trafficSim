@@ -3,6 +3,7 @@ import itertools
 import functools
 import math
 from car import Car, CarSize
+from route import *
 
 from heapq import *
 
@@ -29,7 +30,7 @@ class Graph():
         return best_way
 
     def _do_A_star(self):
-        while(len(self.open_list>0)):
+        while(len(self.open_list)>0):
             current_node = heappop(self.open_list)
             if (current_node.target_reached() == True): # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
@@ -44,7 +45,8 @@ class Graph():
         :param node:
         :return:
         """
-        time_step = bulletime()
+
+        time_step =  bulletime(node.cars)
         new_nodes = node.callculate_next_senarios(time_step)
         for node in new_nodes:
             heappush(self.open_list, node) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
@@ -70,6 +72,20 @@ class Senario():
             return cost
         for car in self.cars:
             cost+=1/car.a # sehr simpler Algo der angepasst werden sollte
+        return cost
+
+
+    def get_node_cost_2(self):
+        cost=0
+        if (check_collision(self.cars) == True):
+            cost = float('inf')
+            return cost
+        return len(self.cars)*self.start_time      #ist start_time die aktuelle Zeit? hiermit würde man die summe der vergangenen Zeiten der Autos berechnen also die Entfernung vom Startpunk kostenmäßig
+
+    def get_heuristic_cost_2(self):
+        cost=0;
+        for car in self.cars:
+            cost +=(car.route.percent_of_route_still_to_travel())/(car.v_max+car.v)  # mal route.länge_der_Strecke 
         return cost
 
     def get_heuristic_cost(self): # TODO mehr variität !
@@ -113,9 +129,11 @@ class CarMarker(Car):
     """
     def get_next_car_marker(self, dt, da):
         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
-        new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
+    #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         new_a = self.get_a_by_da(da)
-        return CarMarker(self.id, self.a_max, self.a_min, self.max_v,self.min_v, new_v, new_a, new_pos, self.car_size) #make the next ghost
+        new_route = self.route
+        new_route.get_new_pos(self.v*dt)
+        return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
 
 
 def bulletime(cars, default_dt=1): #
@@ -141,8 +159,14 @@ def bulletime(cars, default_dt=1): #
 
     return dt
 
-#myCar = CarMarker("test_1", 55, 20, 120, 20, 0, 0, (50,20), None)
-
+myStrecke = Strecke([Point(0.0,0.0),Point(1.0,2.0),Point(2.0,4.0),Point(3.0,8.0)])
+myRoute = Route(myStrecke,0.1)
+myCar = CarMarker("test_1", myRoute, 55, 20, 120, 20, 0, 0, (50,20))
+myCars=[]
+myCars.append(myCar)
+mySenario = Senario(None,0,myCars)
+myGraph = Graph(mySenario)
+myGraph.calluclate_best_senarios()
 #
 # class Shedule():
 #     # Achtung noch kein echter A*, nur ein test
@@ -244,19 +268,19 @@ def bulletime(cars, default_dt=1): #
 #     """
 #     Ein CarGhost ist ein Auto zu einem diskreten Zeitpunkt.
 #     """
-#     def __init__(self, id, max_v, max_a, v=0, a=0, pos=(0,0)):
+#     def __init__(self, id, v_max, max_a, v=0, a=0, pos=(0,0)):
 #         self.id = id # das dient dazu das wir die auseinanderhalten können und zum debugen
-#         self.max_v=max_v #max_v : maximale geschwindigkeit
+#         self.v_max=v_max #v_max : maximale geschwindigkeit
 #         self.max_a=max_a #max_a : maximale beschleunigung
 #         self.v=v
 #         self.a=a
 #         self.pos=pos
 #
 #     def _set_v(self, new_v):
-#         if(new_v<=self.max_v):
+#         if(new_v<=self.v_max):
 #             self.v=new_v
 #         else:
-#             self.v=self.max_v
+#             self.v=self.v_max
 #
 #     def _set_a(self, new_a):
 #         if(new_a<=self.max_a):
@@ -302,7 +326,7 @@ def bulletime(cars, default_dt=1): #
 #         new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
 #         new_a = self.get_change_a_by_da(da)
 #     #    return (str(self.id) +" "+ str(new_a))
-#         return CarGhost(self.id, self.max_v,self.max_a, new_v, new_a, new_pos) #make the next ghost
+#         return CarGhost(self.id, self.v_max,self.max_a, new_v, new_a, new_pos) #make the next ghost
 #
 #     def __str__(self): # TODO mehr Werte
 #         return (str(self.id) +" "+ str(self.a))
@@ -328,10 +352,10 @@ def bulletime(cars, default_dt=1): #
 #
 #
 #     def _set_v(self, new_v):
-#         if (new_v <= self.max_v):
+#         if (new_v <= self.v_max):
 #             self.v = new_v
 #         else:
-#             self.v = self.max_v
+#             self.v = self.v_max
 #
 #     def _set_a(self, new_a):
 #         if (new_a <= self.max_a):

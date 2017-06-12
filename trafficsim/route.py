@@ -32,10 +32,13 @@ class Strecke:
         return x_max
 
 class Route:
-    def __init__(self, strecke, dStep):
+    def __init__(self, strecke, dStep, start_pos=None):
         self.strecke = strecke # Die Route bassiert auf einer Strecke. Wenn man die Route ändert so ändert man auch die Strecke und umgekehert !
         self.points = self._get_path_as_many_points(dStep)
-        self.positon= strecke.getStartPoint()
+        if start_pos==None:
+            self.positon = strecke.getStartPoint()
+        else:
+            self.positon= start_pos
         self._dStep=dStep
         self.point_iterator = 0 # Position an der wir uns im point "array" befinden
 
@@ -63,6 +66,8 @@ class Route:
         """Verändert die Position um den Abstand l. l ist t*v"""
         k=1/self._dStep
         self.point_iterator+=int(k)
+        if self.point_iterator >= len(self.points):
+            self.point_iterator= len(self.points)-1
         return self.points[self.point_iterator]
 
     def get_current_pos(self):
@@ -75,7 +80,7 @@ class Route:
 
     def percent_of_route_still_to_travel(self):
         """Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
-        return 100-(100*self.point_iterator/(len(self.points)))
+        return 100-(100*self.point_iterator/(len(self.points)-1))
 
     def get_angle_of_pos(self, pos):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
