@@ -1,9 +1,8 @@
 from mathe import *
-from route import *
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
-    def __init__(self, id, route, a_max, a_min, v_max, v_min, v, a, car_size):
+    def __init__(self, id, a_max, a_min, v_max, v_min, v, a, start_pos, car_size):
         self.id=id
         self.a_min = a_min
         self.a_max = a_max
@@ -12,8 +11,8 @@ class Car:
 
         self.a = a
         self.v = v #
-        self.pos = route.get_current_pos()
-        self.route = route
+        self.pos = start_pos
+        self.route = Route(start_pos) # TODO Implement me :D
         self.size = car_size
 
     def _set_v(self, new_v):
@@ -23,10 +22,10 @@ class Car:
             self.v = self.max_v
 
     def _set_a(self, new_a):
-        if (new_a <= self.a_max):
+        if (new_a <= self.max_a):
             self.a = new_a
         else:
-            self.a = self.a_max
+            self.a = self.max_a
         pass
 
     def get_pos(self):
@@ -52,13 +51,13 @@ class Car:
         Gibt eine legale Beschleunigung abhängig von einer Beschleunigunsänderung da an. Beachtet die minimal und maximal Beschleunigung.
         :return:
         """
-        if (self.a+da <= self.a_max): # wenn die neue beschleunigung kleiner als max beschleunigung
-            if(self.a+da >= self.a_min): # und wenn die (möglicherweise negative) beschleunigung größer als min beschleunigung
-                return self.a+da
+        if (self.a+da <= self.max_a): # wenn die neue beschleunigung kleiner als max beschleunigung
+            if(self.a+da >= self.min_a): # und wenn die (möglicherweise negative) beschleunigung größer als min beschleunigung
+                return self.a+da;
             else:
-                return self.a_min
+                return self.min_a
         else:
-            return self.a_max
+            return self.max_a
 
         def simple_car_collision(self, car_2):
             """Kollisionscheck das schnell ist aber nicht exakt"""
@@ -95,8 +94,8 @@ def check_collision(cars):
         for car_2 in cars:
             if(car_1 != car_2):
                 # der folgende Algo ist abgeschrieben, ka ob das funktioniert
-                dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
-                diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
+                dist = math.hypot(self.pos.x - car_2.pos.x, self.pos.y - car_2.pos.y)
+                diag_1 = math.sqrt((self.size.get_width() ** 2) + (self.size.get_length() ** 2))
                 diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
                 if dist <= 0.5 * (diag_1 + diag_2):
                     return True
@@ -120,19 +119,14 @@ class CarSize():
         return self.length
 
 class Route():
-    #*******************************************************
-    #Please use get_route to generate the pointslist!!!
-    #*******************************************************
-
     def __init__(self,points,width):
-        self.points=points #The points to define the street
-        self.width=width
-        self.routepoints=self.get_route(self.points,self.width)
+        self.points = points  # The points to define the street
+        self.width = width
+        self.routepoints = self.get_route(self.points, self.width)
         self.point_iterator = 0
 
-
     def get_one_turning_point(self,startpoint,endpoint,width):
-        """Find out the position to turn between 2 points"""
+
         xs=startpoint[0]
         ys=startpoint[1]
         xe=endpoint[0]
@@ -145,8 +139,9 @@ class Route():
         return [x,y]
 
 
+
     def get_two_turning_points(self,startpoint,endpoint,width):
-        """Find out 2 position to turn between 2 points"""
+
         xs = startpoint[0]
         ys = startpoint[1]
         xe = endpoint[0]
@@ -160,6 +155,7 @@ class Route():
         p=[[x1,y1],[x2,y2]]
         #print(p[0])
         return (p)
+
 
 
     def get_key_points(self,points,width):
@@ -215,7 +211,7 @@ class Route():
             x = list(x) + x_new
             y = list(y) + y_new
 
-        x_final, y_final = s.Bezier_Kurve(points=[points[n - 1], new_p[2 * (n - 2)]])
+        x_final,y_final=s.Bezier_Kurve(points=[points[n-1],new_p[2*(n-2)]])
         x_final = list(x_final)
         y_final = list(y_final)
         x_final.pop()
@@ -234,9 +230,21 @@ class Route():
         #print(len(x))
         #print (r)
         #print (len(r))
+        #print(r[0])
         #plt.plot(x, y,"go")
         #plt.show()
         return r
+
+
+    def route_length(self):
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+        d = sum(((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5 for i in (range(len(x)-1)))
+
+        return d
+
+
+
 
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
         from matplotlib import pyplot as plt
@@ -255,8 +263,8 @@ class Route():
         y3 = ypoints[1]
         y5 = ypoints[2]
 
-        s13 = ((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
-        s35 = ((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
+        s13 = math.hypot((x3-x1),(y3-y1)) #((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
+        s35 = math.hypot((x3-x5),(y3-y5)) #((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
 
         x2 = x3 + ((width / 2) * (x1 - x3)) / s13
         y2 = y3 + ((width / 2) * (y1 - y3)) / s13
@@ -293,36 +301,70 @@ class Route():
     def get_current_pos(self):
         return self.points[self.point_iterator]
 
-    def get_step(self):
-        #s=步长 只和现在的位置有关
-        return s
+    def get_step(self,l):
+        #Done
+        n = len(self.routepoints)
+        k = 0 #k=要走的步数
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+        i = self.point_iterator
+        s = 0 #走的路程
+        while i < n-2:
+            s = s + ((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5
+            if s > l:
+                #print(s)
+                break
+            i += 1
+            k += 1
+
+        #print(k)
+        #print(self.point_iterator)
+        return k
 
     def get_new_pos(self, l):
         """Verändert die Position um den Abstand l. l ist t*v"""
-        k=1/self.get_step(l)
+        # Done
+        k = self.get_step(l)
         self.point_iterator+=int(k)
+
+        #print(self.routepoints[self.point_iterator])
+        #print(self.point_iterator)
         return self.routepoints[self.point_iterator]
 
     def traveled_distance_on_route(self):
         """"Zurückgelegter Weg auf der Route d.h. wie weit wir schon gefahren sind"""
-        self.point_iterator #跑到了第几个点
         #关键在于步长不相等
-        return s
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+        d = sum(((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5 for i in (range(self.point_iterator)))
+        #print(d)
+        return d
 
     def percent_of_route_still_to_travel(self):
         """Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
-        return 100-(100*self.point_iterator/(len(self.routepoints)))
+        # Done
+        # 步长不一定
+        d = self.traveled_distance_on_route()
+        dd = self.route_length()
+        #print(100-(100*d/dd))
+        return 100-(100*d/dd)
 
-    def get_angle_of_pos(self, pos):
+    def get_angle_of_pos(self):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
-        #return angle
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+        vx = x[self.point_iterator+1] - x[self.point_iterator]
+        vy = y[self.point_iterator+1] - y[self.point_iterator]
+        return (vx,vy)
 
+#****************Beispiel*************************
 
-#**********Beispiel****************
 #if __name__ == "__main__":
 
-#    Route1=Route()
-#   Route1.get_route([[1,0],[3,5],[5,4],[8,10],[10,2]],width=1)
+#    Route1=Route([[1,1],[2,1],[5,1],[10,1]],width=1)
+#    Route1.get_new_pos(6)
+#    Route1.traveled_distance_on_route()
+#    Route1.percent_of_route_still_to_travel()
 
 
 
