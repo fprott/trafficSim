@@ -209,22 +209,30 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute_1.percent_of_route_still_to_travel())
 
 
-myStrecke = Strecke([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)])
-myStrecke2 = Strecke([Point(0.0,800.0),Point(100.0,400.0),Point(200.0,200.0),Point(300.0,0.0)])
-myRoute = Route(myStrecke,0.1)
-myRoute2 = Route(myStrecke2,0.1)
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,800.0),Point(100.0,400.0),Point(200.0,200.0),Point(300.0,0.0)]), 2)
+myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[8300.0,0.0]] , 2)
 
-# print(myRoute2.get_current_pos())
-# print(myRoute2.percent_of_route_still_to_travel())
-# print(myRoute2.get_new_pos(100))
-# print(myRoute2.percent_of_route_still_to_travel())
+print(myRoute2.get_current_pos())
+print(myRoute2.percent_of_route_still_to_travel())
+print(myRoute2.get_new_pos(100))
+print(myRoute2.percent_of_route_still_to_travel())
 
-myCar = CarMarker("test_1", myRoute, 55, 20, 120, 20, 0, 0, CarSize(50,20))
-myCar2 = CarMarker("test_2", myRoute2, 40, 20, 120, 20, 0, 0, CarSize(50,20))
-myCars=[]
-myCars.append(myCar)
-myCars.append(myCar2)
-mySenario = Senario(None,0,myCars)
-myGraph = Graph(mySenario)
-bestSenarios = myGraph.calluclate_best_senarios()
-Senario.printDebugSenarios(bestSenarios)
+print(myRoute2.get_new_pos(1000))
+print(myRoute2.percent_of_route_still_to_travel())
+
+print(myRoute2.get_new_pos(1000))
+print(myRoute2.percent_of_route_still_to_travel())
+
+print(myRoute2.get_new_pos(10000))
+print(myRoute2.percent_of_route_still_to_travel())
+
+# myCar = CarMarker("test_1", myRoute, 55, 20, 120, 20, 0, 0, CarSize(50,20))
+# myCar2 = CarMarker("test_2", myRoute2, 40, 20, 120, 20, 0, 0, CarSize(50,20))
+# myCars=[]
+# myCars.append(myCar)
+# myCars.append(myCar2)
+# mySenario = Senario(None,0,myCars)
+# myGraph = Graph(mySenario)
+# bestSenarios = myGraph.calluclate_best_senarios()
+# Senario.printDebugSenarios(bestSenarios)
