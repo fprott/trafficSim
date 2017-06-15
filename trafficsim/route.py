@@ -9,6 +9,7 @@ class Route():
         self.width = width
         self.routepoints = self.get_route(self.points, self.width)
         self.point_iterator = 0
+        self.routelength= self.route_length()
 
     def get_one_turning_point(self,startpoint,endpoint,width):
 
@@ -99,8 +100,8 @@ class Route():
         x_final,y_final=s.Bezier_Kurve(points=[points[n-1],new_p[2*(n-2)]])
         x_final = list(x_final)
         y_final = list(y_final)
-        x_final.pop()
-        y_final.pop()
+        #x_final.pop()
+        #y_final.pop()
         x = x + x_final
         y = y + y_final
 
@@ -125,6 +126,7 @@ class Route():
         x = [p[0] for p in self.routepoints]
         y = [p[1] for p in self.routepoints]
         d = sum(((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5 for i in (range(len(x)-1)))
+        #print(d)
 
         return d
 
@@ -194,13 +196,16 @@ class Route():
         y = [p[1] for p in self.routepoints]
         i = self.point_iterator
         s = 0 #走的路程
-        while i < n-2:
-            s = s + ((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5
-            if s > l:
-                #print(s)
-                break
-            i += 1
-            k += 1
+        if l == 0:
+            k = 0
+        else:
+            while i < n - 1:
+                s = s + ((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5
+                if s > l:
+                    # print(s)
+                    break
+                i += 1
+                k += 1
 
         #print(k)
         #print(self.point_iterator)
@@ -209,12 +214,20 @@ class Route():
     def get_new_pos(self, l):
         """Verändert die Position um den Abstand l. l ist t*v"""
         # Done
-        k = self.get_step(l)
-        self.point_iterator+=int(k)
+        d = self.traveled_distance_on_route()
+        if l>(self.routelength - d):
+            print('Error: "l" is out of range')
+        else:
+            k = self.get_step(l)
+            self.point_iterator += int(k)
 
-        #print(self.routepoints[self.point_iterator])
-        #print(self.point_iterator)
-        return self.routepoints[self.point_iterator]
+            t = tuple(self.routepoints[self.point_iterator])
+            #print(self.routepoints[self.point_iterator])
+            #print(t)
+            # print(self.point_iterator)
+            #The return value should be a tuple!!!!!!!!!
+            return t
+
 
     def traveled_distance_on_route(self):
         """"Zurückgelegter Weg auf der Route d.h. wie weit wir schon gefahren sind"""
@@ -230,7 +243,7 @@ class Route():
         # Done
         # 步长不一定
         d = self.traveled_distance_on_route()
-        dd = self.route_length()
+        dd = self.routelength
         #print(100-(100*d/dd))
         return 100-(100*d/dd)
 
