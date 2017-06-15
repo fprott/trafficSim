@@ -216,17 +216,21 @@ class Route():
         # Done
         d = self.traveled_distance_on_route()
         if l>(self.routelength - d):
-            print('Error: "l" is out of range')
+            #print('Error: "l" is out of range')
+            #********Warning: folowing parts can be deleted*************
+            #The car always stay at the endposition
+            t = tuple(self.routepoints[len(self.routepoints)-1])
         else:
             k = self.get_step(l)
             self.point_iterator += int(k)
 
             t = tuple(self.routepoints[self.point_iterator])
             #print(self.routepoints[self.point_iterator])
-            #print(t)
             # print(self.point_iterator)
             #The return value should be a tuple!!!!!!!!!
-            return t
+
+        print(t)
+        return t
 
 
     def traveled_distance_on_route(self):
