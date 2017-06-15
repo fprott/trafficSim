@@ -37,7 +37,7 @@ class Graph():
 
             self.closed_list.add(current_node)
             self._expand_graph(current_node)
-            print(current_node.start_time)
+        #    print(current_node.start_time)
 
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
@@ -101,9 +101,9 @@ class Senario():
         #  return self.cost < other.cost
 
     def target_reached(self):
-        print("----")
+    #    print("----")
         for car in self.cars:
-            print(car.route.percent_of_route_still_to_travel())
+    #        print(car.route.percent_of_route_still_to_travel())
             if car.route.percent_of_route_still_to_travel() !=0:
                 return False
         return True
@@ -119,7 +119,7 @@ class Senario():
             #print(a_car.get_possible_a_range(5))
             for a in a_car.get_possible_a_range(5): #TODO N wählen
                 possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
-            all_possible_car_tuples.append(possible_new_cars) # List von tupeln
+            all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
         #print(tuple(all_possible_car_tuples))
         # for ct in all_possible_car_tuples:
@@ -149,6 +149,15 @@ class Senario():
         #    print("----")
             all_possible_steps.append(Senario(self, new_time, possiblity))
         return all_possible_steps
+
+    def printDebugSenarios(senarios):
+        for senario in senarios:
+            print("Timestep "+str(senario.start_time))
+            p=0
+            for c in senario.cars:
+                p+=c.route.percent_of_route_still_to_travel()
+            p=p/len(senario.cars)
+            print("Percent still to travel "+str(p))
 
 class CarMarker(Car):
     """
@@ -186,26 +195,36 @@ def bulletime(cars, default_dt=1): #
 
     return dt
 
-#myStrecke = Strecke([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)])
-#myStrecke2 = Strecke([Point(300.0,800.0),Point(200.0,400.0),Point(100.0,200.0),Point(0.0,0.0)])
-#myRoute = Route(myStrecke,0.1)
-#myRoute2 = Route(myStrecke2,0.1)
-myRoute_1 = Route([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)], 2.0)
-myRoute_2 = Route([Point(300.0,800.0),Point(200.0,400.0),Point(100.0,200.0),Point(0.0,0.0)], 2.0)
 
-print(myRoute_1.get_current_pos())
-print(myRoute_1.traveled_distance_on_route())
-print(myRoute_1.percent_of_route_still_to_travel())
-print(myRoute_1.get_new_pos(100.0))
-print(myRoute_1.get_current_pos())
-print(myRoute_1.traveled_distance_on_route())
-print(myRoute_1.percent_of_route_still_to_travel())
+#Wang test
+# myRoute_1 = Route([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)], 2.0)
+# myRoute_2 = Route([Point(300.0,800.0),Point(200.0,400.0),Point(100.0,200.0),Point(0.0,0.0)], 2.0)
+#
+# print(myRoute_1.get_current_pos())
+# print(myRoute_1.traveled_distance_on_route())
+# print(myRoute_1.percent_of_route_still_to_travel())
+# print(myRoute_1.get_new_pos(100.0))
+# print(myRoute_1.get_current_pos())
+# print(myRoute_1.traveled_distance_on_route())
+# print(myRoute_1.percent_of_route_still_to_travel())
 
-# myCar = CarMarker("test_1", myRoute_1, 55, 20, 120, 20, 0, 0, CarSize(50,20))
-# myCar2 = CarMarker("test_2", myRoute_2, 40, 20, 120, 20, 0, 0, CarSize(50,20))
-# myCars=[]
-# myCars.append(myCar)
-# myCars.append(myCar2)
-# mySenario = Senario(None,0,myCars)
-# myGraph = Graph(mySenario)
-# myGraph.calluclate_best_senarios()
+
+myStrecke = Strecke([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)])
+myStrecke2 = Strecke([Point(0.0,800.0),Point(100.0,400.0),Point(200.0,200.0),Point(300.0,0.0)])
+myRoute = Route(myStrecke,0.1)
+myRoute2 = Route(myStrecke2,0.1)
+
+# print(myRoute2.get_current_pos())
+# print(myRoute2.percent_of_route_still_to_travel())
+# print(myRoute2.get_new_pos(100))
+# print(myRoute2.percent_of_route_still_to_travel())
+
+myCar = CarMarker("test_1", myRoute, 55, 20, 120, 20, 0, 0, CarSize(50,20))
+myCar2 = CarMarker("test_2", myRoute2, 40, 20, 120, 20, 0, 0, CarSize(50,20))
+myCars=[]
+myCars.append(myCar)
+myCars.append(myCar2)
+mySenario = Senario(None,0,myCars)
+myGraph = Graph(mySenario)
+bestSenarios = myGraph.calluclate_best_senarios()
+Senario.printDebugSenarios(bestSenarios)

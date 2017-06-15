@@ -259,14 +259,25 @@ class Route():
         vy = y[self.point_iterator+1] - y[self.point_iterator]
         return (vx,vy)
 
+
+    def castPointsToWangNotation(points):
+        """
+        Nimmt eine Liste von Punkten und macht die in eine Liste von Listen d.h. die Notation die Wang verwendet
+        """
+        wang=[]
+        for p in points:
+            wang.append([p.x,p.y])
+        return wang
+
+
 #****************Beispiel*************************
 
 #if __name__ == "__main__":
 
-#    Route1=Route([[1,1],[2,1],[5,1],[10,1]],width=1)
-#    Route1.get_new_pos(6)
-#    Route1.traveled_distance_on_route()
-#    Route1.percent_of_route_still_to_travel()
+# Route1=Route([(1,2),(2,1),(5,1),(10,1)],width=1)
+# print(Route1.get_new_pos(100))
+# print(Route1.traveled_distance_on_route())
+# print(Route1.percent_of_route_still_to_travel())
 
 
 
@@ -330,16 +341,17 @@ class Route():
 #             x_roh.append(p.x)
 #             y_roh.append(p.y)
 #         x_range = numpy.arange(self.strecke.getSmallestX(), self.strecke.getBiggestX(), dStep);
-#
 #         y_points = numpy.interp(x_range, x_roh, y_roh)
 #         points=[]
 #         for i in range(0,len(y_points)):
-#             points.append(mathe.Point(y_points[i],x_range[i]))
+#         #    points.append(mathe.Point(y_points[i],x_range[i]))
+#             points.append(mathe.Point(x_range[i], y_points[i]))
+#
 #         return points
 #
 #     def get_new_pos(self, l): # ich gehe davon aus das sich die Einheit nicht ändert !
 #         """Verändert die Position um den Abstand l. l ist t*v"""
-#         k=1/self._dStep
+#         k=l/self._dStep
 #         self.point_iterator+=int(k)
 #         if self.point_iterator >= len(self.points):
 #             self.point_iterator= len(self.points)-1
@@ -360,14 +372,14 @@ class Route():
 #     def get_angle_of_pos(self, pos):
 #         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""
 #     #    return angle
-
-# myStrecke = Strecke([mathe.Point(0.0,0.0),mathe.Point(1.0,2.0),mathe.Point(2.0,4.0),mathe.Point(3.0,8.0)])
-# myRoute = Route(myStrecke,0.1)
-# print(myRoute.get_current_pos())
-# print(myRoute.percent_of_route_still_to_travel())
-# print(myRoute.get_new_pos(1))
-# print(myRoute.percent_of_route_still_to_travel())
-# print(myRoute.get_new_pos(1))
-# print(myRoute.percent_of_route_still_to_travel())
-# print(myRoute.get_new_pos(1))
-# print(myRoute.percent_of_route_still_to_travel())
+#
+# # myStrecke = Strecke([mathe.Point(0.0,0.0),mathe.Point(1.0,2.0),mathe.Point(2.0,4.0),mathe.Point(3.0,8.0)])
+# # myRoute = Route(myStrecke,0.1)
+# # print(myRoute.get_current_pos())
+# # print(myRoute.percent_of_route_still_to_travel())
+# # print(myRoute.get_new_pos(1))
+# # print(myRoute.percent_of_route_still_to_travel())
+# # print(myRoute.get_new_pos(1))
+# # print(myRoute.percent_of_route_still_to_travel())
+# # print(myRoute.get_new_pos(1))
+# # print(myRoute.percent_of_route_still_to_travel())
