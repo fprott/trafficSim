@@ -34,7 +34,7 @@ class Graph():
     def _do_A_star(self):
         while(len(self.open_list)>0):
             current_node = self.get_current_node()
-            if(current_node==None or current_node.get_cost()==float('inf')):
+            if(current_node==None):
                 break
             if (current_node.target_reached() == True): # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
@@ -49,6 +49,8 @@ class Graph():
             for old_nodes in self.closed_list:
                 if current_node.compare_with_other(old_nodes):
                     self.get_current_node()
+            if current_node.get_cost()==float('inf'):
+                return None
             return current_node
         else:
             return None
