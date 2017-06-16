@@ -1,3 +1,5 @@
+import copy
+
 from mathe import Point, Line, calculate_pos
 import itertools
 import functools
@@ -31,15 +33,25 @@ class Graph():
 
     def _do_A_star(self):
         while(len(self.open_list)>0):
-            current_node = heappop(self.open_list)
+            current_node = self.get_current_node()
+            if(current_node==None or current_node.get_cost()==float('inf')):
+                break
             if (current_node.target_reached() == True): # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
 
             self.closed_list.add(current_node)
             self._expand_graph(current_node)
-        #    print(current_node.start_time)
-
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
+
+    def get_current_node(self):
+        if(len(self.open_list)>0):
+            current_node = heappop(self.open_list)
+            for old_nodes in self.closed_list:
+                if current_node.compare_with_other(old_nodes):
+                    self.get_current_node()
+            return current_node
+        else:
+            return None
 
     def _expand_graph(self, node): #should expand by the factor of N
         """
@@ -47,11 +59,15 @@ class Graph():
         :param node:
         :return:
         """
-        time_step = bulletime(node.cars)
+        time_step =  1# bulletime(node.cars)
     #    print(time_step)
         new_nodes = node.callculate_next_senarios(time_step) # break second loop !
-        for node in new_nodes:
-            heappush(self.open_list, node) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
+        # for node in new_nodes:
+        #     print(node.start_time)
+        # print("---")
+        for n in new_nodes:
+        #    if n.get_cost()!=float('inf'):
+            heappush(self.open_list, n) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
 
 class NoPathAvailableError(Exception):
      def __init__(self, message):
@@ -70,12 +86,12 @@ class Senario():
     def get_node_cost(self): # TODO mehr variität !
         cost=0
         if(check_collision(self.cars)==True):
+        #    print("Kollision")
             cost = float('inf')
             return cost
         for car in self.cars:
-            cost+=1/car.a # sehr simpler Algo der angepasst werden sollte
+            cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
         return cost
-
 
     def get_node_cost_2(self):
         cost=0
@@ -96,9 +112,20 @@ class Senario():
             cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
         return cost
 
+    def get_cost(self):
+        return self.get_node_cost()+self.get_heuristic_cost()
+
     def __lt__(self, other): # Iterator !
-        return (self.get_node_cost()+self.get_heuristic_cost())<(other.get_node_cost()+other.get_heuristic_cost())
+        return (self.get_cost())<(other.get_cost())
         #  return self.cost < other.cost
+
+    def compare_with_other(self, other):
+        if self.start_time == other.start_time and self.parent == other.parent:
+            i=0
+            while i<len(self.cars):
+                if self.cars[i].pos == other.cars[i].pos and self.cars[i].v == other.cars[i].v:
+                    return True
+        return False
 
     def target_reached(self):
     #    print("----")
@@ -154,10 +181,13 @@ class Senario():
         for senario in senarios:
             print("Timestep "+str(senario.start_time))
             p=0
+            print("Current Cars:")
             for c in senario.cars:
+                print(c)
                 p+=c.route.percent_of_route_still_to_travel()
             p=p/len(senario.cars)
             print("Percent still to travel "+str(p))
+            print("-----")
 
 class CarMarker(Car):
     """
@@ -165,9 +195,14 @@ class CarMarker(Car):
     """
     def get_next_car_marker(self, dt, da):
         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
+
+        if new_v > self.v_max:
+            new_v = self.v_max
+        if new_v < -self.v_min:
+            new_v = self.v_min
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         new_a = self.get_a_by_da(da)
-        new_route = self.route
+        new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
         new_route.get_new_pos(self.v*dt)
         return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
 
@@ -209,30 +244,30 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute_1.percent_of_route_still_to_travel())
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,200.0),Point(200.0,400.0),Point(300.0,800.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,800.0),Point(100.0,400.0),Point(200.0,200.0),Point(300.0,0.0)]), 2)
-myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[8300.0,0.0]] , 2)
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
+#myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[300.0,0.0]] , 2)
 
-print(myRoute2.get_current_pos())
-print(myRoute2.percent_of_route_still_to_travel())
-print(myRoute2.get_new_pos(100))
-print(myRoute2.percent_of_route_still_to_travel())
+# print(myRoute2.get_current_pos())
+# #print(myRoute2.percent_of_route_still_to_travel())
+# #print(myRoute2.get_new_pos(100))
+# #print(myRoute2.percent_of_route_still_to_travel())
+#
+# print(myRoute2.get_new_pos(1000))
+# print(myRoute2.percent_of_route_still_to_travel())
+#
+# print(myRoute2.get_new_pos(1000))
+# print(myRoute2.percent_of_route_still_to_travel())
+#
+# print(myRoute2.get_new_pos(10000))
+# print(myRoute2.percent_of_route_still_to_travel())
 
-print(myRoute2.get_new_pos(1000))
-print(myRoute2.percent_of_route_still_to_travel())
-
-print(myRoute2.get_new_pos(1000))
-print(myRoute2.percent_of_route_still_to_travel())
-
-print(myRoute2.get_new_pos(10000))
-print(myRoute2.percent_of_route_still_to_travel())
-
-# myCar = CarMarker("test_1", myRoute, 55, 20, 120, 20, 0, 0, CarSize(50,20))
-# myCar2 = CarMarker("test_2", myRoute2, 40, 20, 120, 20, 0, 0, CarSize(50,20))
-# myCars=[]
-# myCars.append(myCar)
-# myCars.append(myCar2)
-# mySenario = Senario(None,0,myCars)
-# myGraph = Graph(mySenario)
-# bestSenarios = myGraph.calluclate_best_senarios()
-# Senario.printDebugSenarios(bestSenarios)
+myCar = CarMarker("test_1", myRoute, 20.0, 20.0, 300.0, 20.0, 0.0, 0.0, CarSize(50,20))
+myCar2 = CarMarker("test_2", myRoute2, 40.0, 20.0, 120.0, 20.0, 0.0, 0.0, CarSize(50,20))
+myCars=[]
+myCars.append(myCar)
+myCars.append(myCar2)
+mySenario = Senario(None,0,myCars)
+myGraph = Graph(mySenario)
+bestSenarios = myGraph.calluclate_best_senarios()
+Senario.printDebugSenarios(bestSenarios)

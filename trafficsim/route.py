@@ -186,7 +186,7 @@ class Route():
         #plt.show()
 
     def get_current_pos(self):
-        return self.points[self.point_iterator]
+        return Point(self.routepoints[self.point_iterator][0],self.routepoints[self.point_iterator][1])
 
     def get_step(self,l):
         #Done
@@ -219,17 +219,18 @@ class Route():
             #print('Error: "l" is out of range')
             #********Warning: folowing parts can be deleted*************
             #The car always stay at the endposition
-            t = tuple(self.routepoints[len(self.routepoints)-1])
+            self.point_iterator = len(self.routepoints)-1
+            t = Point(self.routepoints[len(self.routepoints)-1][0],self.routepoints[len(self.routepoints)-1][1])
         else:
             k = self.get_step(l)
             self.point_iterator += int(k)
 
-            t = tuple(self.routepoints[self.point_iterator])
+            t = Point(self.routepoints[self.point_iterator][0],self.routepoints[self.point_iterator][1])
             #print(self.routepoints[self.point_iterator])
             # print(self.point_iterator)
             #The return value should be a tuple!!!!!!!!!
 
-        print(t)
+     #   print(t)
         return t
 
 
@@ -246,6 +247,11 @@ class Route():
         """Wie viel Prozent der Route noch zurückgelegt werden müssen wobei 0 Prozent heißt das wir angekommen sind und 100 Prozent das wir am Start sind"""
         # Done
         # 步长不一定
+
+        #Bugfix weil er mir keine 0 zurückliefert XD
+        if self.point_iterator >= len(self.routepoints)-1:
+            return 0.0
+
         d = self.traveled_distance_on_route()
         dd = self.routelength
         #print(100-(100*d/dd))

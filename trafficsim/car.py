@@ -17,10 +17,10 @@ class Car:
         self.size = car_size
 
     def _set_v(self, new_v):
-        if (new_v <= self.max_v):
+        if (new_v <= self.v_max):
             self.v = new_v
         else:
-            self.v = self.max_v
+            self.v = self.v_max
 
     def _set_a(self, new_a):
         if (new_a <= self.a_max):
@@ -83,7 +83,7 @@ class Car:
     #    return Cars(self.id, self.a_min, self.a_max,new_pos, new_v, new_a, new_x, new,y, self.length, self.nr_intervals)  # make the next ghost
 
     def __str__(self):  # TODO mehr Werte
-        return (str(self.id) + " " + str(self.a))
+        return ("ID: "+str(self.id) + " current pos: "+str(self.pos)+" a: " + str(self.a)+" v: "+ str(self.v))
 
 def check_collision(cars):
     """
