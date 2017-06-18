@@ -248,6 +248,9 @@ def bulletime(cars, default_dt=1): #
 
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
 myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
+
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 #myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[300.0,0.0]] , 2)
 
 # print(myRoute2.get_current_pos())
