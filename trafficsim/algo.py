@@ -83,36 +83,42 @@ class Senario():
         self.cars = cars
         self.parent = parent
         self.start_time = start_time
+        self.type=2;                          # Ämdert Gütekriterium
     #    self.cost = self.get_node_cost()+self.get_heuristic_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def get_node_cost(self): # TODO mehr variität !
         cost=0
-        if(check_collision(self.cars)==True):
-        #    print("Kollision")
-            cost = float('inf')
+        if(self.type==1):
+            if(check_collision(self.cars)==True):
+            #    print("Kollision")
+                cost = float('inf')
+                return cost
+            for car in self.cars:
+                cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
             return cost
-        for car in self.cars:
-            cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
+
+        if(self.type==2):
+            if (check_collision(self.cars) == True):
+                cost = float('inf')
+                print('fail')
+                return cost
+            else :
+                cost = len(self.cars)*self.start_time
+                return cost      #ist start_time die aktuelle Zeit? hiermit würde man die summe der vergangenen Zeiten der Autos berechnen also die Entfernung vom Startpunk kostenmäßig
         return cost
 
-    def get_node_cost_2(self):
-        cost=0
-        if (check_collision(self.cars) == True):
-            cost = float('inf')
-            return cost
-        return len(self.cars)*self.start_time      #ist start_time die aktuelle Zeit? hiermit würde man die summe der vergangenen Zeiten der Autos berechnen also die Entfernung vom Startpunk kostenmäßig
-
-    def get_heuristic_cost_2(self):
-        cost=0;
-        for car in self.cars:
-            cost +=(car.route.percent_of_route_still_to_travel())/(car.v_max+car.v)  # mal route.länge_der_Strecke
-        return cost
 
     def get_heuristic_cost(self): # TODO mehr variität !
         cost=0
-        for car in self.cars:
-            cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
-        return cost
+        if(self.type==1):
+            for car in self.cars:
+                cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
+            return cost
+        if(self.type==2):
+            for car in self.cars:
+                cost += ((car.route.percent_of_route_still_to_travel())*car.route.route_length()) / (1*(car.v_max))  # mal route.länge_der_Strecke
+            return cost
+
 
     def get_cost(self):
         return self.get_node_cost()+self.get_heuristic_cost()
@@ -139,14 +145,14 @@ class Senario():
 
     def callculate_next_senarios(self, time_step):
         new_time = self.start_time + time_step
-
+        print(self.start_time)
         all_possible_car_tuples = []
         #Bilde ein tuple pro auto mit verschieden Werten
         for a_car in self.cars:
         #    print(a_car)
             possible_new_cars = ()
             #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(5): #TODO N wählen
+            for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
                 possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -186,27 +192,63 @@ class Senario():
             print("Current Cars:")
             for c in senario.cars:
                 print(c)
-                p+=c.route.percent_of_route_still_to_travel()
-            p=p/len(senario.cars)
-            print("Percent still to travel "+str(p))
+                print(c.size.get_width())
+                #p+=c.route.percent_of_route_still_to_travel()
+                print("Percent to  travel :" +str(c.route.percent_of_route_still_to_travel()) )
+            #p=p/len(senario.cars)
+            #print("Percent still to travel "+str(p))
             print("-----")
+
+#class CarMarker(Car):
+ #   """
+ #   Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
+ #   """
+ #   def get_next_car_marker(self, dt, da):
+ #       new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
+#
+ #       if new_v > self.v_max:
+  #          new_v = self.v_max
+   #     if new_v < -self.v_min:
+    #        new_v = self.v_min
+    #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
+     #   new_a = self.get_a_by_da(da)
+      #  new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
+       # new_route.get_new_pos(self.v*dt)
+        #return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
+
 
 class CarMarker(Car):
     """
     Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
     """
     def get_next_car_marker(self, dt, da):
-        new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
+        new_v = self.v+da*dt # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
             new_v = self.v_max
         if new_v < -self.v_min:
             new_v = self.v_min
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
-        new_a = self.get_a_by_da(da)
+        #new_a = self.get_a_by_da(da)
+        new_a = da
         new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
-        new_route.get_new_pos(self.v*dt)
+        aa=new_a
+        if self.v >= self.v_max and aa > 0:
+            aa=0
+        if self.v <= self.v_min and aa < 0:
+            aa=0
+
+        new_route.get_new_pos(self.v*dt+aa*dt*dt*0.5)
+        #print(new_route.get_current_pose())
+        #print(CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size))
+
         return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
+
+
+
+
+
+
 
 
 def bulletime(cars, default_dt=1): #
@@ -246,11 +288,18 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute_1.percent_of_route_still_to_travel())
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
+#myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
+#myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
 
-# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(7030.0,0.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(300,0.0),Point(8000.0,0.0)]), 2)
+
+
+
+
+#myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(200.0,100.0)]), 2)
+#myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,180.0),Point(620.0,0.0)]), 2)
 #myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[300.0,0.0]] , 2)
 
 # print(myRoute2.get_current_pos())
@@ -267,8 +316,9 @@ myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.
 # print(myRoute2.get_new_pos(10000))
 # print(myRoute2.percent_of_route_still_to_travel())
 
-myCar = CarMarker("test_1", myRoute, 20.0, 20.0, 300.0, 20.0, 0.0, 0.0, CarSize(50,20))
-myCar2 = CarMarker("test_2", myRoute2, 40.0, 20.0, 120.0, 20.0, 0.0, 0.0, CarSize(50,20))
+myCar = CarMarker("test_1", myRoute, 65.0, -60.0, 240.0, 20.0, 0.0, 0.0, CarSize(50,0))
+myCar2 = CarMarker("test_2", myRoute2, 40.0, -40.0, 140.0, 20.0, 0.0, 0.0, CarSize(40,0))
+
 myCars=[]
 myCars.append(myCar)
 myCars.append(myCar2)
@@ -276,3 +326,4 @@ mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
 Senario.printDebugSenarios(bestSenarios)
+

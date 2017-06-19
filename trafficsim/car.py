@@ -45,6 +45,8 @@ class Car:
         a_values= list();
         for i in range(0, N):
             a_values.append(self.a_min+ da*i)
+        if 0 not in a_values:        # 0 muss vorhanden sein
+            a_values.append(0);
         return a_values
 
     def get_a_by_da(self, da):
@@ -103,6 +105,14 @@ def check_collision(cars):
     return False
 
 
+
+
+
+
+
+
+
+
 class CarSize():
     """die größere Zahl ist immer length""" # frage, wie baut man damit einen smart nach :D ?
     def __init__(self, width, length):
@@ -118,3 +128,7 @@ class CarSize():
 
     def get_length(self):
         return self.length
+
+
+#car1 =
+
