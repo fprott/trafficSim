@@ -71,7 +71,7 @@ class math_Kurve():
 
          return (f(n) / (f(n - i) * f(i))) * (t ** (n - i)) * (1 - t) ** i
 
-     def Bezier_Kurve(self,points=object, nTimes: object = 11) ->object: #Based on car class, the exact number of curves is object-1!!!!!!!!
+     def Bezier_Kurve(self,points=object, nTimes: object = 1001) ->object: #Based on car class, the exact number of curves is object-1!!!!!!!!
          """
             Given a set of control points, return the
             bezier curve defined by the control points.
