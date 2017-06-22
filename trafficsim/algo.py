@@ -9,6 +9,12 @@ from route import *
 
 from heapq import *
 
+from enum import Enum
+
+class QualityFunction(Enum):
+    STANDART = 1
+    LEVI = 2
+
 class Graph():
     """
     Der Graph enhällt als Knoten alle Senarien. Auf dem Graph wird ein A* Algo ausgeführt. Der Graph wird nur wenn notwendig angepasst.
@@ -83,12 +89,12 @@ class Senario():
         self.cars = cars
         self.parent = parent
         self.start_time = start_time
-        self.type=2;                          # Ämdert Gütekriterium
+        self.quality_function = QualityFunction.STANDART;                     # Ändert Gütekriterium
     #    self.cost = self.get_node_cost()+self.get_heuristic_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def get_node_cost(self): # TODO mehr variität !
         cost=0
-        if(self.type==1):
+        if(self.quality_function==QualityFunction.STANDART):
             if(check_collision(self.cars)==True):
             #    print("Kollision")
                 cost = float('inf')
@@ -97,7 +103,7 @@ class Senario():
                 cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
             return cost
 
-        if(self.type==2):
+        if(self.quality_function==QualityFunction.LEVI):
             if (check_collision(self.cars) == True):
                 cost = float('inf')
                 print('fail')
@@ -110,11 +116,11 @@ class Senario():
 
     def get_heuristic_cost(self): # TODO mehr variität !
         cost=0
-        if(self.type==1):
+        if(self.quality_function==QualityFunction.STANDART):
             for car in self.cars:
                 cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
             return cost
-        if(self.type==2):
+        if(self.quality_function==QualityFunction.LEVI):
             for car in self.cars:
                 cost += ((car.route.percent_of_route_still_to_travel())*car.route.route_length()) / (1*(car.v_max))  # mal route.länge_der_Strecke
             return cost
