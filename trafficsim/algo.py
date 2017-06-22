@@ -61,6 +61,7 @@ class Graph():
         else:
             return None
 
+    #should only expand if not already expanded !
     def _expand_graph(self, node): #should expand by the factor of N
         """
         Erweiteret den Graphen um alle möglichen Kinder des Nodes und nur um diese
@@ -88,8 +89,9 @@ class Senario():
         """
         self.cars = cars
         self.parent = parent
+        self.children = None # am anfang leer
         self.start_time = start_time
-        self.quality_function = QualityFunction.STANDART;                     # Ändert Gütekriterium
+        self.quality_function = QualityFunction.LEVI  # Ändert Gütekriterium TODO richtig übergeben als global !
     #    self.cost = self.get_node_cost()+self.get_heuristic_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def get_node_cost(self): # TODO mehr variität !
@@ -111,7 +113,6 @@ class Senario():
             else :
                 cost = len(self.cars)*self.start_time
                 return cost      #ist start_time die aktuelle Zeit? hiermit würde man die summe der vergangenen Zeiten der Autos berechnen also die Entfernung vom Startpunk kostenmäßig
-        return cost
 
 
     def get_heuristic_cost(self): # TODO mehr variität !
@@ -150,46 +151,50 @@ class Senario():
         return True
 
     def callculate_next_senarios(self, time_step):
-        new_time = self.start_time + time_step
-        print(self.start_time)
-        all_possible_car_tuples = []
-        #Bilde ein tuple pro auto mit verschieden Werten
-        for a_car in self.cars:
-        #    print(a_car)
-            possible_new_cars = ()
-            #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
-                possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
-            all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
+        if self.children == None :
+            new_time = self.start_time + time_step
+            print(self.start_time)
+            all_possible_car_tuples = []
+            #Bilde ein tuple pro auto mit verschieden Werten
+            for a_car in self.cars:
+            #    print(a_car)
+                possible_new_cars = ()
+                #print(a_car.get_possible_a_range(5))
+                for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+                    possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
+                all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
-        #print(tuple(all_possible_car_tuples))
-        # for ct in all_possible_car_tuples:
-        #     print("--")
-        #     for c in ct:
-        #         print(c)
-        #         pass
+            #print(tuple(all_possible_car_tuples))
+            # for ct in all_possible_car_tuples:
+            #     print("--")
+            #     for c in ct:
+            #         print(c)
+            #         pass
 
-        all_car_possiblites = list(itertools.product(*all_possible_car_tuples)) # hexerei, bitte schaut euch die doku an wenn das net geht #BUUUG
-        #EXAMPLE
-        # l = [("A1","A2"),("B1","B2"),("C1","C2")]
-        # ap = list(itertools.product(*l))
-        # ap ist dann
-        # [('A1', 'B1', 'C1'),
-        #  ('A1', 'B1', 'C2'),
-        #  ('A1', 'B2', 'C1'),
-        #  ('A1', 'B2', 'C2'),
-        #  ('A2', 'B1', 'C1'),
-        #  ('A2', 'B1', 'C2'),
-        #  ('A2', 'B2', 'C1'),
-        #  ('A2', 'B2', 'C2')]
+            all_car_possiblites = list(itertools.product(*all_possible_car_tuples)) # hexerei, bitte schaut euch die doku an wenn das net geht #BUUUG
+            #EXAMPLE
+            # l = [("A1","A2"),("B1","B2"),("C1","C2")]
+            # ap = list(itertools.product(*l))
+            # ap ist dann
+            # [('A1', 'B1', 'C1'),
+            #  ('A1', 'B1', 'C2'),
+            #  ('A1', 'B2', 'C1'),
+            #  ('A1', 'B2', 'C2'),
+            #  ('A2', 'B1', 'C1'),
+            #  ('A2', 'B1', 'C2'),
+            #  ('A2', 'B2', 'C1'),
+            #  ('A2', 'B2', 'C2')]
 
-        all_possible_steps = []
-        for possiblity in all_car_possiblites:
-        #    for car in possiblity:
-        #        print(car) #soll immer 2 autos mixen
-        #    print("----")
-            all_possible_steps.append(Senario(self, new_time, possiblity))
-        return all_possible_steps
+            all_possible_steps = []
+            for possiblity in all_car_possiblites:
+            #    for car in possiblity:
+            #        print(car) #soll immer 2 autos mixen
+            #    print("----")
+                all_possible_steps.append(Senario(self, new_time, possiblity))
+            self.children=all_possible_steps
+            return all_possible_steps
+        else:
+            return self.children
 
     def printDebugSenarios(senarios):
         for senario in senarios:
