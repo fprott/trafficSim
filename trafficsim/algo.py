@@ -6,9 +6,7 @@ import functools
 import math
 from car import *
 from route import *
-
 from heapq import *
-
 from enum import Enum
 
 class QualityFunction(Enum):
@@ -39,27 +37,20 @@ class Graph():
 
     def _do_A_star(self):
         while(len(self.open_list)>0):
-            current_node = self.get_current_node()
-            if(current_node==None):
-                break
-            if (current_node.target_reached() == True): # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
+        #    current_node = self.get_current_node()
+            current_node = heappop(self.open_list)
+            print("Current Level: "+str(current_node.start_time)+" List lenght: " + str(len(self.open_list)))
+
+            if current_node.target_reached() == True: # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
 
             self.closed_list.add(current_node)
-            self._expand_graph(current_node)
-        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
+            if current_node.children != None:
+                print("GEHT")
 
-    def get_current_node(self):
-        if(len(self.open_list)>0):
-            current_node = heappop(self.open_list)
-            for old_nodes in self.closed_list:
-                if current_node.compare_with_other(old_nodes):
-                    self.get_current_node()
-            if current_node.get_cost()==float('inf'):
-                return None
-            return current_node
-        else:
-            return None
+            if current_node.children == None: # wenn das Senario noch keine Kinder eingebracht hat, wenn es keine Kinder hat dann muss das eine leere Liste sein []
+                self._expand_graph(current_node)
+        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
     #should only expand if not already expanded !
     def _expand_graph(self, node): #should expand by the factor of N
@@ -68,15 +59,18 @@ class Graph():
         :param node:
         :return:
         """
-        time_step =  1# bulletime(node.cars)
+        time_step = 1# bulletime(node.cars)
     #    print(time_step)
+
         new_nodes = node.callculate_next_senarios(time_step) # break second loop !
-        # for node in new_nodes:
-        #     print(node.start_time)
-        # print("---")
+
+    #    for node in new_nodes:
+    #        print(node.start_time)
+    #    print("---")
         for n in new_nodes:
         #    if n.get_cost()!=float('inf'):
-            heappush(self.open_list, n) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
+            if n.get_cost() < float('inf'):
+                heappush(self.open_list, n) # Achtung, noch gibt es keine Zusammenführung d.h. keine möglichkeit das ein node zwei Eltern hat
 
 class NoPathAvailableError(Exception):
      def __init__(self, message):
@@ -97,7 +91,7 @@ class Senario():
     def get_node_cost(self): # TODO mehr variität !
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
-            if(check_collision(self.cars)==True):
+            if check_collision(self.cars)==True:
             #    print("Kollision")
                 cost = float('inf')
                 return cost
@@ -106,9 +100,9 @@ class Senario():
             return cost
 
         if(self.quality_function==QualityFunction.LEVI):
-            if (check_collision(self.cars) == True):
+            if check_collision(self.cars) == True:
                 cost = float('inf')
-                print('fail')
+            #    print("Kollision")
                 return cost
             else :
                 cost = len(self.cars)*self.start_time
@@ -148,19 +142,20 @@ class Senario():
     #        print(car.route.percent_of_route_still_to_travel())
             if car.route.percent_of_route_still_to_travel() !=0:
                 return False
+        print("Target reach")
         return True
 
     def callculate_next_senarios(self, time_step):
-        if self.children == None :
+        if self.children is None:
             new_time = self.start_time + time_step
-            print(self.start_time)
+        #    print(self.start_time)
             all_possible_car_tuples = []
             #Bilde ein tuple pro auto mit verschieden Werten
             for a_car in self.cars:
             #    print(a_car)
                 possible_new_cars = ()
                 #print(a_car.get_possible_a_range(5))
-                for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+                for a in a_car.get_possible_a_range(5): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
                     possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
                 all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -187,9 +182,9 @@ class Senario():
 
             all_possible_steps = []
             for possiblity in all_car_possiblites:
-            #    for car in possiblity:
-            #        print(car) #soll immer 2 autos mixen
-            #    print("----")
+                # for car in possiblity:
+                #     print(car) #soll immer 2 autos mixen
+                # print("----")
                 all_possible_steps.append(Senario(self, new_time, possiblity))
             self.children=all_possible_steps
             return all_possible_steps
@@ -210,22 +205,22 @@ class Senario():
             #print("Percent still to travel "+str(p))
             print("-----")
 
-#class CarMarker(Car):
- #   """
- #   Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
- #   """
- #   def get_next_car_marker(self, dt, da):
- #       new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
+# class CarMarker(Car):
+#     """
+#     Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
+#     """
+#     def get_next_car_marker(self, dt, da):
+#         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 #
- #       if new_v > self.v_max:
-  #          new_v = self.v_max
-   #     if new_v < -self.v_min:
-    #        new_v = self.v_min
-    #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
-     #   new_a = self.get_a_by_da(da)
-      #  new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
-       # new_route.get_new_pos(self.v*dt)
-        #return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
+#         if new_v > self.v_max:
+#             new_v = self.v_max
+#         if new_v < -self.v_min:
+#             new_v = self.v_min
+#         new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
+#         new_a = self.get_a_by_da(da)
+#         new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
+#         new_route.get_new_pos(self.v*dt)
+#         return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
 
 
 class CarMarker(Car):
@@ -233,7 +228,7 @@ class CarMarker(Car):
     Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
     """
     def get_next_car_marker(self, dt, da):
-        new_v = self.v+da*dt # wir erechnen die neue geschwindigkeit
+        new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
             new_v = self.v_max
@@ -241,25 +236,19 @@ class CarMarker(Car):
             new_v = self.v_min
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         #new_a = self.get_a_by_da(da)
-        new_a = da
+        new_a = self.get_a_by_da(da)
+        if self.v >= self.v_max and new_a > 0:
+            new_a=0
+        if self.v <= self.v_min and new_a < 0:
+            new_a=0
         new_route = copy.deepcopy(self.route) # Deep copy, achtung Flaschenhals TODO verbeser speicher ausnutzung
-        aa=new_a
-        if self.v >= self.v_max and aa > 0:
-            aa=0
-        if self.v <= self.v_min and aa < 0:
-            aa=0
 
-        new_route.get_new_pos(self.v*dt+aa*dt*dt*0.5)
+
+        new_route.get_new_pos(self.v*dt+new_a*dt*dt*0.5)
         #print(new_route.get_current_pose())
         #print(CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size))
 
         return CarMarker(self.id, new_route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size) #make the next ghost
-
-
-
-
-
-
 
 
 def bulletime(cars, default_dt=1): #
@@ -299,18 +288,18 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute_1.percent_of_route_still_to_travel())
 
 
-#myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
-#myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(7030.0,0.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(300,0.0),Point(8000.0,0.0)]), 2)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(7030.0,0.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(300,0.0),Point(8000.0,0.0)]), 2)
 
 
 
 
-#myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(200.0,100.0)]), 2)
-#myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,180.0),Point(620.0,0.0)]), 2)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(200.0,100.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,180.0),Point(620.0,0.0)]), 2)
 #myRoute2 = Route([[0.0,800.0],[100.0,400.0],[200.0,200.0],[300.0,0.0]] , 2)
 
 # print(myRoute2.get_current_pos())
@@ -327,8 +316,8 @@ myRoute2 = Route(Route.castPointsToWangNotation([Point(300,0.0),Point(8000.0,0.0
 # print(myRoute2.get_new_pos(10000))
 # print(myRoute2.percent_of_route_still_to_travel())
 
-myCar = CarMarker("test_1", myRoute, 65.0, -60.0, 240.0, 20.0, 0.0, 0.0, CarSize(50,0))
-myCar2 = CarMarker("test_2", myRoute2, 40.0, -40.0, 140.0, 20.0, 0.0, 0.0, CarSize(40,0))
+myCar = CarMarker("test_1", myRoute, 65.0, -60.0, 240.0, 20.0, 0.0, 0.0, CarSize(60,0))
+myCar2 = CarMarker("test_2", myRoute2, 40.0, -40.0, 140.0, 20.0, 0.0, 0.0, CarSize(50,0))
 
 myCars=[]
 myCars.append(myCar)

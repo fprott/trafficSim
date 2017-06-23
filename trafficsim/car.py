@@ -96,6 +96,10 @@ def check_collision(cars):
     for car_1 in cars:
         for car_2 in cars:
             if(car_1 != car_2):
+                # car_1_oben = car_1.pos.x
+
+
+
                 # der folgende Algo ist abgeschrieben, ka ob das funktioniert
                 dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
                 diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
