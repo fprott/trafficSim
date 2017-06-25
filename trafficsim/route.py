@@ -1,6 +1,6 @@
-import sys
+#import sys
 import math
-sys.path.append("..")
+#sys.path.append("..")
 
 #for "test" running
 from trafficsim.mathe import *
@@ -268,6 +268,38 @@ class Route():
         s = ((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5
 
         return s
+
+    def get_new_pos_without_pointer_change(self,l):
+
+        d = self.traveled_distance_on_route()
+        i = self.point_iterator
+
+        if l > 0:
+            if l > (self.routelength - d):
+                # print('Error: "l" is out of range')
+                # ********Warning: folowing parts can be deleted*************
+                # The car always stay at the endposition
+                i = len(self.routepoints) - 1
+                t = Point(self.routepoints[len(self.routepoints) - 1][0],
+                          self.routepoints[len(self.routepoints) - 1][1])
+            else:
+                k = self.get_step(l)
+                i += int(k)
+                # print(self.routepoints[self.point_iterator])
+                # print(self.point_iterator)
+                # The return value should be a tuple!!!!!!!!!
+                t = Point(self.routepoints[i][0], self.routepoints[i][1])
+        else:
+            if abs(l) > d:
+                t = Point(self.routepoints[0][0], self.routepoints[0][1])
+            else:
+                k = self.get_step(abs(l))
+                i -= int(k)
+                t = Point(self.routepoints[i][0], self.routepoints[i][1])
+
+
+                print(i)
+            return t
 
 
     def traveled_distance_on_route(self):
