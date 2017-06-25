@@ -76,7 +76,7 @@ class Route():
 
 
     def get_route(self,points,width):
-        from matplotlib import pyplot as plt
+        #from matplotlib import pyplot as plt
 
         #points = self.points
         #width = self.width
