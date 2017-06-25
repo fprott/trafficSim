@@ -10,6 +10,11 @@ from trafficsim.mathe import *
 # Wangs Klasse wurde hierher verschoben !
 
 
+#UPDATE 25/06/2017
+#get_next_pos input a negative Length
+#get_next_dis: find out the distance to the next point
+
+
 class Route():
     def __init__(self,points,width):
         self.points = points  # The points to define the street
@@ -253,6 +258,16 @@ class Route():
 
      #   print(t)
         return t
+
+    def get_next_dis(self):
+
+        i = self.point_iterator
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+
+        s = ((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5
+
+        return s
 
 
     def traveled_distance_on_route(self):
