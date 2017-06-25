@@ -6,6 +6,7 @@ from car import *
 from route import *
 from heapq import *
 from enum import Enum
+import copy
 
 class QualityFunction(Enum):
     STANDART = 1
@@ -34,7 +35,7 @@ class Graph():
 
     def calluclate_best_senarios(self):
         best_way=[]
-        node = self._do_A_star() #liefert den Zielknoten
+        node = self._do_A_stern() #liefert den Zielknoten
         while(node != self.root):
             best_way.append(node)
             node = node.parent
@@ -42,13 +43,14 @@ class Graph():
         return best_way
 
 
-    def _do_a_stern(self):
+    def _do_A_stern(self):
         while len(self.open_list)>0:
             current_node = heappop(self.open_list)
+            print("Current Level: " + str(current_node.start_time) + " List lenght: " + str(len(self.open_list)))
             if current_node.target_reached() == True: # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
             self.closed_list.append(current_node)
-            next_nodes = current_node.get_next_senarios()
+            next_nodes = current_node.get_next_senarios(current_node.cars)
             for node in next_nodes:
                 if node.cost < float('inf'):
                     heappush(self.open_list,node)
@@ -71,7 +73,7 @@ class Senario():
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
             if check_collision(self.cars)==True:
-            #    print("Kollision")
+                print("Kollision")
                 cost = float('inf')
                 return cost
             for car in self.cars:
@@ -81,7 +83,7 @@ class Senario():
         if(self.quality_function==QualityFunction.LEVI):
             if check_collision(self.cars) == True:
                 cost = float('inf')
-            #    print("Kollision")
+                print("Kollision")
                 return cost
             else :
                 cost = len(self.cars)*self.start_time
@@ -101,7 +103,7 @@ class Senario():
 
 
     def _get_cost(self):
-        return self.get_node_cost()+self.get_heuristic_cost()
+        return self._get_node_cost()+self._get_heuristic_cost()
 
     def __lt__(self, other): # Iterator !
         return (self.cost)<(other.cost)
@@ -127,7 +129,8 @@ class Senario():
     def get_next_senarios(self, cars):
         if self._children is None:
             dt = bulletime(cars)
-            self._children = self._callculate_next_senarios(dt) #ERROR!!!!!!
+            self._children = self._callculate_next_senarios(dt)
+            return self._children
         else:
             return self._children
 
@@ -141,7 +144,7 @@ class Senario():
             possible_new_cars = ()
             #print(a_car.get_possible_a_range(5))
             for a in a_car.get_possible_a_range(5): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
-                possible_new_cars = possible_new_cars + (a_car.get_next_car_marker(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
+                possible_new_cars = possible_new_cars + (a_car.get_next_car(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
         #print(tuple(all_possible_car_tuples))
@@ -189,29 +192,17 @@ class Senario():
             #print("Percent still to travel "+str(p))
             print("-----")
 
-class CarMarker(Car):
-    """
-    Die Klasse CarMarker besteht aus einem Auto zu einer bestimmten Position. Es findet keine Bewegung dies Autos statt
-    """
-    def __init__(self, id, route, a_max, a_min, v_max, v_min, v, a, car_size, new_pos):
-        super.__init__(id, route, a_max, a_min, v_max, v_min, v, a, car_size)
-        self.pos = new_pos
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 
-    def get_next_car_marker(self, dt, da):
-        new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
-        if new_v > self.v_max:
-            new_v = self.v_max
-        if new_v < -self.v_min:
-            new_v = self.v_min
-    #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
-        #new_a = self.get_a_by_da(da)
-        new_a = self.get_a_by_da(da)
-        if self.v >= self.v_max and new_a > 0:
-            new_a=0
-        if self.v <= self.v_min and new_a < 0:
-            new_a=0
+myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
 
-        new_pos = self.route.get_next_pos_from_pos(self.pos, self.v*dt+new_a*dt*dt*0.5) #errechnet nur neue position
-
-        return CarMarker(self.id, self.route, self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size, new_pos) #make the next ghost
+myCars=[]
+myCars.append(myCar)
+myCars.append(myCar2)
+mySenario = Senario(None,0,myCars)
+myGraph = Graph(mySenario)
+bestSenarios = myGraph.calluclate_best_senarios()
+Senario.printDebugSenarios(bestSenarios)
