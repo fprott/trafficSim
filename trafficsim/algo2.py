@@ -7,6 +7,9 @@ from route import *
 from heapq import *
 from enum import Enum
 import copy
+import time
+
+collision_counter = 0
 
 class QualityFunction(Enum):
     STANDART = 1
@@ -69,10 +72,12 @@ class Senario():
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def _get_node_cost(self): # TODO mehr variität !
+        global collision_counter
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
             if check_collision(self.cars)==True:
             #    print("Kollision")
+                collision_counter+=1
                 cost = float('inf')
                 return cost
             for car in self.cars:
@@ -83,6 +88,7 @@ class Senario():
             if check_collision(self.cars) == True:
                 cost = float('inf')
             #    print("Kollision")
+                collision_counter+=1
                 return cost
             else :
                 cost = len(self.cars)*self.start_time
@@ -191,7 +197,10 @@ class Senario():
             #p=p/len(senario.cars)
             #print("Percent still to travel "+str(p))
             print("-----")
+        print("Number of Collisions "+str(collision_counter))
 
+
+start_time = time.time()
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 
@@ -205,4 +214,9 @@ myCars.append(myCar2)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
+
+end_time = time.time()
+
+
 Senario.printDebugSenarios(bestSenarios)
+print("run time (s) "+str(end_time-start_time))
