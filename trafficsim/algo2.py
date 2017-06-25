@@ -65,7 +65,7 @@ class Senario():
         self.parent = parent
         self._children = None # am anfang leer
         self.start_time = start_time
-        self.quality_function = QualityFunction.LEVI  # Ändert Gütekriterium TODO richtig übergeben als global !
+        self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def _get_node_cost(self): # TODO mehr variität !
@@ -196,8 +196,8 @@ myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 
 
-myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
 
 myCars=[]
 myCars.append(myCar)
