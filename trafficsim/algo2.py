@@ -65,14 +65,14 @@ class Senario():
         self.parent = parent
         self._children = None # am anfang leer
         self.start_time = start_time
-        self.quality_function = QualityFunction.LEVI  # Ändert Gütekriterium TODO richtig übergeben als global !
+        self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def _get_node_cost(self): # TODO mehr variität !
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
             if check_collision(self.cars)==True:
-                print("Kollision")
+            #    print("Kollision")
                 cost = float('inf')
                 return cost
             for car in self.cars:
@@ -82,7 +82,7 @@ class Senario():
         if(self.quality_function==QualityFunction.LEVI):
             if check_collision(self.cars) == True:
                 cost = float('inf')
-                print("Kollision")
+            #    print("Kollision")
                 return cost
             else :
                 cost = len(self.cars)*self.start_time
@@ -121,6 +121,7 @@ class Senario():
         for car in self.cars:
     #        print(car.route.percent_of_route_still_to_travel())
             if car.route.get_percentage_from_start(car.strecke) !=0:
+                print(car.route.get_percentage_from_start(car.strecke))
                 return False
         print("Target reach")
         return True
@@ -142,7 +143,7 @@ class Senario():
         #    print(a_car)
             possible_new_cars = ()
             #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(5): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+            for a in a_car.get_possible_a_range(3): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
                 possible_new_cars = possible_new_cars + (a_car.get_next_car(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -195,8 +196,8 @@ myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 
 
-myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
 
 myCars=[]
 myCars.append(myCar)

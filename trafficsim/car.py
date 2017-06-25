@@ -49,8 +49,9 @@ class Car:
         a_values= list();
         for i in range(0, N):
             a_values.append(self.a_min+ da*i)
-        if 0 not in a_values:        # 0 muss vorhanden sein
+        if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
             a_values.append(0);
+        #a_values = [15]
         return a_values
 
     def get_a_by_da(self, da):
