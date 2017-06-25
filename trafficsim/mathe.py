@@ -67,7 +67,7 @@ class Point(tuple):
 
 class math_Kurve():
      def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
-         from math import factorial as f
+         from  math import factorial as f
 
          return (f(n) / (f(n - i) * f(i))) * (t ** (n - i)) * (1 - t) ** i
 
@@ -208,28 +208,28 @@ class math_Strasse():
          grenz_punkte = self.Grenz_Punkte(self=self,points=points,breite=bereite)
          return self.Grenz_Punkte_Strasse(self=self,points=grenz_punkte)
 
-class Polygon():
-    def main_strasse(self):
-     from matplotlib import pyplot as plt
-     from matplotlib.lines import Line2D
-     Strasse_1 = math_Strasse
-     nPoints = 10
-     Strasse_Punkte = [[0,4.5],[11,5]]#,[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
-     #Strasse_Punkte = np.random.rand(nPoints,2)*20
-     Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=2)
-     print(Polygon_Punkte)
+#class Polygon():
+#    def main_strasse(self):
+#     from matplotlib import pyplot as plt
+#     from matplotlib.lines import Line2D
+#     Strasse_1 = math_Strasse
+#     nPoints = 10
+#     Strasse_Punkte = [[0,4.5],[11,5]]#,[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
+#     #Strasse_Punkte = np.random.rand(nPoints,2)*20
+#     Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=2)
+#     print(Polygon_Punkte)
 
-     figure, ax = plt.subplots()
-     # 设置x，y值域
-     ax.set_xlim(left=-20, right=20)
-     ax.set_ylim(bottom=-20, top=20)
-     # 两条line的数据
-     for i in range(len(Polygon_Punkte)-1):
-         (line1_xs, line1_ys) = zip(*[Polygon_Punkte[i],Polygon_Punkte[i+1]])
-     # 创建两条线，并添加
-         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
-     plt.plot()
-     #plt.sh
+#     figure, ax = plt.subplots()
+#     # 设置x，y值域
+#     ax.set_xlim(left=-20, right=20)
+#     ax.set_ylim(bottom=-20, top=20)
+#     # 两条line的数据
+#     for i in range(len(Polygon_Punkte)-1):
+#         (line1_xs, line1_ys) = zip(*[Polygon_Punkte[i],Polygon_Punkte[i+1]])
+#     # 创建两条线，并添加
+#         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
+#     #plt.plot()
+#     #plt.sh
 
      """xpoints = [p[0] for p in Strasse_Punkte]#points[i]]
      ypoints = [p[1] for p in Strasse_Punkte]#points[i]]
@@ -274,49 +274,49 @@ class Kurve():
 
 #already in car.py as route
 def bahn(points,width):
-     from matplotlib import pyplot as plt
+    from matplotlib import pyplot as plt
 
-     Line1=math_Kurve()
-     Line2=math_Kurve()
-     Kurve=math_Kurve()
+    Line1 = math_Kurve()
+    Line2 = math_Kurve()
+    Kurve=math_Kurve()
 
-     xpoints = [p[0] for p in points]
-     ypoints = [p[1] for p in points]
+    xpoints = [p[0] for p in points]
+    ypoints = [p[1] for p in points]
 
-     x1=xpoints[0]
-     x3=xpoints[1]
-     x5=xpoints[2]
-     y1=ypoints[0]
-     y3=ypoints[1]
-     y5=ypoints[2]
+    x1=xpoints[0]
+    x3=xpoints[1]
+    x5=xpoints[2]
+    y1=ypoints[0]
+    y3=ypoints[1]
+    y5=ypoints[2]
 
-     s13=((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
-     s35 = ((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
+    s13=((x3 - x1) ** 2 + (y3 - y1) ** 2) ** 0.5
+    s35 = ((x3 - x5) ** 2 + (y3 - y5) ** 2) ** 0.5
 
-     x2=x3+((width/2)*(x1-x3))/s13
-     y2=y3+((width/2)*(y1-y3))/s13
-     x4=x3+((width/2)*(x5-x3))/s35
-     y4=y3+((width/2)*(y5-y3))/s35
+    x2=x3+((width/2)*(x1-x3))/s13
+    y2=y3+((width/2)*(y1-y3))/s13
+    x4=x3+((width/2)*(x5-x3))/s35
+    y4=y3+((width/2)*(y5-y3))/s35
 
-     lpoints1=[[x1,y1],[x2,y2]]
-     lpoints2 = [[x4, y4], [x5, y5]]
-     kpoints=[[x2,y2],[x3,y3],[x4,y4]]
+    lpoints1=[[x1,y1],[x2,y2]]
+    lpoints2 = [[x4, y4], [x5, y5]]
+    kpoints=[[x2,y2],[x3,y3],[x4,y4]]
 
-     xpoints=[x1,x2,x3,x4,x5]
-     ypoints=[y1,y2,y3,y4,y5]
+    xpoints=[x1,x2,x3,x4,x5]
+    ypoints=[y1,y2,y3,y4,y5]
 
-     xline1, yline1 = Kurve.Bezier_Kurve(points=lpoints1)
-     xline2, yline2 = Kurve.Bezier_Kurve(points=lpoints2)
-     xkurve, ykurve = Kurve.Bezier_Kurve(points=kpoints)
+    xline1, yline1 = Kurve.Bezier_Kurve(points=lpoints1)
+    xline2, yline2 = Kurve.Bezier_Kurve(points=lpoints2)
+    xkurve, ykurve = Kurve.Bezier_Kurve(points=kpoints)
 
-     xvals = list(xline1) + list(xkurve) + list(xline2)
-     yvals = list(yline1) + list(ykurve) + list(yline2)
-     #xvals=list(xline1).extend(list(xkurve))
-     #yvals = list(yline1).extend((ykurve))
+    xvals = list(xline1) + list(xkurve) + list(xline2)
+    yvals = list(yline1) + list(ykurve) + list(yline2)
+    #xvals=list(xline1).extend(list(xkurve))
+    #yvals = list(yline1).extend((ykurve))
 
-     Route_Points = [xpoints, ypoints]
+    Route_Points = [xpoints, ypoints]
 
-     """plt.plot(xkurve, ykurve)
+    """plt.plot(xkurve, ykurve)
      plt.plot(xline1, yline1)
      plt.plot(xline2, yline2)"""
      #plt.plot(Bahn_Points)
