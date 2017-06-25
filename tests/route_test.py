@@ -1,5 +1,5 @@
 # Weil jeder UnitTest kennt benutzen wir das
-from route import*
+from trafficsim.route import*
 import unittest
 
 class RoutenTest(unittest.TestCase):

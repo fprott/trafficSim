@@ -232,7 +232,7 @@ class Route():
         # Done
         d = self.traveled_distance_on_route()
 
-        if l>0:
+        if l >= 0:
             if l > (self.routelength - d):
                 # print('Error: "l" is out of range')
                 # ********Warning: folowing parts can be deleted*************
@@ -269,12 +269,12 @@ class Route():
 
         return s
 
-    def get_new_pos_without_pointer_change(self,l):
+    def get_new_pos_without_position_change(self,l):
 
         d = self.traveled_distance_on_route()
         i = self.point_iterator
 
-        if l > 0:
+        if l >= 0:
             if l > (self.routelength - d):
                 # print('Error: "l" is out of range')
                 # ********Warning: folowing parts can be deleted*************
@@ -298,8 +298,9 @@ class Route():
                 t = Point(self.routepoints[i][0], self.routepoints[i][1])
 
 
-                print(i)
-            return t
+        #print(i)
+        #print(self.point_iterator)
+        return t
 
 
     def traveled_distance_on_route(self):
