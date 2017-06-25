@@ -13,6 +13,7 @@ from trafficsim.mathe import *
 #UPDATE 25/06/2017
 #get_next_pos input a negative Length
 #get_next_dis: find out the distance to the next point
+#get_new_pos_without_position_change: only find out the next pos without any pointer change
 
 
 class Route():
@@ -36,8 +37,6 @@ class Route():
         #print([x,y])
         return [x,y]
 
-
-
     def get_two_turning_points(self,startpoint,endpoint,width):
 
         xs = startpoint[0]
@@ -53,8 +52,6 @@ class Route():
         p=[[x1,y1],[x2,y2]]
         #print(p[0])
         return (p)
-
-
 
     def get_key_points(self,points,width):
 
@@ -72,8 +69,6 @@ class Route():
 
         #print(new_p)
         return new_p
-
-
 
     def get_route(self,points,width):
         #from matplotlib import pyplot as plt
@@ -135,7 +130,6 @@ class Route():
         #plt.show()
         return r
 
-
     def route_length(self):
         x = [p[0] for p in self.routepoints]
         y = [p[1] for p in self.routepoints]
@@ -143,8 +137,6 @@ class Route():
         #print(d)
 
         return d
-
-
 
 
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
@@ -302,7 +294,6 @@ class Route():
         #print(self.point_iterator)
         return t
 
-
     def traveled_distance_on_route(self):
         """"Zurückgelegter Weg auf der Route d.h. wie weit wir schon gefahren sind"""
         #关键在于步长不相等
@@ -325,6 +316,35 @@ class Route():
         dd = self.routelength
         #print(100-(100*d/dd))
         return 100-(100*d/dd)
+
+    def get_new_pos_from_start(self,l):
+
+        d = self.traveled_distance_on_route()
+        i = 0
+
+        if l > self.routelength:
+            # print('Error: "l" is out of range')
+            # ********Warning: folowing parts can be deleted*************
+            # The car always stay at the endposition
+            #self.i = len(self.routepoints) - 1
+            t = Point(self.routepoints[len(self.routepoints) - 1][0],self.routepoints[len(self.routepoints) - 1][1])
+        else:
+            k = self.get_step(l)
+            i += int(k)
+            # print(self.routepoints[self.point_iterator])
+            # print(self.point_iterator)
+            # The return value should be a tuple!!!!!!!!!
+            t = Point(self.routepoints[i][0], self.routepoints[i][1])
+
+            return t
+
+
+    def get_percentage_from_start(self,l):
+
+        return 100-(100*l/self.routelength)
+
+
+
 
     def get_angle_of_pos(self):
         """Gibt den Winkel zurück so als ob das Auto von Start zu Ende geht"""

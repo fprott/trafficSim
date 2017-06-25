@@ -3,17 +3,19 @@ from route import *
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
-    def __init__(self, id, route, a_max, a_min, v_max, v_min, v, a, car_size):
+    def __init__(self, id, strecke, a_max, a_min, v_max, v_min, v, a, car_size, pos):
         self.id=id
         self.a_min = a_min
         self.a_max = a_max
         self.v_max = v_max
         self.v_min = v_min
 
+        self.strecke = strecke
         self.a = a
         self.v = v #
-        self.pos = route.get_current_pos()
-        self.route = route
+#       self.pos = route.get_current_pos()
+#        self.route = route
+        self.pos = pos
         self.size = car_size
 
     def _set_v(self, new_v):
