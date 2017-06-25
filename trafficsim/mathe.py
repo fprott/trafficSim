@@ -67,7 +67,7 @@ class Point(tuple):
 
 class math_Kurve():
      def Bernstein_Poly(self,i, n, t):        #The Bernstein polynomial of n, i as a function of t
-         from math import factorial as f
+         from  math import factorial as f
 
          return (f(n) / (f(n - i) * f(i))) * (t ** (n - i)) * (1 - t) ** i
 
@@ -208,28 +208,28 @@ class math_Strasse():
          grenz_punkte = self.Grenz_Punkte(self=self,points=points,breite=bereite)
          return self.Grenz_Punkte_Strasse(self=self,points=grenz_punkte)
 
-class Polygon():
-    def main_strasse(self):
-     from matplotlib import pyplot as plt
-     from matplotlib.lines import Line2D
-     Strasse_1 = math_Strasse
-     nPoints = 10
-     Strasse_Punkte = [[0,4.5],[11,5]]#,[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
-     #Strasse_Punkte = np.random.rand(nPoints,2)*20
-     Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=2)
-     print(Polygon_Punkte)
+#class Polygon():
+#    def main_strasse(self):
+#     from matplotlib import pyplot as plt
+#     from matplotlib.lines import Line2D
+#     Strasse_1 = math_Strasse
+#     nPoints = 10
+#     Strasse_Punkte = [[0,4.5],[11,5]]#,[10.5,-2],[1,-6],[-5,-5],[-10,3],[-4,6],[0,4.5]]#[[0,0],[2,2],[5,0],[5,-1],[2,-3]]
+#     #Strasse_Punkte = np.random.rand(nPoints,2)*20
+#     Polygon_Punkte = Strasse_1.Polygon_Punkte(Strasse_1,points=Strasse_Punkte,bereite=2)
+#     print(Polygon_Punkte)
 
-     figure, ax = plt.subplots()
-     # 设置x，y值域
-     ax.set_xlim(left=-20, right=20)
-     ax.set_ylim(bottom=-20, top=20)
-     # 两条line的数据
-     for i in range(len(Polygon_Punkte)-1):
-         (line1_xs, line1_ys) = zip(*[Polygon_Punkte[i],Polygon_Punkte[i+1]])
-     # 创建两条线，并添加
-         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
-     plt.plot()
-     #plt.sh
+#     figure, ax = plt.subplots()
+#     # 设置x，y值域
+#     ax.set_xlim(left=-20, right=20)
+#     ax.set_ylim(bottom=-20, top=20)
+#     # 两条line的数据
+#     for i in range(len(Polygon_Punkte)-1):
+#         (line1_xs, line1_ys) = zip(*[Polygon_Punkte[i],Polygon_Punkte[i+1]])
+#     # 创建两条线，并添加
+#         ax.add_line(Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
+#     #plt.plot()
+#     #plt.sh
 
      """xpoints = [p[0] for p in Strasse_Punkte]#points[i]]
      ypoints = [p[1] for p in Strasse_Punkte]#points[i]]
