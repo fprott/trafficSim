@@ -1,4 +1,11 @@
-from mathe import *
+import sys
+import math
+sys.path.append("..")
+
+#for "test" running
+from trafficsim.mathe import *
+#for "route" running
+#from mathe import *
 
 # Wangs Klasse wurde hierher verschoben !
 
@@ -66,6 +73,8 @@ class Route():
     def get_route(self,points,width):
         from matplotlib import pyplot as plt
 
+        #points = self.points
+        #width = self.width
         xpoints = [p[0] for p in points]
         ypoints = [p[1] for p in points]
         n = len(points)
@@ -181,9 +190,11 @@ class Route():
         #plt.plot(xline2, yline2)
 
         #plt.plot(xvals,yvals)
-        return xvals,yvals
         #plt.plot(xpoints, ypoints, "ro")
         #plt.show()
+
+        return xvals,yvals
+
 
     def get_current_pos(self):
         return Point(self.routepoints[self.point_iterator][0],self.routepoints[self.point_iterator][1])
@@ -216,20 +227,29 @@ class Route():
         # Done
         d = self.traveled_distance_on_route()
 
-        if l>(self.routelength - d):
-            #print('Error: "l" is out of range')
-            #********Warning: folowing parts can be deleted*************
-            #The car always stay at the endposition
-            self.point_iterator = len(self.routepoints)-1
-            t = Point(self.routepoints[len(self.routepoints)-1][0],self.routepoints[len(self.routepoints)-1][1])
+        if l>0:
+            if l > (self.routelength - d):
+                # print('Error: "l" is out of range')
+                # ********Warning: folowing parts can be deleted*************
+                # The car always stay at the endposition
+                self.point_iterator = len(self.routepoints) - 1
+                t = Point(self.routepoints[len(self.routepoints) - 1][0],
+                          self.routepoints[len(self.routepoints) - 1][1])
+            else:
+                k = self.get_step(l)
+                self.point_iterator += int(k)
+                # print(self.routepoints[self.point_iterator])
+                # print(self.point_iterator)
+                # The return value should be a tuple!!!!!!!!!
+                t = Point(self.routepoints[self.point_iterator][0], self.routepoints[self.point_iterator][1])
         else:
-            k = self.get_step(l)
-            self.point_iterator += int(k)
+            if abs(l) > d:
+                t = Point(self.routepoints[0][0],self.routepoints[0][1])
+            else:
+                k = self.get_step(abs(l))
+                self.point_iterator -= int(k)
+                t = Point(self.routepoints[self.point_iterator][0], self.routepoints[self.point_iterator][1])
 
-            t = Point(self.routepoints[self.point_iterator][0],self.routepoints[self.point_iterator][1])
-            #print(self.routepoints[self.point_iterator])
-            # print(self.point_iterator)
-            #The return value should be a tuple!!!!!!!!!
 
      #   print(t)
         return t
@@ -281,7 +301,7 @@ class Route():
 
 #if __name__ == "__main__":
 
-# Route1=Route([(1,2),(2,1),(5,1),(10,1)],width=1)
+# Route1=Route([(500,1),(1000,1)],width=1)
 # print(Route1.get_new_pos(100))
 # print(Route1.traveled_distance_on_route())
 # print(Route1.percent_of_route_still_to_travel())
