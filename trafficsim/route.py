@@ -341,7 +341,11 @@ class Route():
 
     def get_percentage_from_start(self,l):
 
-        return 100-(100*l/self.routelength)
+            if l>=self.routelength:
+                return 0.0
+            else:
+                return 100-(100*l/self.routelength)
+
 
 
 
