@@ -3,7 +3,7 @@ import math
 #sys.path.append("..")
 
 #for "test" running
-from trafficsim.mathe import *
+from mathe import *
 #for "route" running
 #from mathe import *
 
@@ -140,7 +140,7 @@ class Route():
 
 
     def basic_route(points, width): #points can only be given by 3 points like [[1,4],[2,1],[5,1]]
-        from matplotlib import pyplot as plt
+#        from matplotlib import pyplot as plt
 
         Line1 = math_Kurve()
         Line2 = math_Kurve()

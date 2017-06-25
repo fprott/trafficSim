@@ -16,7 +16,7 @@ class RoutenTest(unittest.TestCase):
     # Hier müssen mehr Tests gemacht werden.
 
     # ANFORDERUNGEN ROUTE / WANG:
-    #     Jede Punkt auf der Route darf maximal 10 cm abstand vom nächsten haben
+    #     Jede Punkt auf der Route darf maximal 10 cm abstand vom nächsten haben <- 5 verschiedene Tests die das beweisen [100, 200, 300]
     #     percent_of_route_still_to_travel MUSS am Ende 0 zurücklieferen
     #     auf der Route zu lange zu fahren d.h. zu weit zu fahren darf KEINEN Fehler schmeisen d.h. das ist geplant
     #     Alle Ausgaben müssen die Punkt klasse verwenden (eingaben am besten auch)
