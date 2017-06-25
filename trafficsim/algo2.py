@@ -8,6 +8,8 @@ from heapq import *
 from enum import Enum
 import copy
 
+  #hello
+
 class QualityFunction(Enum):
     STANDART = 1
     LEVI = 2
@@ -21,7 +23,7 @@ def bulletime(cars, default_dt=1): #muss immer unterschätzen aber nie meher als
     Errechnet die dt und da
    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
-    return 0.25
+    return 0.1
 
 class Graph():
     """
@@ -65,7 +67,7 @@ class Senario():
         self.parent = parent
         self._children = None # am anfang leer
         self.start_time = start_time
-        self.quality_function = QualityFunction.LEVI  # Ändert Gütekriterium TODO richtig übergeben als global !
+        self.quality_function = QualityFunction.STANDART # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
 
     def _get_node_cost(self): # TODO mehr variität !
@@ -141,6 +143,7 @@ class Senario():
         #Bilde ein tuple pro auto mit verschieden Werten
         for a_car in self.cars:
         #    print(a_car)
+
             possible_new_cars = ()
             #print(a_car.get_possible_a_range(5))
             for a in a_car.get_possible_a_range(3): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
@@ -192,16 +195,19 @@ class Senario():
             #print("Percent still to travel "+str(p))
             print("-----")
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(500.0,0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(90.0,0.0),Point(800.0,0.0)]), 2)
+myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,500),Point(150.0,0.0)]), 2)
 
 
-myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_1", 0.0, 50.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar = Car("test_1", 0.0, 50.0, -60.0, 150.0, 0.1, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 100.0, 0.1, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar3 = Car("test_3", 0.0, 50.0, -60.0, 70.0, 0.1, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
 
 myCars=[]
 myCars.append(myCar)
-myCars.append(myCar2)
+#myCars.append(myCar2)
+myCars.append(myCar3)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
