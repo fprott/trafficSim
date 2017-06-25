@@ -20,15 +20,39 @@ def bulletime(cars, default_dt=1): #muss immer unterschätzen aber nie meher als
     Errechnet die dt und da
    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
-    return 1
+    return 0.25
 
 class Graph():
     """
     Der Graph enhällt als Knoten alle Senarien. Auf dem Graph wird ein A* Algo ausgeführt. Der Graph wird nur wenn notwendig angepasst.
     """
-    def __init__(self):
-        self.open_list = []
-        self.closed_list = []
+    def __init__(self, root_senario):
+        self.open_list = [] #erkannte aber noch nicht geprüfte / benutzte knoten
+        self.closed_list = [] # erkannte und behandelte knoten
+        self.root = root_senario
+        heappush(self.open_list, root_senario) # der root ist der erste zu prüfende
+
+    def calluclate_best_senarios(self):
+        best_way=[]
+        node = self._do_A_star() #liefert den Zielknoten
+        while(node != self.root):
+            best_way.append(node)
+            node = node.parent
+        best_way.reverse()
+        return best_way
+
+
+    def _do_a_stern(self):
+        while len(self.open_list)>0:
+            current_node = heappop(self.open_list)
+            if current_node.target_reached() == True: # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
+                return current_node
+            self.closed_list.append(current_node)
+            next_nodes = current_node.get_next_senarios()
+            for node in next_nodes:
+                if node.cost < float('inf'):
+                    heappush(self.open_list,node)
+        raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
 
 class Senario():
