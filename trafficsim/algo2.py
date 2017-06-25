@@ -42,7 +42,6 @@ class Graph():
         best_way.reverse()
         return best_way
 
-
     def _do_A_stern(self):
         while len(self.open_list)>0:
             current_node = heappop(self.open_list)
@@ -94,11 +93,11 @@ class Senario():
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
             for car in self.cars:
-                cost +=car.route.percent_of_route_still_to_travel() # sehr simpler Algo der angepasst werden sollte
+                cost +=car.route.get_percentage_from_start(car.strecke) # sehr simpler Algo der angepasst werden sollte
             return cost
         if(self.quality_function==QualityFunction.LEVI):
             for car in self.cars:
-                cost += ((car.route.percent_of_route_still_to_travel())*car.route.route_length()) / (1*(car.v_max))  # mal route.länge_der_Strecke
+                cost += ((car.route.get_percentage_from_start(car.strecke))*car.route.route_length()) / (1*(car.v_max))  # mal route.länge_der_Strecke
             return cost
 
 
@@ -121,7 +120,7 @@ class Senario():
     #    print("----")
         for car in self.cars:
     #        print(car.route.percent_of_route_still_to_travel())
-            if car.route.percent_of_route_still_to_travel() !=0:
+            if car.route.get_percentage_from_start(car.strecke) !=0:
                 return False
         print("Target reach")
         return True
@@ -187,7 +186,7 @@ class Senario():
                 print(c)
                 print(c.size.get_width())
                 #p+=c.route.percent_of_route_still_to_travel()
-                print("Percent to  travel :" +str(c.route.percent_of_route_still_to_travel()) )
+                print("Percent to  travel :" +str(c.route.get_percentage_from_start(c.strecke)) )
             #p=p/len(senario.cars)
             #print("Percent still to travel "+str(p))
             print("-----")
