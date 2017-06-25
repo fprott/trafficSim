@@ -288,8 +288,8 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute_1.percent_of_route_still_to_travel())
 
 
-# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0),Point(200.0,0.0),Point(300.0,0.0)]), 2)
-# myRoute2 = Route(Route.castPointsToWangNotation([Point(300.0,0.0),Point(200.0,0.0),Point(100.0,0.0),Point(0.0,0.0)]), 2)
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(1000.0,0.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(60.0,0.0),Point(1500.0,0.0)]), 2)
 
 
 # myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(7030.0,0.0)]), 2)
@@ -316,8 +316,9 @@ def bulletime(cars, default_dt=1): #
 # print(myRoute2.get_new_pos(10000))
 # print(myRoute2.percent_of_route_still_to_travel())
 
-myCar = CarMarker("test_1", myRoute, 65.0, -60.0, 240.0, 20.0, 0.0, 0.0, CarSize(60,0))
-myCar2 = CarMarker("test_2", myRoute2, 40.0, -40.0, 140.0, 20.0, 0.0, 0.0, CarSize(50,0))
+
+myCar = CarMarker("test_1", myRoute, 65.0, -60.0, 300.0, 0.0, 0.0, 0.0, CarSize(60,0))
+myCar2 = CarMarker("test_2", myRoute2, 40.0, -40.0, 150.0,0.0, 0.0, 0.0, CarSize(50,0))
 
 myCars=[]
 myCars.append(myCar)
