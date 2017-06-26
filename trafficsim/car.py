@@ -1,5 +1,7 @@
 from mathe import *
 from route import *
+from random import randint
+
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
@@ -42,25 +44,33 @@ class Car:
 
     def get_possible_a_range(self, N):
         """
-        Gibt N äquidistante mögliche beschleunigungswerte zurück
+        Gibt N zufällige mögliche beschleunigungswerte zurück, maximalwer ist immer drunter !
         :return:
         """
-        if N == 1:
-            a_values = [self.a_max]
-            return a_values
-        da = (self.a_max-self.a_min)/(N-1)
-        a_values= list();
-        for i in range(0, N):
-            new_a = self.a_min+ da*i
-#            a_values.append(new_a)
-            if new_a >0: # macht das nicht schneller :D
-                if self.v < self.v_max:
-                    a_values.append(new_a)
-            else:
-                a_values.append(new_a)
+        a_values=[]
+        N-=1
+        while N>0:
+            a_values.append(randint(int(self.a_min), int(self.a_max))) #TODO prüfen ob man mehere Values positiv macht
+            N-=1
 
-        if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
-            a_values.append(0);
+        a_values.append(self.a_max)
+
+#         if N == 1:
+#             a_values = [self.a_max]
+#             return a_values
+#         da = (self.a_max-self.a_min)/(N-1)
+#         a_values= list();
+#         for i in range(0, N):
+#             new_a = self.a_min+ da*i
+# #            a_values.append(new_a)
+#             if new_a >0: # macht das nicht schneller :D
+#                 if self.v < self.v_max:
+#                     a_values.append(new_a)
+#             else:
+#                 a_values.append(new_a)
+#
+#         if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
+#             a_values.append(0);
         return a_values
 
     def get_a_by_da(self, da):
