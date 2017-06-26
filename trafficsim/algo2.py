@@ -24,7 +24,7 @@ def bulletime(cars, default_dt=1): #muss immer unterschätzen aber nie meher als
     Errechnet die dt und da
    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
-    return 0.25
+    return 0.2
 
 class Graph():
     """
@@ -205,8 +205,8 @@ myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 
 
-myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute2.get_current_pos(), myRoute2)
 
 myCars=[]
 myCars.append(myCar)
