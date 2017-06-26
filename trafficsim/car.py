@@ -296,9 +296,6 @@ class CarSize():
 
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-
-
-
-myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,10), myRoute.get_current_pos(), myRoute)
-print(myCar.get_cornerpoints(3.14/2))
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+# myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,10), myRoute.get_current_pos(), myRoute)
+# print(myCar.get_cornerpoints(3.14/2))
