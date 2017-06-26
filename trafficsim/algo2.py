@@ -181,6 +181,7 @@ class Senario():
     def get_next_senarios(self, cars):
         if self._children is None:
             dt = bulletime(cars)
+        #    print(dt)
             self._children = self._callculate_next_senarios(dt)
             return self._children
         else:
