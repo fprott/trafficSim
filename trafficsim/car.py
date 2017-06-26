@@ -45,13 +45,12 @@ class Car:
         Gibt N äquidistante mögliche beschleunigungswerte zurück
         :return:
         """
-        da = (self.a_max-self.a_min)/(N-1)
-        a_values= list();
+        da = (self.a_max-self.a_min)/(N)
+        a_values= list()
         for i in range(0, N):
             a_values.append(self.a_min+ da*i)
-        if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
-            a_values.append(0);
-        #a_values = [15]
+        if 0  in a_values:        # 0 muss vorhanden sein
+            a_values.remove(0)
         return a_values
 
     def get_a_by_da(self, da):
@@ -82,6 +81,8 @@ class Car:
         return 0
 
     def get_next_car(self, dt, da):
+       # if self.v == self.v_max or self.v == self.v_min:
+        #    return Car("Delete", 0, 0, 0, 0, 0, 0, 0, self.size, self.pos, self.route)
         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
