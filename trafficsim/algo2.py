@@ -88,12 +88,21 @@ class Graph(): #
                 else: # wir haben eine Kollision !
                     car1,car2 = get_first_two_cars_that_collide(node.cars) # finde die Autos die kollidieren, das ist teuer machen wir aber selten
                     t_min = get_crash_zone(car1,car2) # minimaler Wert der in der Crash Zone liegt
-                    t_max = # maximaler Wert der in der Crashzone liegt
+                    t_max = _calc_t_max(car1,car2)# maximaler Wert der in der Crashzone liegt
                 #    print("t_crash " + str(t_min))
                     last_node_befor_crash = self._remove_subtree_by_time(node, t_min) # wenn das nächste kind einen Unfall baut
-                    # der letzte Knoten der noch zu reten ist wird expandiert !
-                    new_nodes = last_node_befor_crash.expand_next_Scenarios(last_node_befor_crash.cars)
-                    next_nodes.extend(new_nodes)
+                    s_time = last_node_befor_crash.start_time
+                    e_time = s_time - t_max
+                    if e_time<=0:
+                        e_time = 0.1
+
+                    expand_node = last_node_befor_crash
+                    while expand_node.start_time > e_time:
+                        new_nodes = expand_node.expand_next_Scenarios(expand_node.cars)
+                        next_nodes.extend(new_nodes)
+                        expand_node = expand_node.parent
+
+
 
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
