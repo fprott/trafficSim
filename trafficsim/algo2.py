@@ -55,7 +55,7 @@ def _calc_t_max(car1,car2):
     return 1
 
 
-class Graph():
+class Graph(): #
     """
     Der Graph enhällt als Knoten alle Senarien. Auf dem Graph wird ein A* Algo ausgeführt. Der Graph wird nur wenn notwendig angepasst.
     """
