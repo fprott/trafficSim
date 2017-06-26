@@ -38,7 +38,9 @@ def bulletime(cars, default_t = 100): #muss immer unterschätzen aber nie meher 
                 t_min = t
             j+=1
         i+=1
-    print("t_min "+str(t_min))
+    if t_min < 0.1:
+        t_min = 0.1
+    #print("t_min "+str(t_min))
     return t_min
 
 def _calc_t_min(car1,car2):
@@ -78,14 +80,19 @@ class Graph():
             for node in next_nodes:
                 if node.cost < float('inf'):
                     heappush(self.open_list,node)
-                else:
-                    self._remove_subtree_by_time(node,0.25) # wenn das nächste kind einen Unfall baut
+                else: # wir haben eine Kollision !
+                    pass
+                    car1,car2 = get_first_two_cars_that_collide(node.cars) # finde die Autos die kollidieren, das ist teuer machen wir aber selten
+                    t_min = get_crash_zone(car1,car2)
+                #    print("t_crash " + str(t_min))
+                    self._remove_subtree_by_time(node, t_min) # wenn das nächste kind einen Unfall baut
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
     #entfernt bei einem Unfall den Teil des Baums wo der Unfall unvermeidlich ist !
     def _remove_subtree_by_time(self, crash_node, t):
         parrent_node = crash_node.parent
         dt = crash_node.start_time - parrent_node.start_time
+    #    print("t_node " + str(dt))
         if dt <= t:
             t=t-dt
             #löschen aller kinder des knotens
@@ -246,13 +253,13 @@ myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.
 
 myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
 myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
-myCar3 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
+myCar3 = Car("test_3", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
 
 
 myCars=[]
 myCars.append(myCar)
 myCars.append(myCar2)
-myCars.append(myCar3)
+#myCars.append(myCar3)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
