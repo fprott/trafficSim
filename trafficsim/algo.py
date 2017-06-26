@@ -260,7 +260,7 @@ def bulletime(cars, default_dt=1): #
     for i in range(len(cars)):
         for j in range(i + 1, len(cars)):
             dist = math.hypot(cars[i].pos.x - cars[j].pos.x, cars[i].pos.y - cars[j].pos.y);    #autos werden vereinfacht als kreise modelliert'
-            if dist <= 1.4*(cars[i].size.get_length()+cars[j].size.get_length()):
+            if dist <= 2*(cars[i].size.get_length()+cars[j].size.get_length()):
                 safe_zone=0;
                 break
         if safe_zone == 0:

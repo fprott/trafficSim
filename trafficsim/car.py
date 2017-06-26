@@ -114,6 +114,51 @@ class Car:
     #    #new_x="";
     #    #nex_y="";   to DO
     #    return Cars(self.id, self.a_min, self.a_max,new_pos, new_v, new_a, new_x, new,y, self.length, self.nr_intervals)  # make the next ghost
+    def get_cornerpoints(self,angle):
+        Ox=self.size.get_length()*0.5
+        Oy=self.size.get_width()*0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        forward_left = Point(Rx,Ry)
+
+        Ox = self.size.get_length() * 0.5
+        Oy = -self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        forward_right = Point(Rx,Ry)
+
+        Ox = -self.size.get_length() * 0.5
+        Oy = self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        back_left = Point(Rx, Ry)
+
+        Ox = -self.size.get_length() * 0.5
+        Oy = -self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        back_right = Point(Rx,Ry)
+        return [forward_left,forward_right, back_left, back_right]
+
+    def get_crash_zone(car1, car2, dt,time):
+        safe_distance = 0.5*(car_1.size.get_length()+car_2.size.get_length())
+        actuall_distance = math.hypot(car1.pos.x - car2.pos.x, car1.pos.y - car2.pos.y)
+        error = safe_distance - actuall_distance
+        t = math.sqrt((2*error)/car1.a_min)
+        if t < dt:
+            t=dt
+        return t
+
+
+
+
+
+
+
+
+
+
+
 
     def __str__(self):  # TODO mehr Werte
         return ("ID: "+str(self.id) + " current pos: "+str(self.pos)+" a: " + str(self.a)+" v: "+ str(self.v))
@@ -132,7 +177,8 @@ def check_collision(cars):
                 dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
                 diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
                 diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
-                if dist <= 0.5 * (diag_1 + diag_2):
+                #if dist <= 0.5 * (diag_1 + diag_2):
+                if dist <= 0.5*(car_1.size.get_length()+car_2.size.get_length()):
                     return True
     return False
 
@@ -140,15 +186,34 @@ def check_collision(cars):
 # gibt die länge an die car1 nichts machen kann um die Kollision zu vermeiden
 # car2 wird in der Zwischenzeit in ruhe gelassen
 # wir nehmen das car was kleiners t hat dann später !
-def get_crash_zone(time, car1,car2):
-    v1 = car1.getVec
-    v2 = car2.getVec
+
+#def get_crash_zone2(time, car1,car2):
+#    v1 = car1.getVec
+#    v2 = car2.getVec
     # finde p_crash; p_crash = oberster punkt (vektoriel gesehen) an dem die Autos sich berühren
+#    P = Point(math.abs(car1.pos.x-car2.pos.x)*0.5,math.abs(car1.pos.y-car2.pos.y)*0.5)
+#    if car1.pos.x <= car2.pos.x:
+#        x = car1.pos.x + P.x
+#    else:
+#        x= car2.pos.x +P.x
+#    if car1.pos.y <= car2.pos.y:
+#        y= car1.pos.y + P.y
+#    else:
+#        y= car2.pos.y + P.y
+#    p_crash = Point(x,y)
+
+
+
+
+
+
+
+
 
     # finde p_end; p_end = wir verlassen das car2 an der stelle
-    p_end = 5#car2.pos.x*cos(winkel)-sin(winkel)+car2.pos.y*sin(winkel)+cos(winkel)
+#    p_end = car2.pos.x*cos(winkel)-sin(winkel)+car2.pos.y*sin(winkel)+cos(winkel)
     # s finden; s = länge von berühungspunkt bis ende des autos
-    car2.size.get_length()#levi
+#    car2.size.get_length()#levi
     # t_min erechen; t_min = zeit die vergeht bis car2 wegefahren ist
 
 
@@ -176,5 +241,10 @@ class CarSize():
         return self.length
 
 
-#car1 =
 
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+
+
+
+myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,10), myRoute.get_current_pos(), myRoute)
+print(myCar.get_cornerpoints(3.14/2))
