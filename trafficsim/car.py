@@ -148,7 +148,7 @@ def get_crash_zone(time, car1,car2):
     # finde p_end; p_end = wir verlassen das car2 an der stelle
     p_end = #car2.pos.x*cos(winkel)-sin(winkel)+car2.pos.y*sin(winkel)+cos(winkel)
     # s finden; s = länge von berühungspunkt bis ende des autos
-    car2.size.get_length()
+    car2.size.get_length()#levi
     # t_min erechen; t_min = zeit die vergeht bis car2 wegefahren ist
 
 
