@@ -114,7 +114,7 @@ class Car:
     #    #new_x="";
     #    #nex_y="";   to DO
     #    return Cars(self.id, self.a_min, self.a_max,new_pos, new_v, new_a, new_x, new,y, self.length, self.nr_intervals)  # make the next ghost
-    def get_cornerpoints(self,angle):
+    def get_cornerpoints(self,angle): # ahhh
         Ox=self.size.get_length()*0.5
         Oy=self.size.get_width()*0.5
         Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
