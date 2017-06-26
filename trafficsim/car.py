@@ -45,6 +45,9 @@ class Car:
         Gibt N äquidistante mögliche beschleunigungswerte zurück
         :return:
         """
+        if N == 1:
+            a_values = [self.a_max]
+            return a_values
         da = (self.a_max-self.a_min)/(N-1)
         a_values= list();
         for i in range(0, N):
