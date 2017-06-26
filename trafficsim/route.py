@@ -7,6 +7,7 @@ from mathe import *
 #for "route" running
 #from mathe import *
 
+from parameter import *
 # Wangs Klasse wurde hierher verschoben !
 
 
@@ -23,6 +24,13 @@ class Route():
         self.routepoints = self.get_route(self.points, self.width)
         self.point_iterator = 0
         self.routelength= self.route_length()
+
+    def gui_to_route(self):
+
+
+
+
+        return 0
 
     def get_one_turning_point(self,startpoint,endpoint,width):
 
@@ -358,6 +366,23 @@ class Route():
         vy = y[self.point_iterator+1] - y[self.point_iterator]
         return (vx,vy)
 
+    def get_angle_from_start(self,l):
+
+        i = 0
+        if l > self.routelength:
+            i = len(self.routepoints) - 2
+        else:
+            k = self.get_step(l)
+            i += int(k)
+
+        x = [p[0] for p in self.routepoints]
+        y = [p[1] for p in self.routepoints]
+        vx = x[i + 1] - x[i]
+        vy = y[i + 1] - y[i]
+
+        return (vx,vy)
+
+
 
     def castPointsToWangNotation(points):
         """
@@ -367,6 +392,7 @@ class Route():
         for p in points:
             wang.append([p.x,p.y])
         return wang
+
 
 
 #****************Beispiel*************************

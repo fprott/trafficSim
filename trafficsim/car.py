@@ -45,12 +45,19 @@ class Car:
         Gibt N äquidistante mögliche beschleunigungswerte zurück
         :return:
         """
-        da = (self.a_max-self.a_min)/(N)
-        a_values= list()
+        da = (self.a_max-self.a_min)/(N-1)
+        a_values= list();
         for i in range(0, N):
-            a_values.append(self.a_min+ da*i)
-        if 0  in a_values:        # 0 muss vorhanden sein
-            a_values.remove(0)
+            new_a = self.a_min+ da*i
+#            a_values.append(new_a)
+            if new_a >0: # macht das nicht schneller :D
+                if self.v < self.v_max:
+                    a_values.append(new_a)
+            else:
+                a_values.append(new_a)
+
+        if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
+            a_values.append(0);
         return a_values
 
     def get_a_by_da(self, da):
@@ -81,8 +88,6 @@ class Car:
         return 0
 
     def get_next_car(self, dt, da):
-       # if self.v == self.v_max or self.v == self.v_min:
-        #    return Car("Delete", 0, 0, 0, 0, 0, 0, 0, self.size, self.pos, self.route)
         new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
@@ -123,9 +128,6 @@ def check_collision(cars):
         for car_2 in cars:
             if(car_1 != car_2):
                 # car_1_oben = car_1.pos.x
-
-
-
                 # der folgende Algo ist abgeschrieben, ka ob das funktioniert
                 dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
                 diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
@@ -134,6 +136,20 @@ def check_collision(cars):
                     return True
     return False
 
+# car1 und car2 haben zum jetzigen Zeitpunkt eine Kollision
+# gibt die länge an die car1 nichts machen kann um die Kollision zu vermeiden
+# car2 wird in der Zwischenzeit in ruhe gelassen
+# wir nehmen das car was kleiners t hat dann später !
+def get_crash_zone(time, car1,car2):
+    v1 = car1.getVec
+    v2 = car2.getVec
+    # finde p_crash; p_crash = oberster punkt (vektoriel gesehen) an dem die Autos sich berühren
+
+    # finde p_end; p_end = wir verlassen das car2 an der stelle
+    p_end = #car2.pos.x*cos(winkel)-sin(winkel)+car2.pos.y*sin(winkel)+cos(winkel)
+    # s finden; s = länge von berühungspunkt bis ende des autos
+    car2.size.get_length()
+    # t_min erechen; t_min = zeit die vergeht bis car2 wegefahren ist
 
 
 
