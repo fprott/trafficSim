@@ -19,12 +19,34 @@ class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
 
-def bulletime(cars, default_dt=1): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
+def bulletime(cars, default_t = 100): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
     """
     Errechnet die dt und da
-   cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
+    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
-    return 0.25
+    i = 0
+    t_min = default_t
+    # für alle autoparre
+    while i<len(cars):
+        c1=cars[i]
+        j=i+1
+        while j<len(cars):
+            c2=cars[j]
+            #eigentlicher t_min berechnung
+            t = _calc_t_min(c1,c2)
+            if t_min > t:
+                t_min = t
+            j+=1
+        i+=1
+    print("t_min "+str(t_min))
+    return t_min
+
+def _calc_t_min(car1,car2):
+    #wir nehmen worst-case an, beide autos kommen mit v_max direkt aufeinander zu
+    l = math.sqrt((car1.pos.x-car2.pos.x)**2+(car1.pos.y-car2.pos.y)**2)
+    v_g = car1.v_max+car2.v_max
+    t_min = l/v_g
+    return t_min
 
 class Graph():
     """
@@ -56,8 +78,25 @@ class Graph():
             for node in next_nodes:
                 if node.cost < float('inf'):
                     heappush(self.open_list,node)
+                else:
+                    self._remove_subtree_by_time(node,0.25) # wenn das nächste kind einen Unfall baut
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
+    #entfernt bei einem Unfall den Teil des Baums wo der Unfall unvermeidlich ist !
+    def _remove_subtree_by_time(self, crash_node, t):
+        parrent_node = crash_node.parent
+        dt = crash_node.start_time - parrent_node.start_time
+        if dt <= t:
+            t=t-dt
+            #löschen aller kinder des knotens
+            for n in parrent_node._children:
+                if n in self.open_list:
+                    self.open_list.remove(n)
+            #self.open_list.remove(parrent_node)
+            self._remove_subtree_by_time(parrent_node, t)
+        else:
+            if crash_node in self.open_list:
+                self.open_list.remove(crash_node)
 
 class Senario():
     def __init__(self, parent, start_time, cars):
@@ -149,7 +188,7 @@ class Senario():
         #    print(a_car)
             possible_new_cars = ()
             #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(3): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+            for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
                 possible_new_cars = possible_new_cars + (a_car.get_next_car(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -203,14 +242,17 @@ class Senario():
 start_time = time.time()
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
-
-myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
 myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar3 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
+
 
 myCars=[]
 myCars.append(myCar)
 myCars.append(myCar2)
+myCars.append(myCar3)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
