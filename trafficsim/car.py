@@ -101,15 +101,12 @@ class Car:
         return 0
 
     def get_next_car(self, dt, da):
-        new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
-        if new_v > self.v_max:
-            new_v = self.v_max
-        if new_v < -self.v_min:
-            new_v = self.v_min
+
+
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         #new_a = self.get_a_by_da(da)
-        new_a = self.get_a_by_da(da)
+        new_a = da
         if self.v >= self.v_max and new_a > 0:
             new_a=0
         if self.v <= self.v_min and new_a < 0:
@@ -117,6 +114,12 @@ class Car:
 
         new_strecke = self.strecke+self.v*dt+new_a*dt*dt*0.5
         new_pos = self.route.get_new_pos_without_position_change(new_strecke) #errechnet nur neue position
+        new_v = self.v + da * dt  # wir erechnen die neue geschwindigkeit
+
+        if new_v > self.v_max:
+            new_v = self.v_max
+        if new_v < -self.v_min:
+            new_v = self.v_min
         return Car(self.id, new_strecke,self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size, new_pos, self.route) #make the next car
 
 
@@ -306,6 +309,3 @@ class CarSize():
 
 
 
-# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-# myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,10), myRoute.get_current_pos(), myRoute)
-# print(myCar.get_cornerpoints(3.14/2))
