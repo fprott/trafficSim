@@ -261,8 +261,6 @@ class Senario():
             #p=p/len(senario.cars)
             #print("Percent still to travel "+str(p))
             print("-----")
-        print("Number of Collisions "+str(collision_counter))
-
 
 start_time = time.time()
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)

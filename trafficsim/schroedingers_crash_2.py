@@ -23,7 +23,8 @@ class Algo():
     def do_algo(self):
         while len(self.scenarios)>0:
             scenario = self.scenarios.pop()
-            printDebugFirstCollision(scenario)
+            print(len(self.scenarios))
+        #    printDebugFirstCollision(scenario)
             collision, scenario1, scenario2 = scenario.do_the_schroedinger()
             if collision==True:
             #    printDebugScenario(scenario)
@@ -130,7 +131,7 @@ class Graph():
         #Wenn es keine Kollision gibt geben wir None als graphen zurück und ein False
         crash_node, car1, car2 = self.get_first_collision()
      #   print(crash_node)
-        if crash_node==False: #wenn wir keinen Crash haben !
+        if crash_node==None: #wenn wir keinen Crash haben !
             return False, None, None
         g1 = self._make_alternative_reality(crash_node, car1, car2) # möglichkeit 1: das erste auto bremst
         # print("Vorher")
@@ -212,7 +213,7 @@ class Graph():
         a_p=s_break/s_tb
         a_p=-a_p
         a_p = 100
-        print(a_p)
+    #    print(a_p)
     #    a_p = -(num_of_breaks*break_a+break_a) #TODO fixen
      #   print(a_p)
         # jetzt bügeln wir den crash aus
