@@ -27,16 +27,15 @@ class Algo():
         #    printDebugFirstCollision(scenario)
             collision, scenario1, scenario2 = scenario.do_the_schroedinger()
             if collision==True:
-            #    printDebugScenario(scenario)
+                printDebugScenario(scenario)
                 if scenario1 != None:
                     self.scenarios.append(scenario1)
                 if scenario2 != None:
                     self.scenarios.append(scenario2)
-                # print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-                # printDebugScenario(scenario1)
-                # print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-                # printDebugScenario(scenario2)
-
+                print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
+                printDebugScenario(scenario1)
+                print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
+                printDebugScenario(scenario2)
             else: #keine Kollision
                 self.possible_solutions.append(scenario)
                 print("NICE")
