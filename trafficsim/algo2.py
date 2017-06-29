@@ -19,13 +19,13 @@ class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
 
-def bulletime(cars, default_t = 100): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
+def bulletime(cars, maximum_t = 100, minimum_t=0.11): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
     """
     Errechnet die dt und da
     cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
     i = 0
-    t_min = default_t
+    t_min = maximum_t
     # für alle autoparre
     while i<len(cars):
         c1=cars[i]
@@ -38,8 +38,8 @@ def bulletime(cars, default_t = 100): #muss immer unterschätzen aber nie meher 
                 t_min = t
             j+=1
         i+=1
-    if t_min < 0.1:
-        t_min = 0.1
+    if t_min < minimum_t: #da wir sonst nie einen zusammensttß machen muss es ein minimum geben !
+        t_min = minimum_t
     #print("t_min "+str(t_min))
     return t_min
 
@@ -81,11 +81,11 @@ class Graph():
                 if node.cost < float('inf'):
                     heappush(self.open_list,node)
                 else: # wir haben eine Kollision !
-                    pass
                     car1,car2 = get_first_two_cars_that_collide(node.cars) # finde die Autos die kollidieren, das ist teuer machen wir aber selten
                     t_min = get_crash_zone(car1,car2)
                 #    print("t_crash " + str(t_min))
-                    self._remove_subtree_by_time(node, t_min) # wenn das nächste kind einen Unfall baut
+                    self._remove_subtree_by_time(node, t_min)
+
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
     #entfernt bei einem Unfall den Teil des Baums wo der Unfall unvermeidlich ist !
@@ -116,6 +116,7 @@ class Senario():
         self.start_time = start_time
         self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
+        self.N = 3
 
     def _get_node_cost(self): # TODO mehr variität !
         global collision_counter
@@ -181,10 +182,27 @@ class Senario():
     def get_next_senarios(self, cars):
         if self._children is None:
             dt = bulletime(cars)
+        #    print(dt)
             self._children = self._callculate_next_senarios(dt)
             return self._children
         else:
             return self._children
+
+    # def expand_N(self):
+    #     self.N = self.N+2 # wir expandieren immer um 2
+    #
+    # def expand_next_senarios(self, cars):
+    #     self.expand_N()
+    #     dt = bulletime(cars)
+    #     new_children = self._callculate_next_senarios(dt)
+    #     #schon vorhande kinder nicht neu aufnehemen ! Achtung, wenn man das doch macht explodiert alles !!!
+    #     my_children = self._children
+    #     for old_child in my_children:
+    #         for new_child in new_children:
+    #             if(new_child == old_child):
+    #                 new_children.remove(new_child)#TODO TEsten !
+    #     self._children.extend(new_children)
+    #     return new_children
 
     def _callculate_next_senarios(self, time_step):
         new_time = self.start_time + time_step
@@ -194,8 +212,8 @@ class Senario():
         for a_car in self.cars:
         #    print(a_car)
             possible_new_cars = ()
-            #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(2): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+            #print(a_car.get_possible_a_range(3))
+            for a in a_car.get_possible_a_range(self.N):
                 possible_new_cars = possible_new_cars + (a_car.get_next_car(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -243,8 +261,6 @@ class Senario():
             #p=p/len(senario.cars)
             #print("Percent still to travel "+str(p))
             print("-----")
-        print("Number of Collisions "+str(collision_counter))
-
 
 start_time = time.time()
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
@@ -259,7 +275,7 @@ myCar3 = Car("test_3", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), m
 myCars=[]
 myCars.append(myCar)
 myCars.append(myCar2)
-#myCars.append(myCar3)
+myCars.append(myCar3)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
