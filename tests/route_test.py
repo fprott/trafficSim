@@ -1,5 +1,5 @@
 # Weil jeder UnitTest kennt benutzen wir das
-from trafficsim.route import*
+from route import *
 import unittest
 
 class RoutenTest(unittest.TestCase):
@@ -12,6 +12,31 @@ class RoutenTest(unittest.TestCase):
         self.assertIsNotNone(myRoute.routepoints)
         self.assertEqual(myRoute.point_iterator, 0)
         self.assertNotEqual(myRoute.routelength,0)
+
+    def testIDoNotBeliveWang(self):
+        y_max = 0
+        myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(1000.0, 1000.0)]), 2)
+        px_1 = myRoute.points[0][0]
+        py_1 = myRoute.points[0][1]
+        for p in myRoute.routepoints:
+            px_2 = p[0]
+            py_2 =p[1]
+            self.assertLess(abs(px_2 - px_1),0.1,"Wangs Route macht zu kleine Schritte in X")
+            self.assertLess(abs(py_2 - py_1), 0.1, "Wangs Route macht zu kleine Schritte in Y")
+            px_1 = px_2
+            py_1 = py_2
+
+        myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 1000.0), Point(1000.0, 0.0)]), 2)
+        px_1 = myRoute2.points[0][0]
+        py_1 = myRoute2.points[0][1]
+        for p in myRoute2.routepoints:
+            px_2 = p[0]
+            py_2 = p[1]
+            self.assertLess(abs(px_2 - px_1), 0.1, "Wangs Route macht zu kleine Schritte in X")
+            self.assertLess(abs(py_2 - py_1), 0.1, "Wangs Route macht zu kleine Schritte in Y")
+            px_1 = px_2
+            py_1 = py_2
+    #    myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 100.0), Point(100.0, 0.0)]), 2)
 
     # Hier müssen mehr Tests gemacht werden.
 

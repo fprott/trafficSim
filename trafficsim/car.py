@@ -1,5 +1,7 @@
 from mathe import *
 from route import *
+from random import randint
+
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
@@ -42,16 +44,33 @@ class Car:
 
     def get_possible_a_range(self, N):
         """
-        Gibt N äquidistante mögliche beschleunigungswerte zurück
+        Gibt N zufällige mögliche beschleunigungswerte zurück, maximalwer ist immer drunter !
         :return:
         """
-        da = (self.a_max-self.a_min)/(N-1)
-        a_values= list();
-        for i in range(0, N):
-            a_values.append(self.a_min+ da*i)
-        if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
-            a_values.append(0);
-        #a_values = [15]
+        a_values=[]
+        N-=1
+        while N>0:
+            a_values.append(randint(int(self.a_min), int(self.a_max))) #TODO prüfen ob man mehere Values positiv macht
+            N-=1
+
+        a_values.append(self.a_max)
+
+#         if N == 1:
+#             a_values = [self.a_max]
+#             return a_values
+#         da = (self.a_max-self.a_min)/(N-1)
+#         a_values= list();
+#         for i in range(0, N):
+#             new_a = self.a_min+ da*i
+# #            a_values.append(new_a)
+#             if new_a >0: # macht das nicht schneller :D
+#                 if self.v < self.v_max:
+#                     a_values.append(new_a)
+#             else:
+#                 a_values.append(new_a)
+#
+#         if 0 not in a_values:        # 0 darf nicht vorhanden sein sonst ist dass das gleiche
+#             a_values.append(0);
         return a_values
 
     def get_a_by_da(self, da):
@@ -82,15 +101,12 @@ class Car:
         return 0
 
     def get_next_car(self, dt, da):
-        new_v = self.v+self.a*dt # wir erechnen die neue geschwindigkeit
 
-        if new_v > self.v_max:
-            new_v = self.v_max
-        if new_v < -self.v_min:
-            new_v = self.v_min
+
+
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         #new_a = self.get_a_by_da(da)
-        new_a = self.get_a_by_da(da)
+        new_a = da
         if self.v >= self.v_max and new_a > 0:
             new_a=0
         if self.v <= self.v_min and new_a < 0:
@@ -98,6 +114,12 @@ class Car:
 
         new_strecke = self.strecke+self.v*dt+new_a*dt*dt*0.5
         new_pos = self.route.get_new_pos_without_position_change(new_strecke) #errechnet nur neue position
+        new_v = self.v + da * dt  # wir erechnen die neue geschwindigkeit
+
+        if new_v > self.v_max:
+            new_v = self.v_max
+        if new_v < -self.v_min:
+            new_v = self.v_min
         return Car(self.id, new_strecke,self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size, new_pos, self.route) #make the next car
 
 
@@ -108,31 +130,158 @@ class Car:
     #    #new_x="";
     #    #nex_y="";   to DO
     #    return Cars(self.id, self.a_min, self.a_max,new_pos, new_v, new_a, new_x, new,y, self.length, self.nr_intervals)  # make the next ghost
+    def get_cornerpoints(self,angle): # ahhh
+        Ox=self.size.get_length()*0.5
+        Oy=self.size.get_width()*0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        forward_left = Point(Rx,Ry)
+
+        Ox = self.size.get_length() * 0.5
+        Oy = -self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        forward_right = Point(Rx,Ry)
+
+        Ox = -self.size.get_length() * 0.5
+        Oy = self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        back_left = Point(Rx, Ry)
+
+        Ox = -self.size.get_length() * 0.5
+        Oy = -self.size.get_width() * 0.5
+        Rx = self.pos.x + (Ox * math.cos(angle)) - (Oy * math.sin(angle))
+        Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
+        back_right = Point(Rx,Ry)
+        return [forward_left,forward_right, back_left, back_right]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def __str__(self):  # TODO mehr Werte
         return ("ID: "+str(self.id) + " current pos: "+str(self.pos)+" a: " + str(self.a)+" v: "+ str(self.v))
 
+#ineffizient, NICHT benutzeen
 def check_collision(cars):
     """
     Prüft ob 2 Autos kollidieren. Bricht ab sobald das war ist. Sagt nicht welche Autos.
     :param cars:
     :return:
     """
-    for car_1 in cars:
-        for car_2 in cars:
-            if(car_1 != car_2):
-                # car_1_oben = car_1.pos.x
-
-
-
-                # der folgende Algo ist abgeschrieben, ka ob das funktioniert
-                dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
-                diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
-                diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
-                if dist <= 0.5 * (diag_1 + diag_2):
-                    return True
+    # for car_1 in cars:
+    #     for car_2 in cars:
+    #         if(car_1 != car_2):
+    #             # car_1_oben = car_1.pos.x
+    #             # der folgende Algo ist abgeschrieben, ka ob das funktioniert
+    #             dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
+    #             diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
+    #             diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
+    #             #if dist <= 0.5 * (diag_1 + diag_2):
+    #             if dist <= 0.5*(car_1.size.get_length()+car_2.size.get_length()):
+    #                 return True
+    # return False
+    i=0
+    while i<len(cars):
+        j=i+1
+        car_1=cars[i]
+        while j<len(cars):
+            car_2 = cars[j]
+            dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
+            diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
+            diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
+            # if dist <= 0.5 * (diag_1 + diag_2):
+            if dist <= 0.5 * (car_1.size.get_length() + car_2.size.get_length()):
+                return True
+            j+=1
+        i+=1
     return False
 
+def get_first_two_cars_that_collide(cars):
+    i=0
+    while i<len(cars):
+        j=i+1
+        car_1=cars[i]
+        while j<len(cars):
+            car_2 = cars[j]
+            dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
+            diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
+            diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
+            # if dist <= 0.5 * (diag_1 + diag_2):
+            if dist <= 0.5 * (car_1.size.get_length() + car_2.size.get_length()):
+                return car_1,car_2
+            j+=1
+        i+=1
+    return False
+
+def get_crash_zone_if_collision(cars):
+    i=0
+    while i<len(cars):
+        j=i+1
+        car_1=cars[i]
+        while j<len(cars):
+            car_2 = cars[j]
+            dist = math.hypot(car_1.pos.x - car_2.pos.x, car_1.pos.y - car_2.pos.y)
+            diag_1 = math.sqrt((car_1.size.get_width() ** 2) + (car_1.size.get_length() ** 2))
+            diag_2 = math.sqrt((car_2.size.get_width() ** 2) + (car_2.size.get_length() ** 2))
+            # if dist <= 0.5 * (diag_1 + diag_2):
+            if dist <= 0.5 * (car_1.size.get_length() + car_2.size.get_length()):
+                crash_zone = get_crash_zone(car_1, car_2,)
+                return crash_zone
+            j+=1
+        i+=1
+    return False
+# car1 und car2 haben zum jetzigen Zeitpunkt eine Kollision
+# gibt die länge an die car1 nichts machen kann um die Kollision zu vermeiden
+# car2 wird in der Zwischenzeit in ruhe gelassen
+# wir nehmen das car was kleiners t hat dann später !
+
+def get_crash_zone(car1, car2):
+    safe_distance = 0.5*(car1.size.get_length()+car2.size.get_length())
+    actuall_distance = math.hypot(car1.pos.x - car2.pos.x, car1.pos.y - car2.pos.y)
+    error = safe_distance - actuall_distance
+    t = math.sqrt(abs((2*error)/car1.a_min))
+    return t
+
+
+#def get_crash_zone2(time, car1,car2):
+#    v1 = car1.getVec
+#    v2 = car2.getVec
+    # finde p_crash; p_crash = oberster punkt (vektoriel gesehen) an dem die Autos sich berühren
+#    P = Point(math.abs(car1.pos.x-car2.pos.x)*0.5,math.abs(car1.pos.y-car2.pos.y)*0.5)
+#    if car1.pos.x <= car2.pos.x:
+#        x = car1.pos.x + P.x
+#    else:
+#        x= car2.pos.x +P.x
+#    if car1.pos.y <= car2.pos.y:
+#        y= car1.pos.y + P.y
+#    else:
+#        y= car2.pos.y + P.y
+#    p_crash = Point(x,y)
+
+
+
+
+
+
+
+
+
+    # finde p_end; p_end = wir verlassen das car2 an der stelle
+#    p_end = car2.pos.x*cos(winkel)-sin(winkel)+car2.pos.y*sin(winkel)+cos(winkel)
+    # s finden; s = länge von berühungspunkt bis ende des autos
+#    car2.size.get_length()#levi
+    # t_min erechen; t_min = zeit die vergeht bis car2 wegefahren ist
 
 
 
@@ -159,5 +308,4 @@ class CarSize():
         return self.length
 
 
-#car1 =
 

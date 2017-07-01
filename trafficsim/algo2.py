@@ -7,6 +7,9 @@ from route import *
 from heapq import *
 from enum import Enum
 import copy
+import time
+
+collision_counter = 0
 
 class QualityFunction(Enum):
     STANDART = 1
@@ -16,12 +19,36 @@ class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
 
-def bulletime(cars, default_dt=1): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
+def bulletime(cars, maximum_t = 100, minimum_t=0.11): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
     """
     Errechnet die dt und da
-   cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
+    cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
     """
-    return 0.25
+    i = 0
+    t_min = maximum_t
+    # für alle autoparre
+    while i<len(cars):
+        c1=cars[i]
+        j=i+1
+        while j<len(cars):
+            c2=cars[j]
+            #eigentlicher t_min berechnung
+            t = _calc_t_min(c1,c2)
+            if t_min > t:
+                t_min = t
+            j+=1
+        i+=1
+    if t_min < minimum_t: #da wir sonst nie einen zusammensttß machen muss es ein minimum geben !
+        t_min = minimum_t
+    #print("t_min "+str(t_min))
+    return t_min
+
+def _calc_t_min(car1,car2):
+    #wir nehmen worst-case an, beide autos kommen mit v_max direkt aufeinander zu
+    l = math.sqrt((car1.pos.x-car2.pos.x)**2+(car1.pos.y-car2.pos.y)**2)
+    v_g = car1.v_max+car2.v_max
+    t_min = l/v_g
+    return t_min
 
 class Graph():
     """
@@ -53,8 +80,30 @@ class Graph():
             for node in next_nodes:
                 if node.cost < float('inf'):
                     heappush(self.open_list,node)
+                else: # wir haben eine Kollision !
+                    car1,car2 = get_first_two_cars_that_collide(node.cars) # finde die Autos die kollidieren, das ist teuer machen wir aber selten
+                    t_min = get_crash_zone(car1,car2)
+                #    print("t_crash " + str(t_min))
+                    self._remove_subtree_by_time(node, t_min)
+
         raise NoPathAvailableError("A Stern findet keinen möglichen Pfad. Bitte Eingabe überprüfen!")
 
+    #entfernt bei einem Unfall den Teil des Baums wo der Unfall unvermeidlich ist !
+    def _remove_subtree_by_time(self, crash_node, t):
+        parrent_node = crash_node.parent
+        dt = crash_node.start_time - parrent_node.start_time
+    #    print("t_node " + str(dt))
+        if dt <= t:
+            t=t-dt
+            #löschen aller kinder des knotens
+            for n in parrent_node._children:
+                if n in self.open_list:
+                    self.open_list.remove(n)
+            #self.open_list.remove(parrent_node)
+            self._remove_subtree_by_time(parrent_node, t)
+        else:
+            if crash_node in self.open_list:
+                self.open_list.remove(crash_node)
 
 class Senario():
     def __init__(self, parent, start_time, cars):
@@ -67,12 +116,15 @@ class Senario():
         self.start_time = start_time
         self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
+        self.N = 3
 
     def _get_node_cost(self): # TODO mehr variität !
+        global collision_counter
         cost=0
         if(self.quality_function==QualityFunction.STANDART):
             if check_collision(self.cars)==True:
             #    print("Kollision")
+                collision_counter+=1
                 cost = float('inf')
                 return cost
             for car in self.cars:
@@ -83,6 +135,7 @@ class Senario():
             if check_collision(self.cars) == True:
                 cost = float('inf')
             #    print("Kollision")
+                collision_counter+=1
                 return cost
             else :
                 cost = len(self.cars)*self.start_time
@@ -129,10 +182,27 @@ class Senario():
     def get_next_senarios(self, cars):
         if self._children is None:
             dt = bulletime(cars)
+        #    print(dt)
             self._children = self._callculate_next_senarios(dt)
             return self._children
         else:
             return self._children
+
+    # def expand_N(self):
+    #     self.N = self.N+2 # wir expandieren immer um 2
+    #
+    # def expand_next_senarios(self, cars):
+    #     self.expand_N()
+    #     dt = bulletime(cars)
+    #     new_children = self._callculate_next_senarios(dt)
+    #     #schon vorhande kinder nicht neu aufnehemen ! Achtung, wenn man das doch macht explodiert alles !!!
+    #     my_children = self._children
+    #     for old_child in my_children:
+    #         for new_child in new_children:
+    #             if(new_child == old_child):
+    #                 new_children.remove(new_child)#TODO TEsten !
+    #     self._children.extend(new_children)
+    #     return new_children
 
     def _callculate_next_senarios(self, time_step):
         new_time = self.start_time + time_step
@@ -142,8 +212,8 @@ class Senario():
         for a_car in self.cars:
         #    print(a_car)
             possible_new_cars = ()
-            #print(a_car.get_possible_a_range(5))
-            for a in a_car.get_possible_a_range(3): #TODO N wählen  ergibt N+1 Beschleunigungen da 0 zwingend dabei ist
+            #print(a_car.get_possible_a_range(3))
+            for a in a_car.get_possible_a_range(self.N):
                 possible_new_cars = possible_new_cars + (a_car.get_next_car(time_step,a),) # ein tupel enhällt alle möglichen nächsten Autos
             all_possible_car_tuples.append(possible_new_cars) # List von tupeln, darf NICHT in der for schleife sein !
 
@@ -192,17 +262,26 @@ class Senario():
             #print("Percent still to travel "+str(p))
             print("-----")
 
+start_time = time.time()
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
-
-myCar = Car("test_1", 0.0, 55.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
 myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar3 = Car("test_3", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
+
 
 myCars=[]
 myCars.append(myCar)
 myCars.append(myCar2)
+myCars.append(myCar3)
 mySenario = Senario(None,0,myCars)
 myGraph = Graph(mySenario)
 bestSenarios = myGraph.calluclate_best_senarios()
+
+end_time = time.time()
+
+
 Senario.printDebugSenarios(bestSenarios)
+print("run time (s) "+str(end_time-start_time))

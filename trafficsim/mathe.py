@@ -1,8 +1,12 @@
+
+
+
 #Diese Klassen sollen von euch nach euren Vorschlägen verfollständig werden.
 #Wenn feststeht wie der Polygonenzug aussieht kann ich das auch noch schnell fertig machen, aber erstmal gibt mir feedback !
 import numpy as np
 #from scipy.misc import comb # bitte nicht benutzen, kann nicht überall einfach installiert werden. Bitte nur PIP verwenden
 import math
+from math import factorial as f
 import pygame
 #from gui import *
 
@@ -262,9 +266,9 @@ class Kurve():
          Kurve_Points=[xvals,yvals]
          print(Kurve_Points)
 
-         plt.plot(xvals, yvals)
-         plt.plot(xpoints, ypoints, "ro")
-         plt.show()
+         #plt.plot(xvals, yvals)
+         #plt.plot(xpoints, ypoints, "ro")
+         #plt.show()
 
          for nr in range(len(points)):
              plt.text(points[nr][0], points[nr][1], nr)
