@@ -2,6 +2,7 @@ from mathe import *
 from route import *
 from random import randint
 
+#neuer scheiss
 
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
