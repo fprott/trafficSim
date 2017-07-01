@@ -19,7 +19,7 @@ class KollisionTest(unittest.TestCase):
 
     def test_movement(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(500.0, 0.0)]), 2)
-        car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, 0.0, 0.0, 0.0, CarSize(10, 0), myRoute.get_current_pos(),myRoute)
+        car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, -200.0, 0.0, 0.0, CarSize(10, 0), myRoute.get_current_pos(),myRoute)
         car_step1 = car_step0.get_next_car(1, 60)
         #print(car_step1.v)
         #print(car_step1.strecke)
