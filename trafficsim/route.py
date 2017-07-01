@@ -297,7 +297,6 @@ class Route():
                 i -= int(k)
                 t = Point(self.routepoints[i][0], self.routepoints[i][1])
 
-
         #print(i)
         #print(self.point_iterator)
         return t
