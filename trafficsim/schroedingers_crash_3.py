@@ -136,11 +136,13 @@ class Crash():
         self.car1 = car1
         self.car2 = car2
 
-    def get_crash_avoidance_distance(car_to_break, car_not_to_break):
-        return car_not_to_break.size.width+car_not_to_break.size.width.length # TODO besserer Abstand
+    def get_crash_avoidance_distance(car_to_brake, car_not_to_brake):
+        return car_not_to_brake.size.width+car_not_to_brake.size.width.length # TODO besserer Abstand
 
-    def get_break_time(car_to_break, length):
-        return 5
+    def get_brake_start(self, car_to_brake, length):
+        safe_distance = Crash.get_crash_avoidance_distance(self.car1, self.car2)
+        t_brake = math.sqrt(2 * safe_distance / car_to_brake.a_min)
+        return self.zeitpunkt - t_brake
 
 class Zeitpunkt():
     def __init__(self, t, cars, parent, dt):
