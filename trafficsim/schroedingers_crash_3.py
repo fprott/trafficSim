@@ -53,7 +53,7 @@ class SchroedingersCrash():
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
 
-    def _printDebugScenario(scenario):
+    def _printDebugScenario(scenario): #
         for node in scenario.zeitpunkte:
             print("Timestep " + str(node.start_time))
             p = 0
