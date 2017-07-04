@@ -87,14 +87,33 @@ class Scenario():
             zeitpunkt.set_all_cars_to_max_a()
             self.zeitpunkte.append(zeitpunkt)
 
-    def rebuild_self_with_break(self, break_zeitpunkt, time_to_break):
+    def rebuild_self_with_break(self, start_break_zeitpunkt, end_break_zeitpunkt, car_to_break):
+        start_breaking_time = start_break_zeitpunkt.time
+        end_breaking_time = end_break_zeitpunkt.time
+        start_breaking = False
+        for zeitpunkt in self.zeitpunkte:
+            if zeitpunkt.time == start_breaking_time:
+                breaking = True
+            if start_breaking == True:
+                zeitpunkt.delete_self # wir löschen die weiteren Zeitpunkte
+                self.zeitpunkte.remove(zeitpunkt)
+
+        zeitpunkt = start_break_zeitpunkt
+        while zeitpunkt.target_reached()==False:
+            zeitpunkt.set_all_cars_to_max_a()
+            if zeitpunkt.time < end_breaking_time: #wenn wir noch bremsen
+                for car in zeitpunkt.cars:
+                    if car == car_to_break: #kann man das vergleichen BUG???
+                        car.a=car.a_min
+            self.zeitpunkte.append(zeitpunkt)
+            zeitpunkt = zeitpunkt.make_next_zeitpunkt()
 
     # Lösche Senarien aus der To-Do liste immer dann wenn:
     # a.) man zum Anfangszeitpunkt schon bremst
     # b.) ein Auto dauerhaft steht (v == 0, a == 0)
     # c.) ein Auto rückwärst fährt
     def is_scenario_invalid(self):
-        if self.zeitpunkte[0].is_one_car_breaking
+        if self.zeitpunkte[0].is_one_car_breaking:
             return True
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.is_one_car_permanently_standing():
