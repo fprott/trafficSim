@@ -49,8 +49,24 @@ class SchroedingersCrash():
                     #Passe das Scenario so an das der Unfall verhindert wird
                     self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
                     self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
+                    _printDebugScenario(clone1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
+
+    def _printDebugScenario(scenario):
+        for node in scenario.zeitpunkte:
+            print("Timestep " + str(node.start_time))
+            p = 0
+            print("Current Cars:")
+            for c in node.cars:
+                print(c)
+                # print(c.size.get_width())
+                # p+=c.route.percent_of_route_still_to_travel()
+                print("Percent to  travel :" + str(c.route.get_percentage_from_start(c.strecke)))
+            # p=p/len(scenario.cars)
+            # print("Percent still to travel "+str(p))
+            print("Crash?: " + str(check_collision(node.cars)))
+            print("-----")
 
     def prevent_crash(self, scenario, crash_zeitpunkt, car_to_break, car_not_to_break):
         # Zeit die wir bremsen müssen
@@ -221,8 +237,8 @@ myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(1000.0,1000
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,1000.0),Point(1000.0,0.0)]), 2)
 myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
-myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute2.get_current_pos(), myRoute2)
 myCar3 = Car("test_3", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
 
 
