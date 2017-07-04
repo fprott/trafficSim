@@ -9,6 +9,9 @@ from enum import Enum
 import copy
 import time
 
+
+
+
 class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
@@ -27,15 +30,15 @@ class Algo():
         #    printDebugFirstCollision(scenario)
             collision, scenario1, scenario2 = scenario.do_the_schroedinger()
             if collision==True:
-                printDebugScenario(scenario)
+                # printDebugScenario(scenario)
                 if scenario1 != None:
                     self.scenarios.append(scenario1)
                 if scenario2 != None:
                     self.scenarios.append(scenario2)
-                print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-                printDebugScenario(scenario1)
-                print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-                printDebugScenario(scenario2)
+                # print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
+                # printDebugScenario(scenario1)
+                # print("XXXXXXXXXXXXXXXXXXXXXXXXXX")
+                # printDebugScenario(scenario2)
             else: #keine Kollision
                 self.possible_solutions.append(scenario)
                 print("NICE")
@@ -111,7 +114,7 @@ class Graph():
 
     #macht eine deepcopy des Graphen
     def clone_self(self):
-        #clone = copy.deepcopy(self()) #geht nicht !
+        #clone = copy.deepcopy(self) #geht nicht !
         clone = Graph(self.root)
         new_nodes = []
         for node in self.nodes:
@@ -157,7 +160,7 @@ class Graph():
         s_break = self.get_crash_avoidance_distance(car_to_break, car_not_to_break)
     #    v_break = s_break/self.get_dt() # um diese geschwindkeit müssen wir langsamer werden
 
-        new_graph = self.clone_self()  # wir haben eine exakte kopie des Graphen
+    #    new_graph = self.clone_self()  # wir haben eine exakte kopie des Graphen
         # jetzt bügeln wir den crash aus
 
 

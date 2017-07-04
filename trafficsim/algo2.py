@@ -72,7 +72,7 @@ class Graph():
     def _do_A_stern(self):
         while len(self.open_list)>0:
             current_node = heappop(self.open_list)
-            print("Current Level: " + str(current_node.start_time) + " List lenght: " + str(len(self.open_list)))
+        #    print("Current Level: " + str(current_node.start_time) + " List lenght: " + str(len(self.open_list)))
             if current_node.target_reached() == True: # wir erwarten das wir eine Lösung finden. Wenn wir eine finden dann ist es automatisch die beste Lösung
                 return current_node
             self.closed_list.append(current_node)
@@ -116,7 +116,7 @@ class Senario():
         self.start_time = start_time
         self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
-        self.N = 3
+        self.N = 5
 
     def _get_node_cost(self): # TODO mehr variität !
         global collision_counter
@@ -174,7 +174,7 @@ class Senario():
         for car in self.cars:
     #        print(car.route.percent_of_route_still_to_travel())
             if car.route.get_percentage_from_start(car.strecke) !=0:
-                print(car.route.get_percentage_from_start(car.strecke))
+        #        print(car.route.get_percentage_from_start(car.strecke))
                 return False
         print("Target reach")
         return True
@@ -267,10 +267,9 @@ myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0
 myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
-myCar = Car("test_1", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_2", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
-myCar3 = Car("test_3", 0.0, 50.0, -60.0, 300.0, 10.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
-
+myCar = Car("test_1", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute2.get_current_pos(), myRoute2)
+myCar3 = Car("test_3", 0.0, 10.0, -10.0, 35.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute3.get_current_pos(), myRoute3)
 
 myCars=[]
 myCars.append(myCar)

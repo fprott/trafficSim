@@ -26,10 +26,6 @@ class Route():
         self.routelength= self.route_length()
 
     def gui_to_route(self):
-
-
-
-
         return 0
 
     def get_one_turning_point(self,startpoint,endpoint,width):

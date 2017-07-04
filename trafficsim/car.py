@@ -2,8 +2,6 @@ from mathe import *
 from route import *
 from random import randint
 
-#neuer scheiss
-
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
     def __init__(self, id, strecke, a_max, a_min, v_max, v_min, v, a, car_size, pos, route):
@@ -102,9 +100,6 @@ class Car:
         return 0
 
     def get_next_car(self, dt, a):
-
-
-
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         #new_a = self.get_a_by_da(da)
         new_a = a
@@ -115,7 +110,7 @@ class Car:
 
         new_strecke = self.strecke+self.v*dt+new_a*dt*dt*0.5
         new_pos = self.route.get_new_pos_without_position_change(new_strecke) #errechnet nur neue position
-        new_v = self.v + a * dt  # wir erechnen die neue geschwindigkeit
+        new_v = self.v + new_a * dt  # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
             new_v = self.v_max
@@ -156,19 +151,6 @@ class Car:
         Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
         back_right = Point(Rx,Ry)
         return [forward_left,forward_right, back_left, back_right]
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def __str__(self):  # TODO mehr Werte
         return ("ID: "+str(self.id) + " current pos: "+str(self.pos)+" a: " + str(self.a)+" v: "+ str(self.v))
@@ -309,12 +291,12 @@ class CarSize():
         return self.length
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(500.0,0.0)]), 2)
-car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, -200.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
-car_step1 = car_step0.get_next_car(1,60)
-print(car_step1.v)
-print(car_step1.strecke)
-car_step1.v
-car_step2 = car_step1.get_next_car(1,-60)
-print(car_step2.v)
-print(car_step2.strecke)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(500.0,0.0)]), 2)
+# car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, -200.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
+# car_step1 = car_step0.get_next_car(1,60)
+# print(car_step1.v)
+# print(car_step1.strecke)
+# car_step1.v
+# car_step2 = car_step1.get_next_car(1,-60)
+# print(car_step2.v)
+# print(car_step2.strecke)
