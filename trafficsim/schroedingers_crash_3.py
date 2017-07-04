@@ -209,6 +209,9 @@ class Zeitpunkt():
             del car
         del self
 
+    def __repr__(self):
+        return "Zeitpunkt[%2.2f]" % self.time
+
 class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
