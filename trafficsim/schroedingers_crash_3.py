@@ -19,7 +19,7 @@ import copy
 # c.) ein Auto rückwärst fährt
 # 8.) Nehme das beste Senario was das Ziel erreicht (beste heißt hier das wir eine Gütefunktion brauchen. z.B. maximirung von Beschleunigungen oder minimrung der gesamtzeit etc.
 
-class schroedingers_crash():
+class SchroedingersCrash():
     def __init__(self, start_zeitpunkt):
         self.scenarios = []
         self.possible_solutions = []
@@ -33,7 +33,7 @@ class schroedingers_crash():
         #sollange es noch möglichkeiten gibt
         while len(self.scenarios)>0:
             scenario = self.scenarios.pop()
-            if scenario.is_scenario_invalid == False: #wenn das Scenario sinnvoll ist d.h. man nicht steht oder rückwertsfährt oder sowas
+            if scenario.is_scenario_invalid() == False: #wenn das Scenario sinnvoll ist d.h. man nicht steht oder rückwertsfährt oder sowas
                 # Fahre bis zu einem Unfall
                 crash = scenario.get_first_crash()
                 if crash == None:
@@ -43,20 +43,25 @@ class schroedingers_crash():
                     car1, car2 = crash.car1, crash.car2
                     crash_zeitpunkt = crash.zeitpunkt
                     # Lösche das jetzige Senario und mache zwei neue Senarien
-                    clone1 = Scenario.clone_self()
-                    clone2 = Scenario.clone_self()
-                    Scenario.delete_self()
+                    clone1 = scenario.clone_self()
+                    clone2 = scenario.clone_self()
+                    scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
-                    clone1.prevent_crash(crash_zeitpunkt, car1, car2)
-                    clone2.prevent_crash(crash_zeitpunkt, car2, car1)
+                    self.prevent_crash(clone1 ,crash_zeitpunkt, car1, car2)
+                    self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
 
-    def prevent_crash(self, crash_zeitpunkt, car_to_break, car_not_to_break):
-        # a verkleinern und dann neue nodes bauen
-
-        break_time = 5 # das müssen wir eigentlich oben noch errechnen
-
+    def prevent_crash(self, scenario, crash_zeitpunkt, car_to_break, car_not_to_break):
+        # Zeit die wir bremsen müssen
+        break_time = Crash.get_brake_start(crash_zeitpunkt, car_to_break, car_not_to_break)
+        #finde den Zeitpunkt an den wir zu bremsen beginnen müssen
+        t_before_crash = crash_zeitpunkt.time - break_time
+        zeitpunkt = crash_zeitpunkt.parent
+        while zeitpunkt.time>t_before_crash:
+            zeitpunkt = crash_zeitpunkt.parent
+        #bau das ding neu auf
+        scenario.rebuild_self_with_break(zeitpunkt, crash_zeitpunkt, car_to_break)
 
 class Scenario():
     def __init__(self):
@@ -113,7 +118,7 @@ class Scenario():
     # b.) ein Auto dauerhaft steht (v == 0, a == 0)
     # c.) ein Auto rückwärst fährt
     def is_scenario_invalid(self):
-        if self.zeitpunkte[0].is_one_car_breaking:
+        if self.zeitpunkte[0].is_one_car_breaking():
             return True
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.is_one_car_permanently_standing():
@@ -126,7 +131,7 @@ class Scenario():
         for zeitpunkt in self.zeitpunkte:
             if check_collision(zeitpunkt.cars) == True:
                 car1, car2 = get_first_two_cars_that_collide(zeitpunkt.cars)
-            return Crash
+                return Crash(self, car1, car2)
         return None
 
 # nicht wirklich python like aber hilft mir denken
@@ -137,12 +142,12 @@ class Crash():
         self.car2 = car2
 
     def get_crash_avoidance_distance(car_to_brake, car_not_to_brake):
-        return car_not_to_brake.size.width+car_not_to_brake.size.width.length # TODO besserer Abstand
+        return car_not_to_brake.size.width+car_not_to_brake.size.length # TODO besserer Abstand
 
-    def get_brake_start(self, car_to_brake, length):
-        safe_distance = Crash.get_crash_avoidance_distance(self.car1, self.car2)
+    def get_brake_start(crash_zeitpunkt, car_to_brake, car_not_to_brake):
+        safe_distance = Crash.get_crash_avoidance_distance(car_to_brake, car_not_to_brake)
         t_brake = math.sqrt(2 * safe_distance / car_to_brake.a_min)
-        return self.zeitpunkt - t_brake
+        return crash_zeitpunkt.time - t_brake
 
 class Zeitpunkt():
     def __init__(self, t, cars, parent, dt):
@@ -207,3 +212,22 @@ class Zeitpunkt():
 class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
+
+
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(1000.0,1000.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,1000.0),Point(1000.0,0.0)]), 2)
+myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
+
+myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(20,0), myRoute.get_current_pos(), myRoute)
+myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute2.get_current_pos(), myRoute2)
+myCar3 = Car("test_3", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
+
+
+myCars=[]
+myCars.append(myCar)
+myCars.append(myCar2)
+#myCars.append(myCar3)
+
+sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.1))
+sc.do_the_schroedinger()
+#myAlgo.do_algo()
