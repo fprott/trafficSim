@@ -47,7 +47,7 @@ class SchroedingersCrash():
                     clone2 = scenario.clone_self()
                     scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
-                    self.prevent_crash(clone1 ,crash_zeitpunkt, car1, car2)
+                    self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
                     self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
@@ -56,9 +56,9 @@ class SchroedingersCrash():
         # Zeit die wir bremsen müssen
         break_time = Crash.get_brake_start(crash_zeitpunkt, car_to_break, car_not_to_break)
         #finde den Zeitpunkt an den wir zu bremsen beginnen müssen
-        t_before_crash = crash_zeitpunkt.time - break_time
+    #    t_before_crash = crash_zeitpunkt.time - break_time
         zeitpunkt = crash_zeitpunkt.parent
-        while zeitpunkt.time>t_before_crash:
+        while zeitpunkt.time>break_time:
             zeitpunkt = crash_zeitpunkt.parent
         #bau das ding neu auf
         scenario.rebuild_self_with_break(zeitpunkt, crash_zeitpunkt, car_to_break)
@@ -131,7 +131,7 @@ class Scenario():
         for zeitpunkt in self.zeitpunkte:
             if check_collision(zeitpunkt.cars) == True:
                 car1, car2 = get_first_two_cars_that_collide(zeitpunkt.cars)
-                return Crash(self, car1, car2)
+                return Crash(zeitpunkt, car1, car2)
         return None
 
 # nicht wirklich python like aber hilft mir denken
@@ -146,7 +146,7 @@ class Crash():
 
     def get_brake_start(crash_zeitpunkt, car_to_brake, car_not_to_brake):
         safe_distance = Crash.get_crash_avoidance_distance(car_to_brake, car_not_to_brake)
-        t_brake = math.sqrt(2 * safe_distance / car_to_brake.a_min)
+        t_brake = math.sqrt(-2 * safe_distance / car_to_brake.a_min)
         return crash_zeitpunkt.time - t_brake
 
 class Zeitpunkt():
