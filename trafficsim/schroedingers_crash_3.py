@@ -49,13 +49,13 @@ class SchroedingersCrash():
                     #Passe das Scenario so an das der Unfall verhindert wird
                     self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
                     self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
-                    #SchroedingersCrash._printDebugScenario(clone1)
+                    SchroedingersCrash._printDebugScenario(clone1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
 
     def _printDebugScenario(scenario): #
         for node in scenario.zeitpunkte:
-            print("Timestep " + str(node.start_time))
+            print("Timestep " + str(node.time))
             p = 0
             print("Current Cars:")
             for c in node.cars:
