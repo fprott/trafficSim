@@ -49,7 +49,7 @@ class SchroedingersCrash():
                     #Passe das Scenario so an das der Unfall verhindert wird
                     self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
                     self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
-                    _printDebugScenario(clone1)
+                    #SchroedingersCrash._printDebugScenario(clone1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
 
@@ -124,7 +124,7 @@ class Scenario():
             zeitpunkt.set_all_cars_to_max_a()
             if zeitpunkt.time < end_breaking_time: #wenn wir noch bremsen
                 for car in zeitpunkt.cars:
-                    if car == car_to_break: #kann man das vergleichen BUG???
+                    if car.id == car_to_break.id: #ID muss eindeutig sein !
                         car.a=car.a_min
             self.zeitpunkte.append(zeitpunkt)
             zeitpunkt = zeitpunkt.make_next_zeitpunkt()
