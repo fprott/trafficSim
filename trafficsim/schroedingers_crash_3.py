@@ -48,7 +48,6 @@ class SchroedingersCrash():
                     scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
                     self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
-                    print("MEH")
                     self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
@@ -58,13 +57,9 @@ class SchroedingersCrash():
         break_time = Crash.get_brake_start(crash_zeitpunkt, car_to_break, car_not_to_break)
         #finde den Zeitpunkt an den wir zu bremsen beginnen müssen
     #    t_before_crash = crash_zeitpunkt.time - break_time
-        print(break_time)
-        print("-----------")
         zeitpunkt = crash_zeitpunkt.parent
         while zeitpunkt.time>break_time:
-            zeitpunkt = crash_zeitpunkt.parent
-            print(zeitpunkt.time)
-        print("MÖP")
+            zeitpunkt = zeitpunkt.parent
         #bau das ding neu auf
         scenario.rebuild_self_with_break(zeitpunkt, crash_zeitpunkt, car_to_break)
 
