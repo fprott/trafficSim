@@ -35,6 +35,7 @@ class SchroedingersCrash():
             scenario = self.scenarios.pop()
             if scenario.is_scenario_invalid() == False: #wenn das Scenario sinnvoll ist d.h. man nicht steht oder rückwertsfährt oder sowas
                 # Fahre bis zu einem Unfall
+            #    SchroedingersCrash._printDebugScenario(scenario)
                 crash = scenario.get_first_crash()
                 if crash == None:
                     self.possible_solutions.append(scenario)
@@ -83,6 +84,10 @@ class Scenario():
     def __init__(self):
         self.zeitpunkte = []
         self.dt = 0.1
+        # self.cost = float('Inf')
+
+    def get_costs(self):
+        return self.zeitpunkte[-1].time # wenig Zeit gebraucht ist kleine Kosten :D
 
     def clone_self(self):
         #clone = copy.deepcopy(self) # geht net (!) weil Bug in aktueller Python Version (?)
@@ -100,6 +105,7 @@ class Scenario():
         del self
 
     def build_self_with_max_a(self, start_zeitpunkt):
+        self.cost = 0
         start_zeitpunkt.set_all_cars_to_max_a()
         self.zeitpunkte.append(start_zeitpunkt)
         zeitpunkt = start_zeitpunkt
@@ -111,25 +117,46 @@ class Scenario():
     def rebuild_self_with_brake(self, start_brake_zeitpunkt, end_brake_zeitpunkt, car_to_brake):
         start_breaking_time = start_brake_zeitpunkt.time
         end_breaking_time = end_brake_zeitpunkt.time
+
+
+        # gehe alle Zeitpunkte rückwerts durch
+        # wenn wir den Zeitpunkt finden wo wir anfangen müssen zu bremsen dann
+        # schau ob der Zeitpunkt schon bremmst, wenn ja dann muss man früher anfangen zu bremsen
+        for zeiptunkt in reversed(self.zeitpunkte):
+            if zeiptunkt.time < end_breaking_time and zeiptunkt.time > start_breaking_time: # wir müssten bremsen
+                for car in zeiptunkt.cars:
+                    if car.id == car_to_brake.id:  # ID muss eindeutig sein !
+                        if car.a == car.a_min:
+                            start_breaking_time -= self.dt
+
+        times_to_break = math.ceil((end_breaking_time - start_breaking_time) / self.dt)
+
+        # jetzt ist die start_breaking_time und die times_to_break richtig
+        if start_breaking_time <0 :
+            return False
+
+        # löschen der liste für alle zeitpunkte nach dem start
         start_breaking = False
         neue_zeitpunkte = []
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.time == start_breaking_time:
                 start_breaking = True
             if start_breaking == True:
-                zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte, das ist eingeltich nicht notwendig aber yolo
+                zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte, das ist eingeltich nicht notwendig aber dann muss das der garbage collector nicht machen d.h. es passiert sicher kein müll
             else:
                 neue_zeitpunkte.append(zeitpunkt)
 
         self.zeitpunkte = neue_zeitpunkte
 
-        zeitpunkt = start_brake_zeitpunkt
+        # erweitert die Liste wieder zur vollständigkeit
+        zeitpunkt = self.zeitpunkte[-1]
         while zeitpunkt.target_reached()==False:
             zeitpunkt.set_all_cars_to_max_a()
-            if zeitpunkt.time < end_breaking_time: #wenn wir noch bremsen
+            if times_to_break!=0: #wenn wir noch bremsen
                 for car in zeitpunkt.cars:
                     if car.id == car_to_brake.id: #ID muss eindeutig sein !
                         car.a=car.a_min
+                        times_to_break -= 1
             self.zeitpunkte.append(zeitpunkt)
             zeitpunkt = zeitpunkt.make_next_zeitpunkt()
 
@@ -175,6 +202,7 @@ class Zeitpunkt():
         self.time = t
         self.parent = parent
         self.dt = dt
+        # self.cost = 0
 
     def set_all_cars_to_max_a(self):
         for car in self.cars:
@@ -239,7 +267,7 @@ class NoPathAvailableError(Exception):
 
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
 myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
-# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+#myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
 myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)
@@ -254,4 +282,5 @@ myCars.append(myCar2)
 
 sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.1))
 sc.do_the_schroedinger()
+print(sc.possible_solutions)
 #myAlgo.do_algo()
