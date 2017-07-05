@@ -54,11 +54,10 @@ class SchroedingersCrash():
                     car1, car2 = crash.car1, crash.car2
                     crash_zeitpunkt = crash.zeitpunkt
 
-                    # wir tragen ein das wir diese art von crash schonmal verhindet haben, wenn es einen crash schonmal gab dann sind wir offentsichlich in einer unlösbaren situation
-                    for old_scenario in self.prevent_crashs:
-                        if scenario.is_equal(old_scenario):
-                            continue
-                    self.prevent_crashs.append(scenario)
+                    # wir prüfen ob das scenario schonmal da war (verhindert das wir in endlosschleifen geraten wenn das problem unlösbar ist !)
+                    if self.scenario_already_handeled(scenario):
+                        continue
+                    self.prevent_crashs.append(scenario) #sonst kümmeren wir uns um den crash
 
                     # Lösche das jetzige Senario und mache zwei neue Senarien
                     clone1 = scenario.clone_self()
@@ -71,6 +70,12 @@ class SchroedingersCrash():
                         self.scenarios.append(clone2)
             else:
                 print("invalid")
+
+    def scenario_already_handeled(self, scenario):
+        for old_scenario in self.prevent_crashs:
+            if scenario.is_equal(old_scenario):
+                return True
+        return False
 
     def _printDebugScenario(scenario): #
         for node in scenario.zeitpunkte:
@@ -123,11 +128,29 @@ class Scenario():
         del self
 
     def is_equal(self, otherScenario):
+        if len(self.zeitpunkte) != len(otherScenario.zeitpunkte):
+            return False
 
         while i< len(self.zeitpunkte):
             zp_self = self.zeitpunkte[i]
             zp_other = otherScenario.zeitpunkte[i]
+            if zp_self.time != zp_other.time:
+                return False
+            if zp_self.parrent != zp_other.parrent:
+                return False
+            if zp_self.dt != zp_other.dt:
+                return False
 
+            if len(zp_self.cars) != len(zp_other.cars):
+                return False
+            j=0
+            while j<len(zp_self.cars):
+                car_self = zp_self.cars[j]
+                car_other = zp_other.cars[j]
+                if not car_self.is_equal(car_other):
+                    return False
+
+        return True
 
     def build_self_with_max_a(self, start_zeitpunkt):
         self.cost = 0
@@ -147,14 +170,14 @@ class Scenario():
         # gehe alle Zeitpunkte rückwerts durch
         # wenn wir den Zeitpunkt finden wo wir anfangen müssen zu bremsen dann
         # schau ob der Zeitpunkt schon bremmst, wenn ja dann muss man früher anfangen zu bremsen
-        print(start_braking_time)
+    #    print(start_braking_time)
         for zeitpunkt in reversed(self.zeitpunkte):
             if zeitpunkt.time < end_braking_time and zeitpunkt.time > start_braking_time: # wir müssten bremsen
                 for car in zeitpunkt.cars:
                     if car.id == car_to_brake.id:  # ID muss eindeutig sein !
                         if car.a == car.a_min:
                             start_braking_time -= self.dt
-        print(start_braking_time)
+     #   print(start_braking_time)
         times_to_break = math.ceil((end_braking_time - start_braking_time) / self.dt)
 
         # jetzt ist die start_braking_time und die times_to_break richtig
@@ -294,8 +317,8 @@ class NoPathAvailableError(Exception):
 
 
 myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
-#myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+#myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
 myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)

@@ -21,6 +21,13 @@ class Car:
 
         self.route = route # nur ein POINTER auf Route, da Listen nicht deep-copy werden
 
+    def is_equal(self, other_car):
+        if self.id == other_car.id and self.a_min == other_car.a_min and self.a_max == other_car.a_max and self.v_min == other_car.v_min and self.v_max == other_car.v_max \
+            and self.strecke == other_car.strecke and self.a == other_car.a and self.v == other_car.v and self.pos == other_car.pos \
+            and self.size.width == other_car.size.width and self.size.length == other_car.size.length:
+            return True
+        return False
+
     def _set_v(self, new_v):
         if (new_v <= self.v_max):
             self.v = new_v
