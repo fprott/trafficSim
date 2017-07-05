@@ -237,8 +237,9 @@ class NoPathAvailableError(Exception):
         self.message = message
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(1000.0,1000.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,1000.0),Point(1000.0,0.0)]), 2)
+myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
 myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 
 myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)
