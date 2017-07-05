@@ -30,6 +30,17 @@ class SchroedingersCrash():
         myScenario.build_self_with_max_a(start_zeitpunkt)
         self.scenarios.append(myScenario)
 
+    def get_best_solution(self):
+        best_cost = float('inf')
+        best_solution = None
+        for solution in self.possible_solutions:
+            if solution.get_costs() < best_cost:
+                best_cost = solution.get_costs()
+                best_solution = solution
+        if best_solution == None:
+            raise NosolutionAvailableError("Schrödinger's Crash findet keine Lösungen. Bitte Eingabe überprüfen!")
+        return best_solution
+
     def do_the_schroedinger(self):
         # n_c =0
         #sollange es noch möglichkeiten gibt
@@ -38,12 +49,13 @@ class SchroedingersCrash():
             if scenario.is_scenario_invalid() == False: #wenn das Scenario sinnvoll ist d.h. man nicht steht oder rückwertsfährt oder sowas
                 # Fahre bis zu einem Unfall
                 crash = scenario.get_first_crash()
+            #    print(crash.zeitpunkt)
                 if crash == None:
-                    print("no crash")
+                #    print("no crash")
                 #    SchroedingersCrash._printDebugScenario(scenario)
                     self.possible_solutions.append(scenario)
                 else:
-                    print("crash")
+                #    print("crash")
 
                     # if n_c > 0:
                     #     SchroedingersCrash._printDebugScenario(scenario)
@@ -65,11 +77,13 @@ class SchroedingersCrash():
                     scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
                     if self.prevent_crash(clone1, crash_zeitpunkt, car1, car2) == True:
+                    #    print("geht")
                         self.scenarios.append(clone1)
                     if self.prevent_crash(clone2, crash_zeitpunkt, car2, car1) == True:
+                    #    print("geht auch")
                         self.scenarios.append(clone2)
-            else:
-                print("invalid")
+            #else:
+            #    print("invalid")
 
     def scenario_already_handeled(self, scenario):
         for old_scenario in self.prevent_crashs:
@@ -98,9 +112,15 @@ class SchroedingersCrash():
         #finde den Zeitpunkt an den wir zu bremsen beginnen müssen
     #    t_before_crash = crash_zeitpunkt.time - brake_time
         zeitpunkt = crash_zeitpunkt.parent
+        # print(zeitpunkt)
+        # for zp in scenario.zeitpunkte:
+        #     print(zp.parent)
+        if zeitpunkt == None:
+            return False
         while zeitpunkt.time>brake_time:
             zeitpunkt = zeitpunkt.parent
         #bau das ding neu auf
+     #   print("geht")
         return scenario.rebuild_self_with_brake(zeitpunkt, crash_zeitpunkt, car_to_brake)
 
 class Scenario():
@@ -136,7 +156,7 @@ class Scenario():
             zp_other = otherScenario.zeitpunkte[i]
             if zp_self.time != zp_other.time:
                 return False
-            if zp_self.parrent != zp_other.parrent:
+            if zp_self.parent != zp_other.parent:
                 return False
             if zp_self.dt != zp_other.dt:
                 return False
@@ -312,27 +332,27 @@ class Zeitpunkt():
     def __repr__(self):
         return "Zeitpunkt[%2.2f]" % self.time
 
-class NoPathAvailableError(Exception):
+class NosolutionAvailableError(Exception):
     def __init__(self, message):
         self.message = message
 
 
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-#myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
-myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
-
-myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute2.get_current_pos(), myRoute2)
-myCar3 = Car("test_3", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
-
-
-myCars=[]
-myCars.append(myCar)
-myCars.append(myCar2)
-#myCars.append(myCar3)
-
-sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.05))
-sc.do_the_schroedinger()
-print(sc.possible_solutions)
-#myAlgo.do_algo()
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+# #myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0,100.0),Point(0.0,0.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+# myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
+#
+# myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute.get_current_pos(), myRoute)
+# myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4,2), myRoute2.get_current_pos(), myRoute2)
+# myCar3 = Car("test_3", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(30,0), myRoute3.get_current_pos(), myRoute3)
+#
+#
+# myCars=[]
+# myCars.append(myCar)
+# myCars.append(myCar2)
+# #myCars.append(myCar3)
+#
+# sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.05))
+# sc.do_the_schroedinger()
+# print(sc.possible_solutions)
+# #myAlgo.do_algo()
