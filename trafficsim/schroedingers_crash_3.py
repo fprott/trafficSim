@@ -23,6 +23,7 @@ class SchroedingersCrash():
     def __init__(self, start_zeitpunkt):
         self.scenarios = []
         self.possible_solutions = []
+        self.prevent_crashs=[]
 
         # Setze Beschleunigung aller autos auf maximum
         myScenario = Scenario()
@@ -30,29 +31,46 @@ class SchroedingersCrash():
         self.scenarios.append(myScenario)
 
     def do_the_schroedinger(self):
+        # n_c =0
         #sollange es noch möglichkeiten gibt
         while len(self.scenarios)>0:
             scenario = self.scenarios.pop()
             if scenario.is_scenario_invalid() == False: #wenn das Scenario sinnvoll ist d.h. man nicht steht oder rückwertsfährt oder sowas
                 # Fahre bis zu einem Unfall
-            #    SchroedingersCrash._printDebugScenario(scenario)
                 crash = scenario.get_first_crash()
                 if crash == None:
+                    print("no crash")
+                #    SchroedingersCrash._printDebugScenario(scenario)
                     self.possible_solutions.append(scenario)
                 else:
+                    print("crash")
+
+                    # if n_c > 0:
+                    #     SchroedingersCrash._printDebugScenario(scenario)
+                    #     sbsdb
+                    # n_c += 1
+                #    SchroedingersCrash._printDebugScenario(scenario)
                     #Suche die zwei (!) Autos die im Umfall verwickelt sind
                     car1, car2 = crash.car1, crash.car2
                     crash_zeitpunkt = crash.zeitpunkt
+
+                    # wir tragen ein das wir diese art von crash schonmal verhindet haben, wenn es einen crash schonmal gab dann sind wir offentsichlich in einer unlösbaren situation
+                    for old_scenario in self.prevent_crashs:
+                        if scenario.is_equal(old_scenario):
+                            continue
+                    self.prevent_crashs.append(scenario)
+
                     # Lösche das jetzige Senario und mache zwei neue Senarien
                     clone1 = scenario.clone_self()
                     clone2 = scenario.clone_self()
                     scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
-                    self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
-                    self.prevent_crash(clone2, crash_zeitpunkt, car2, car1)
-                    #SchroedingersCrash._printDebugScenario(clone1)
-                    self.scenarios.append(clone1)
-                    self.scenarios.append(clone2)
+                    if self.prevent_crash(clone1, crash_zeitpunkt, car1, car2) == True:
+                        self.scenarios.append(clone1)
+                    if self.prevent_crash(clone2, crash_zeitpunkt, car2, car1) == True:
+                        self.scenarios.append(clone2)
+            else:
+                print("invalid")
 
     def _printDebugScenario(scenario): #
         for node in scenario.zeitpunkte:
@@ -78,12 +96,12 @@ class SchroedingersCrash():
         while zeitpunkt.time>brake_time:
             zeitpunkt = zeitpunkt.parent
         #bau das ding neu auf
-        scenario.rebuild_self_with_brake(zeitpunkt, crash_zeitpunkt, car_to_brake)
+        return scenario.rebuild_self_with_brake(zeitpunkt, crash_zeitpunkt, car_to_brake)
 
 class Scenario():
     def __init__(self):
         self.zeitpunkte = []
-        self.dt = 0.1
+        self.dt = 0.05
         # self.cost = float('Inf')
 
     def get_costs(self):
@@ -104,6 +122,13 @@ class Scenario():
             zeitpunkt.delete_self()
         del self
 
+    def is_equal(self, otherScenario):
+
+        while i< len(self.zeitpunkte):
+            zp_self = self.zeitpunkte[i]
+            zp_other = otherScenario.zeitpunkte[i]
+
+
     def build_self_with_max_a(self, start_zeitpunkt):
         self.cost = 0
         start_zeitpunkt.set_all_cars_to_max_a()
@@ -115,33 +140,35 @@ class Scenario():
             self.zeitpunkte.append(zeitpunkt)
 
     def rebuild_self_with_brake(self, start_brake_zeitpunkt, end_brake_zeitpunkt, car_to_brake):
-        start_breaking_time = start_brake_zeitpunkt.time
-        end_breaking_time = end_brake_zeitpunkt.time
+        start_braking_time = start_brake_zeitpunkt.time
+        end_braking_time = end_brake_zeitpunkt.time
 
-
+      #  print(start_braking_time)
         # gehe alle Zeitpunkte rückwerts durch
         # wenn wir den Zeitpunkt finden wo wir anfangen müssen zu bremsen dann
         # schau ob der Zeitpunkt schon bremmst, wenn ja dann muss man früher anfangen zu bremsen
-        for zeiptunkt in reversed(self.zeitpunkte):
-            if zeiptunkt.time < end_breaking_time and zeiptunkt.time > start_breaking_time: # wir müssten bremsen
-                for car in zeiptunkt.cars:
+        print(start_braking_time)
+        for zeitpunkt in reversed(self.zeitpunkte):
+            if zeitpunkt.time < end_braking_time and zeitpunkt.time > start_braking_time: # wir müssten bremsen
+                for car in zeitpunkt.cars:
                     if car.id == car_to_brake.id:  # ID muss eindeutig sein !
                         if car.a == car.a_min:
-                            start_breaking_time -= self.dt
+                            start_braking_time -= self.dt
+        print(start_braking_time)
+        times_to_break = math.ceil((end_braking_time - start_braking_time) / self.dt)
 
-        times_to_break = math.ceil((end_breaking_time - start_breaking_time) / self.dt)
-
-        # jetzt ist die start_breaking_time und die times_to_break richtig
-        if start_breaking_time <0 :
+        # jetzt ist die start_braking_time und die times_to_break richtig
+        if start_braking_time <0 :
             return False
 
         # löschen der liste für alle zeitpunkte nach dem start
-        start_breaking = False
+        start_braking = False
         neue_zeitpunkte = []
         for zeitpunkt in self.zeitpunkte:
-            if zeitpunkt.time == start_breaking_time:
-                start_breaking = True
-            if start_breaking == True:
+            if zeitpunkt.time == start_braking_time:
+                start_braking = True
+                start_brake_zeitpunkt = zeitpunkt
+            if start_braking == True:
                 zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte, das ist eingeltich nicht notwendig aber dann muss das der garbage collector nicht machen d.h. es passiert sicher kein müll
             else:
                 neue_zeitpunkte.append(zeitpunkt)
@@ -149,7 +176,7 @@ class Scenario():
         self.zeitpunkte = neue_zeitpunkte
 
         # erweitert die Liste wieder zur vollständigkeit
-        zeitpunkt = self.zeitpunkte[-1]
+        zeitpunkt = start_brake_zeitpunkt
         while zeitpunkt.target_reached()==False:
             zeitpunkt.set_all_cars_to_max_a()
             if times_to_break!=0: #wenn wir noch bremsen
@@ -159,13 +186,14 @@ class Scenario():
                         times_to_break -= 1
             self.zeitpunkte.append(zeitpunkt)
             zeitpunkt = zeitpunkt.make_next_zeitpunkt()
+        return True
 
     # Lösche Senarien aus der To-Do liste immer dann wenn:
     # a.) man zum Anfangszeitpunkt schon bremst
     # b.) ein Auto dauerhaft steht (v == 0, a == 0)
     # c.) ein Auto rückwärst fährt
     def is_scenario_invalid(self):
-        if self.zeitpunkte[0].is_one_car_breaking():
+        if self.zeitpunkte[0].is_one_car_braking():
             return True
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.is_one_car_permanently_standing():
@@ -231,7 +259,7 @@ class Zeitpunkt():
         return False
 
     # b.) man zum Anfangszeitpunkt schon bremst
-    def is_one_car_breaking(self):
+    def is_one_car_braking(self):
         for car in self.cars:
             if car.a<0:
                 return True
@@ -280,7 +308,7 @@ myCars.append(myCar)
 myCars.append(myCar2)
 #myCars.append(myCar3)
 
-sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.1))
+sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.05))
 sc.do_the_schroedinger()
 print(sc.possible_solutions)
 #myAlgo.do_algo()
