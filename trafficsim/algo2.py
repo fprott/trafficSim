@@ -12,7 +12,7 @@ import time
 collision_counter = 0
 
 class QualityFunction(Enum):
-    STANDART = 1
+    STANDART_A_STERN = 1
     LEVI = 2
 
 class NoPathAvailableError(Exception):
@@ -114,14 +114,14 @@ class Senario():
         self.parent = parent
         self._children = None # am anfang leer
         self.start_time = start_time
-        self.quality_function = QualityFunction.STANDART  # Ändert Gütekriterium TODO richtig übergeben als global !
+        self.quality_function = QualityFunction.STANDART_A_STERN  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
         self.N = 5
 
     def _get_node_cost(self): # TODO mehr variität !
         global collision_counter
         cost=0
-        if(self.quality_function==QualityFunction.STANDART):
+        if(self.quality_function==QualityFunction.STANDART_A_STERN):
             if check_collision(self.cars)==True:
             #    print("Kollision")
                 collision_counter+=1
@@ -144,7 +144,7 @@ class Senario():
 
     def _get_heuristic_cost(self): # TODO mehr variität !
         cost=0
-        if(self.quality_function==QualityFunction.STANDART):
+        if(self.quality_function==QualityFunction.STANDART_A_STERN):
             for car in self.cars:
                 cost +=car.route.get_percentage_from_start(car.strecke) # sehr simpler Algo der angepasst werden sollte
             return cost
@@ -262,25 +262,25 @@ class Senario():
             #print("Percent still to travel "+str(p))
             print("-----")
 
-start_time = time.time()
-myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
-myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
-
-myCar = Car("test_1", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
-myCar2 = Car("test_2", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute2.get_current_pos(), myRoute2)
-myCar3 = Car("test_3", 0.0, 10.0, -10.0, 35.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute3.get_current_pos(), myRoute3)
-
-myCars=[]
-myCars.append(myCar)
-myCars.append(myCar2)
-myCars.append(myCar3)
-mySenario = Senario(None,0,myCars)
-myGraph = Graph(mySenario)
-bestSenarios = myGraph.calluclate_best_senarios()
-
-end_time = time.time()
-
-
-Senario.printDebugSenarios(bestSenarios)
-print("run time (s) "+str(end_time-start_time))
+# start_time = time.time()
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+# myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
+#
+# myCar = Car("test_1", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
+# myCar2 = Car("test_2", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute2.get_current_pos(), myRoute2)
+# myCar3 = Car("test_3", 0.0, 10.0, -10.0, 35.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute3.get_current_pos(), myRoute3)
+#
+# myCars=[]
+# myCars.append(myCar)
+# myCars.append(myCar2)
+# myCars.append(myCar3)
+# mySenario = Senario(None,0,myCars)
+# myGraph = Graph(mySenario)
+# bestSenarios = myGraph.calluclate_best_senarios()
+#
+# end_time = time.time()
+#
+#
+# Senario.printDebugSenarios(bestSenarios)
+# print("run time (s) "+str(end_time-start_time))

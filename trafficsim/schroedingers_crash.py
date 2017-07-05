@@ -19,6 +19,11 @@ import copy
 # c.) ein Auto rückwärst fährt
 # 8.) Nehme das beste Senario was das Ziel erreicht (beste heißt hier das wir eine Gütefunktion brauchen. z.B. maximirung von Beschleunigungen oder minimrung der gesamtzeit etc.
 
+# TODO:
+# 1.) Gebe jedem Knoten eine Cost sache und passe get_best_solution demensprechend an, am besten per funktion (!)
+# 2.) Lasse A* einmal den schrödinger mit der richtigen einstellung callen und habe eine gute-nicht-perfekte Lösung
+# 3.) Mache A* und schmeise jeden Knoten weg der schlechter als Schrödinger ist :D
+
 class SchroedingersCrash():
     def __init__(self, start_zeitpunkt):
         self.scenarios = []

@@ -31,16 +31,16 @@ class SchroedingerTest(unittest.TestCase):
         myCars.append(myCar2)
         sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.05))
         sc.do_the_schroedinger()
-        solutions = sc.get_best_solution()
+        solution = sc.get_best_solution()
         self.assertEqual(len(sc.possible_solutions),2)
-        self.assertIsNotNone(solutions)
+        self.assertIsNotNone(solution)
 
         myCars=[myCar]
         sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.05))
         sc.do_the_schroedinger()
         best_solutions = sc.get_best_solution()
         # wenn man nur so fährt braucht man minimale zeit, ich denke wir sind nicht viel langsamer
-        self.assertAlmostEqual(solutions.get_costs(),best_solutions.get_costs(), delta=0.2) # der abstand zwischen den beiden ist maximal 0.2 sec pro crash
+        self.assertAlmostEqual(solution.get_costs(),best_solutions.get_costs(), delta=0.2) # der abstand zwischen den beiden ist maximal 0.2 sec pro crash
 
     #    self.assertEqual()
 
