@@ -48,8 +48,8 @@ class SchroedingersCrash():
                     scenario.delete_self()
                     #Passe das Scenario so an das der Unfall verhindert wird
                     self.prevent_crash(clone1, crash_zeitpunkt, car1, car2)
-                    self.prevent_crash(clone1, crash_zeitpunkt, car2, car1)
-                    SchroedingersCrash._printDebugScenario(clone1)
+                    self.prevent_crash(clone2, crash_zeitpunkt, car2, car1)
+                    #SchroedingersCrash._printDebugScenario(clone1)
                     self.scenarios.append(clone1)
                     self.scenarios.append(clone2)
 
@@ -68,16 +68,16 @@ class SchroedingersCrash():
             print("Crash?: " + str(check_collision(node.cars)))
             print("-----")
 
-    def prevent_crash(self, scenario, crash_zeitpunkt, car_to_break, car_not_to_break):
+    def prevent_crash(self, scenario, crash_zeitpunkt, car_to_brake, car_not_to_brake):
         # Zeit die wir bremsen müssen
-        break_time = Crash.get_brake_start(crash_zeitpunkt, car_to_break, car_not_to_break)
+        brake_time = Crash.get_brake_start(crash_zeitpunkt, car_to_brake, car_not_to_brake)
         #finde den Zeitpunkt an den wir zu bremsen beginnen müssen
-    #    t_before_crash = crash_zeitpunkt.time - break_time
+    #    t_before_crash = crash_zeitpunkt.time - brake_time
         zeitpunkt = crash_zeitpunkt.parent
-        while zeitpunkt.time>break_time:
+        while zeitpunkt.time>brake_time:
             zeitpunkt = zeitpunkt.parent
         #bau das ding neu auf
-        scenario.rebuild_self_with_break(zeitpunkt, crash_zeitpunkt, car_to_break)
+        scenario.rebuild_self_with_brake(zeitpunkt, crash_zeitpunkt, car_to_brake)
 
 class Scenario():
     def __init__(self):
@@ -108,23 +108,23 @@ class Scenario():
             zeitpunkt.set_all_cars_to_max_a()
             self.zeitpunkte.append(zeitpunkt)
 
-    def rebuild_self_with_break(self, start_break_zeitpunkt, end_break_zeitpunkt, car_to_break):
-        start_breaking_time = start_break_zeitpunkt.time
-        end_breaking_time = end_break_zeitpunkt.time
+    def rebuild_self_with_brake(self, start_brake_zeitpunkt, end_brake_zeitpunkt, car_to_brake):
+        start_breaking_time = start_brake_zeitpunkt.time
+        end_breaking_time = end_brake_zeitpunkt.time
         start_breaking = False
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.time == start_breaking_time:
-                breaking = True
+                start_breaking = True
             if start_breaking == True:
-                zeitpunkt.delete_self # wir löschen die weiteren Zeitpunkte
+                zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte
                 self.zeitpunkte.remove(zeitpunkt)
 
-        zeitpunkt = start_break_zeitpunkt
+        zeitpunkt = start_brake_zeitpunkt
         while zeitpunkt.target_reached()==False:
             zeitpunkt.set_all_cars_to_max_a()
             if zeitpunkt.time < end_breaking_time: #wenn wir noch bremsen
                 for car in zeitpunkt.cars:
-                    if car.id == car_to_break.id: #ID muss eindeutig sein !
+                    if car.id == car_to_brake.id: #ID muss eindeutig sein !
                         car.a=car.a_min
             self.zeitpunkte.append(zeitpunkt)
             zeitpunkt = zeitpunkt.make_next_zeitpunkt()
