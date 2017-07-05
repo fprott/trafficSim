@@ -153,6 +153,7 @@ class Scenario():
         return True
 
     def build_self_with_max_a(self, start_zeitpunkt):
+        self.dt = start_zeitpunkt.dt
         self.cost = 0
         start_zeitpunkt.set_all_cars_to_max_a()
         self.zeitpunkte.append(start_zeitpunkt)
