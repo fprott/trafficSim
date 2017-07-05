@@ -112,12 +112,16 @@ class Scenario():
         start_breaking_time = start_brake_zeitpunkt.time
         end_breaking_time = end_brake_zeitpunkt.time
         start_breaking = False
+        neue_zeitpunkte = []
         for zeitpunkt in self.zeitpunkte:
             if zeitpunkt.time == start_breaking_time:
                 start_breaking = True
             if start_breaking == True:
-                zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte
-                self.zeitpunkte.remove(zeitpunkt)
+                zeitpunkt.delete_self() # wir löschen die weiteren Zeitpunkte, das ist eingeltich nicht notwendig aber yolo
+            else:
+                neue_zeitpunkte.append(zeitpunkt)
+
+        self.zeitpunkte = neue_zeitpunkte
 
         zeitpunkt = start_brake_zeitpunkt
         while zeitpunkt.target_reached()==False:
