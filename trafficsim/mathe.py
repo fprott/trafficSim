@@ -20,6 +20,34 @@ def calculate_pos(old_pos, dt, v):
     """
     return old_pos+((v*dt),(v*dt)) # FIXME das braucht noch ne richtungsvektor !!!
 
+def calculate_length(list):
+
+    x = [p[0] for p in list]
+    y = [p[1] for p in list]
+    d = sum(((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5 for i in (range(len(x) - 1)))
+
+    return d
+
+def list_remove_list(a,b):
+    if b == []:
+        return a
+    else:
+        for i in range(len(b)):
+            a.remove(b[i])
+
+    return a
+
+
+def list_and_list(a,b):
+
+    l = []
+    for i in range(len(b)):
+        for j in range(len(a)):
+            if b[i] == a[j]:
+                l.append(b[i])
+
+    return l
+
 #Die funktionierien und sind frei nutzbar!!!
 class Line(list):
     """
