@@ -1,7 +1,7 @@
 import sys
 import math
 sys.path.append("..")
-from route import *
+#from route import *
 import unittest
 from parameter import *
 from path_planning import *
@@ -70,8 +70,8 @@ class RoutenTest(unittest.TestCase):
         point = [250,400]
         street = Strassen_Nets
         direction = 1
-        start = [125,0]
-        end = [500,250]
+        start = [0,250]
+        end = [250,470]
         Node1 = Node([349.4,366.3],street,direction)
         #print(Node1.get_lower_node())
 
@@ -80,7 +80,7 @@ class RoutenTest(unittest.TestCase):
 
         #***************TEST PATH****************
         #Path1 = Path([0,250],[500,625],street=[[20, [0, 250, 1], [250, 250, 1], [375, 250], [500, 250]], [20, [250, 0], [250, 125], [250, 250], [250, 400]], [20, [125, 0], [250, 125], [375, 250], [500, 625]]])
-        Path1 = Path([0, 250], [125, 0], street)
+        Path1 = Path(start, end, street)
 
 
         #Path1.set_visited([375,250])

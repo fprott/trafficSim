@@ -1,10 +1,11 @@
 from route import *
+from path_planning import *
 
 Flag_STOP = False
 
 Strassen_Nets = [
-    [40,[0,250],[470,250]],
-    [40,[250,0],[250,470]]
+    [40,[0,250],[250,250],[470,250]],
+    [40,[250,0],[250,250],[250,470]]
 ]
 
 # Strassen_Nets = [
@@ -29,7 +30,12 @@ for i in range(750):
     Fahrbahn_Nets[0].append([0+(i+1)*500/250,250])
     Fahrbahn_Nets[1].append([250,0+(i+1)*500/250])
 
-path = [[260,0],[250,250],[500,240]]
+
+start = [0,250]
+end = [250,470]
+Path1 = Path(start, end, Strassen_Nets)
+#path = [[260,0],[250,250],[500,240]]
+path = Path1.get_path()
 Route1 = Route(path, width=40,accur=4)
 print(Route1.routepoints)
 Fahrbahn_Nets[1] = Route1.routepoints
