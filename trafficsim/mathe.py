@@ -20,6 +20,8 @@ def calculate_pos(old_pos, dt, v):
     """
     return old_pos+((v*dt),(v*dt)) # FIXME das braucht noch ne richtungsvektor !!!
 
+
+
 def calculate_length(list):
 
     x = [p[0] for p in list]
@@ -28,17 +30,23 @@ def calculate_length(list):
 
     return d
 
+
+
 def list_remove_list(a,b):
+# remove the elements of list b from list a
+
     if b == []:
         return a
     else:
-        for i in range(len(b)):
+        for i in range(len(b)-1):
             a.remove(b[i])
 
     return a
 
 
+
 def list_and_list(a,b):
+# find the same elements in list a and b
 
     l = []
     for i in range(len(b)):

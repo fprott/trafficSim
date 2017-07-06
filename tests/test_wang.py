@@ -5,6 +5,7 @@ from route import *
 import unittest
 from parameter import *
 from path_planning import *
+from matplotlib import pyplot as plt
 
 
 class RoutenTest(unittest.TestCase):
@@ -71,30 +72,51 @@ class RoutenTest(unittest.TestCase):
         direction = 1
         start = [125,0]
         end = [500,250]
-        Node1 = Node([250,125],street,direction)
+        Node1 = Node([349.4,366.3],street,direction)
         #print(Node1.get_lower_node())
 
-        stack = []
-        visited = []
-        start = Node(start, street, direction)
-        stack.append(start.positon)
+
         #print(stack[len(stack)-1])
 
         #***************TEST PATH****************
-        Path1 = Path([125,0],[500,250],street)
-        visited = []
-        #print(list_remove_list(Node1.get_lower_node(),visited))
-        #print(list_remove_list([],[]))
-        #print(Path1.get_unvisited_child([250, 125], [[250,250]]))
+        #Path1 = Path([0,250],[500,625],street=[[20, [0, 250, 1], [250, 250, 1], [375, 250], [500, 250]], [20, [250, 0], [250, 125], [250, 250], [250, 400]], [20, [125, 0], [250, 125], [375, 250], [500, 625]]])
+        Path1 = Path([0, 250], [125, 0], street)
+
+
+        #Path1.set_visited([375,250])
+        #print(Path1.check_visited([250,250]))
+        #print(Path1.street)
+        #Path1.set_unvisited([0,250])
+        #print(Path1.check_visited([0,250]))
+        #print(Path1.street)
+
+
+        #print(Path1.get_unvisited_child([250, 250], [[250,123.25],[250,400],[301.8,250]],[[0,250]]))
+        #print(Path1.get_unvisited_child([0,250],[0,250]))
+
+
 
         #print(Path1.depthFirstSearch_test())
 
         path = Path1.depthFirstSearch()
         print(path)
+
         #print(path[1][0])
-        print(calculate_length(path[0]))
-        print(calculate_length(path[1]))
-        print(Path1.get_path())
+        #print(calculate_length(path[0]))
+        #print(calculate_length(path[1]))
+
+        path = Path1.get_path()
+        #path = [[0,100],[100,150],[300,400]]
+        print(path)
+
+
+        #Route1 = Route(path,width=20)
+        #print(Route1.routepoints)
+
+        #x = [p[0] for p in Route1.routepoints]
+        #y = [p[1] for p in Route1.routepoints]
+        #plt.plot(x,y,"g")
+        #plt.show()
 
 
         #a = [1,2,3,4]
