@@ -47,18 +47,21 @@ class ASternTest(unittest.TestCase):
     #
     # #    self.assertEqual()
     #
-    def test_crash_unavoidable(self):
+    # ACHTUNG: es ist nicht empfehlenswert diesen Test mit weniger als 16 GB Ram auszuführen !
+    # JEDER einzelne Knoten muss durchgegangen werden. Das sind Millionen
+    # Kleine Anmerkung, der Test ist super um kappute Speicherbereiche zu finden ;D
+    def test_crash_unavoidable(self): #this will and must take forever :D
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(100.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0, 0.0), Point(0.0, 0.0)]), 2)
         myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute.get_current_pos(), myRoute)
         myCar2 = Car("test_2", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute2.get_current_pos(), myRoute2)
+        #myCar = Car("test_1", 0.0, 50.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10, 0), myRoute.get_current_pos(), myRoute)
+        #myCar2 = Car("test_2", 0.0, 50.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10, 0), myRoute2.get_current_pos(), myRoute2)
         myCars = []
         myCars.append(myCar)
         myCars.append(myCar2)
         mySenario = Senario(None, 0, myCars)
         myGraph = Graph(mySenario)
-
-
         exeption = False
         try:
             solution = myGraph.calluclate_best_senarios()

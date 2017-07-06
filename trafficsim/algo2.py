@@ -19,7 +19,7 @@ class NoPathAvailableError(Exception):
     def __init__(self, message):
         self.message = message
 
-def bulletime(cars, maximum_t = 100, minimum_t=0.11): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
+def bulletime(cars, minimum_t=0.05, maximum_t = 100): #muss immer unterschätzen aber nie meher als min_abstand zwischen zwei punkten
     """
     Errechnet die dt und da
     cars = liste mit allen autos, default_dt= dt wenn autos voneinander weit entfernt sind
@@ -38,7 +38,7 @@ def bulletime(cars, maximum_t = 100, minimum_t=0.11): #muss immer unterschätzen
                 t_min = t
             j+=1
         i+=1
-    if t_min < minimum_t: #da wir sonst nie einen zusammensttß machen muss es ein minimum geben !
+    if t_min < minimum_t: #da wir sonst nie einen zusammenstoß machen muss es ein minimum geben !
         t_min = minimum_t
     #print("t_min "+str(t_min))
     return t_min
@@ -59,6 +59,37 @@ class Graph():
         self.closed_list = [] # erkannte und behandelte knoten
         self.root = root_senario
         heappush(self.open_list, root_senario) # der root ist der erste zu prüfende
+        # find minimum_t for bulletime
+
+        # das muss nur groß genug sein um nicht versehntlich ein auto zu skipen und umbedingt groß genug nicht "auf der stelle" zu tretten
+
+        maximaler_abstand = 0
+        maximales_v = 0
+        min_breite = float('inf')
+        min_laenge = float('inf')
+        for car in root_senario.cars:
+            if car.v_max > maximales_v:
+                maximales_v=car.v_max
+            if car.size.width < min_breite:
+                min_breite = car.size.width
+            if car.size.length < min_laenge:
+                min_laenge = car.size.length
+            i = 1
+            while i < len(car.route.routepoints):
+                abstand = math.sqrt((car.route.routepoints[i][0]-car.route.routepoints[i-1][0])**2+(car.route.routepoints[i][1]-car.route.routepoints[i-1][1])**2)
+                if abstand > maximaler_abstand:
+                    maximaler_abstand = abstand
+                i+=1
+
+
+
+        # s=v*t -> s/v = t
+        #damit wir nicht auf der stelle tretten muss gelten
+        minimum_t1 = maximaler_abstand/maximales_v # meistens ein super kleiner wert, viel zu klein für effektive berechnung d.h. meist unötig
+        #damit wir nicht überspringen muss gelten
+        minimum_t2 = min(min_laenge,min_breite)/maximales_v
+        root_senario.bullettime_minimum_t = max(minimum_t1,minimum_t2)
+
 
     def calluclate_best_senarios(self):
         best_way=[]
@@ -106,7 +137,7 @@ class Graph():
                 self.open_list.remove(crash_node)
 
 class Senario():
-    def __init__(self, parent, start_time, cars):
+    def __init__(self, parent, start_time, cars, bullettime_minimum_t=0.05):
         """
         :param cars: Eine Liste von CarMarker
         """
@@ -117,6 +148,7 @@ class Senario():
         self.quality_function = QualityFunction.STANDART_A_STERN  # Ändert Gütekriterium TODO richtig übergeben als global !
         self.cost = self._get_cost() # Dieser Aufrruf dient zur Beschleunigung des Programms
         self.N = 5
+        self.bullettime_minimum_t = bullettime_minimum_t
 
     def _get_node_cost(self): # TODO mehr variität !
         global collision_counter
@@ -176,12 +208,12 @@ class Senario():
             if car.route.get_percentage_from_start(car.strecke) !=0:
         #        print(car.route.get_percentage_from_start(car.strecke))
                 return False
-        print("Target reach")
+        #print("Target reach")
         return True
 
     def get_next_senarios(self, cars):
         if self._children is None:
-            dt = bulletime(cars)
+            dt = bulletime(cars, self.bullettime_minimum_t)
         #    print(dt)
             self._children = self._callculate_next_senarios(dt)
             return self._children
@@ -243,7 +275,7 @@ class Senario():
             # for car in possiblity:
             #     print(car) #soll immer 2 autos mixen
             # print("----")
-            all_possible_steps.append(Senario(self, new_time, possiblity))
+            all_possible_steps.append(Senario(self, new_time, possiblity, self.bullettime_minimum_t))
         self.children=all_possible_steps
         return all_possible_steps
 
@@ -263,18 +295,18 @@ class Senario():
             print("-----")
 
 # start_time = time.time()
-# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,100.0)]), 2)
-# myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0,100.0),Point(100.0,0.0)]), 2)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(100.0,0.0)]), 2)
+# myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0, 0.0),Point(0.0, 0.0)]), 2)
 # myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0,50.0),Point(100.0,50.0)]), 2)
 #
-# myCar = Car("test_1", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
-# myCar2 = Car("test_2", 0.0, 10.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute2.get_current_pos(), myRoute2)
-# myCar3 = Car("test_3", 0.0, 10.0, -10.0, 35.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute3.get_current_pos(), myRoute3)
+# myCar = Car("test_1", 0.0, 50.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
+# myCar2 = Car("test_2", 0.0, 50.0, -20.0, 50.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute2.get_current_pos(), myRoute2)
+# myCar3 = Car("test_3", 0.0, 50.0, -10.0, 35.0, 10.0, 0.0, 0.0, CarSize(10,0), myRoute3.get_current_pos(), myRoute3)
 #
 # myCars=[]
 # myCars.append(myCar)
 # myCars.append(myCar2)
-# myCars.append(myCar3)
+# #myCars.append(myCar3)
 # mySenario = Senario(None,0,myCars)
 # myGraph = Graph(mySenario)
 # bestSenarios = myGraph.calluclate_best_senarios()
