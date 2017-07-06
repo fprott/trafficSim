@@ -19,7 +19,8 @@ from mathe import *
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QGroupBox, QDialog, QVBoxLayout, QGridLayout
 
-from file import  *
+from file import *
+from route import *
 import parameter
 
 Klick_Time = 0
@@ -30,6 +31,7 @@ red = (255, 0, 0)
 blue = (0, 0,255)
 green = (0,255, 0)
 gray = (128, 128, 128)
+dunkel_gray = (	85, 107, 47)
 purpur = (104, 34, 139)
 yellow = (255, 255, 0)
 BackGroundColor = (25,235,25)
@@ -50,10 +52,9 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
     Punkte_Nets = []
     FahrzeugePunkte_Nets = []
     possible_Punkt = []
-    # Strassen_Nets = parameter.Strassen_Nets
-    # Fahrzeuge_Nets = parameter.Fahrzeuge_Nets
-    # print("Strassen_Nets definiert : %r"%Strassen_Nets)
     type_Farbe_List = [blue,black,green,purpur,red,white,yellow,white]
+    Schnitt_Standard_Punkte = []
+
     def __init__(self,pyGameDrawingBoard ,parent=None):
         super(QTDesignWidget, self).__init__(parent)
         self.setupUi(self)
@@ -77,6 +78,8 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         self.pushButton_Losen_Strasse.clicked.connect(self.event_Button_Losen_Strasse)
         self.pushButton_Speichen_Strasse.clicked.connect(self.event_Daten_Speichern_Strassen)
         self.treeView_Strasse.clicked.connect(self.event_treeWidget_Strasse)
+        self.lineEdit_Str_Punkte.returnPressed.connect(self.event_Erneuen_Strassen_Nets)
+        self.lineEdit_Str_Bereite.returnPressed.connect(self.event_Erneuen_Strassen_Bereite)
 
         #pygame on frame_Fahrzeug
         self.lable_2= QtWidgets.QLabel(self.frame_Fahrzeug)
@@ -88,6 +91,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         self.pushButton_Losen_Fahrzeug.clicked.connect(self.event_Button_Losen_Fahrzeug)
         self.pushButton_Speichen_Fahrzeug.clicked.connect(self.event_Daten_Speichern_Fahrzeugen)
         self.treeView_Fahrzeug.clicked.connect(self.event_treeWidget_Fahrzeug)
+        self.lineEdit_Fahrzeug_Punkte.returnPressed.connect(self.event_Erneuen_Fahrzeuge_Nets)
         #self.tab_Fahrzeug.isEnabled(self.event_print)
 
         #pygame on frame_Simulation
@@ -104,6 +108,10 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         self.pushButton_Stop_Simulation.clicked.connect(self.event_STOP_Simulation)
 
         #self.pushButton1 = QtWidgets.QPushButton("PyQt5 button")'
+        self.event_Erneuen_TreeWidget(self.treeView_Strasse, parameter.Strassen_Nets)
+        self.event_Erneuen_Strassen(parameter.Strassen_Nets)
+        self.erneuen_Potenzielle_Fahrbahn_Nets()
+        self.erneuen_Frame_Strasse()
 
         #register Buttons
         self.pushButton_Add_Strasse.clicked.connect(self.on_pushButton_Add_Strasse_triggered)
@@ -121,9 +129,10 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         if(self.pushButton_Add_Strasse.isChecked()==True):
             self.Klick_Time_Strasse = 0
             print("**************************")
+            self.statusBar.showMessage('Bitte Wählen Sie die Anfangspunkt an der Frame.')
         elif(self.pushButton_Add_Strasse.isChecked()==False):
             print("==========================")
-            if (len(self.Punkte_Nets)!=0):
+            if (len(self.Punkte_Nets)>1):
                 print('Punkte_Nets bevor Breite insert: %r'%(self.Punkte_Nets))
                 self.Punkte_Nets.insert(0,int(self.lineEdit_Str_Bereite.text()))
                 print('Strassen_Nets bevor Punkte_Nets append: %r'%parameter.Strassen_Nets)
@@ -131,13 +140,14 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 parameter.Strassen_Nets.append(self.Punkte_Nets)
                 # parameter.Strassen_Nets = parameter.Strassen_Nets
                 print('Strassen_Nets : %r'%parameter.Strassen_Nets)
-                self.Punkte_Nets = []#del(self.Punkte_Nets[:]);
-                print('Punkte_Nets : %r'%self.Punkte_Nets)
+            self.Punkte_Nets = []#del(self.Punkte_Nets[:]);
+            print('Punkte_Nets : %r'%self.Punkte_Nets)
             print("==========================")
             self.event_Erneuen_TreeWidget(self.treeView_Strasse, parameter.Strassen_Nets)
             self.event_Erneuen_Strassen(parameter.Strassen_Nets)
 
         # erneue die pygame Inhalt in frame_Strasse
+        self.erneuen_Potenzielle_Fahrbahn_Nets()
         self.erneuen_Frame_Strasse()
 
     def on_pushButton_Losen_Strasse_triggered(self):
@@ -149,29 +159,29 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
             self.pushButton_Losen_Fahrzeug.setChecked(False)
         if(self.pushButton_Add_Fahrzeug.isChecked()==True):
             self.Klick_Time_Fahrzeug = 0
+            self.statusBar.showMessage('Bitte Wählen Sie die Anfangspunkt an der Frame.')
         elif(self.pushButton_Add_Fahrzeug.isChecked()==False):
-            if (len(self.FahrzeugePunkte_Nets)!=0):
+            if (len(self.FahrzeugePunkte_Nets)>1):
                 type = self.comboBox_Fahrzeug.currentIndex()
                 Points = [[self.FahrzeugePunkte_Nets[0][0], self.FahrzeugePunkte_Nets[0][1]], [self.FahrzeugePunkte_Nets[1][0],self.FahrzeugePunkte_Nets[1][1]]]
                 Richtung = self.Richtung(Points) + 180
                 self.drawingBoard_Fahrzeug.drawFahrzeug(type, self.FahrzeugePunkte_Nets[0][0], self.FahrzeugePunkte_Nets[0][1], Richtung, 20)
 
                 #TODO: Die Kurve Funktion brauchen weite bearbeitet werden.
-                # print(self.FahrzeugePunkte_Nets)
-                xvals, yvals = self.Bezier_Kurve(points=self.FahrzeugePunkte_Nets)
-                xvals = list(xvals)
-                yvals = list(yvals)
-                xvals.reverse()
-                yvals.reverse()
-                print(xvals)
+                route_n = Route(self.FahrzeugePunkte_Nets,width=30, accur = 1)
+                print("route_n is %r"%route_n.routepoints)
                 colour = self.type_Farbe_List[self.comboBox_Fahrzeug.currentIndex()]
-                self.drawingBoard_Fahrzeug.drawKurve(xvals, yvals, colour)
 
+                # zeichnen die Kurve
+                x = []
+                y = []
+                points = route_n.routepoints
+                for i in range(len(points)):
+                    x.append(points[i][0])
+                    y.append(points[i][1])
+                self.drawingBoard_Fahrzeug.drawKurve(x,y, colour)
                 # Add die Fahrbahn neuer Fahrzeug nach Fahrbahn_Nets
-                fahrbahn = [0 for i in range(len(xvals))]
-                for i in range(len(xvals)):
-                    fahrbahn[i] = [xvals[i],yvals[i]]
-                parameter.Fahrbahn_Nets.append(fahrbahn)
+                parameter.Fahrbahn_Nets.append(route_n.routepoints)
 
                 #Umformen die Fahrzeug Daten und speichern in die Fahrzeug_Nets
                 self.FahrzeugePunkte_Nets.insert(0,int(self.comboBox_Fahrzeug.currentIndex()))
@@ -179,12 +189,13 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 parameter.Fahrzeuge_Nets.append(self.FahrzeugePunkte_Nets)
                 # parameter.Fahrzeuge_Nets = parameter.Fahrzeuge_Nets
                 print('Fahrzeuge_Nets :'+str(parameter.Fahrzeuge_Nets))
-                self.FahrzeugePunkte_Nets = []#del(self.FahrzeugePunkte_Nets[:])
-                print('FahrzeugePunkte_Nets :'+str((self.FahrzeugePunkte_Nets)))
 
+            self.FahrzeugePunkte_Nets = []#del(self.FahrzeugePunkte_Nets[:])
+            print('FahrzeugePunkte_Nets :'+str((self.FahrzeugePunkte_Nets)))
             self.event_Erneuen_TreeWidget(self.treeView_Fahrzeug, parameter.Fahrzeuge_Nets)
 
         # erneue die pygame Inhalt in frame_Strasse
+        self.erneuen_Potenzielle_Fahrbahn_Nets()
         self.erneuen_Frame_Fahrzeug()
 
     def on_pushButton_Losen_Fahrzeug_triggered(self):
@@ -215,7 +226,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
 
                 x = event.pos().x() - self.drawingBoardWidget_Fahrzeug.pos().x() - 20
                 y = event.pos().y() - self.drawingBoardWidget_Fahrzeug.pos().y() - 20 - 21 - 21
-                possible_Points = self.drawingBoard_Fahrzeug.getNearestPointWithinXY( x, y, 40)
+                possible_Points = self.drawingBoard_Fahrzeug.getNearestPointWithinXY( x, y, 15 ,parameter.Potenzielle_Fahrbahn_Nets)
                 print(possible_Points)
                 if possible_Points != None:
                     # if self.possible_Punkt != None:
@@ -226,7 +237,8 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                     for i in range(len(self.FahrzeugePunkte_Nets)):
                         self.drawingBoard_Fahrzeug.drawPoint(self.FahrzeugePunkte_Nets[i][0],
                                                              self.FahrzeugePunkte_Nets[i][1], colour)
-                    # pygame.display.flip();
+                    # pygame.display.flip();# Zeichnen die Potenzielle Fahrbahn an der Strasse
+                    self.zeichnen_Potenzielle_Fahrbahn_Nets()
                     self.erneuen_Frame_Fahrzeug()
                 else:
                     self.possible_Punkt = None
@@ -245,7 +257,6 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                     print("FahrzeugePunkte_Nets : %r" % self.FahrzeugePunkte_Nets)
 
                     # Erneuen die TreeWidget
-                    # TODO: Die TreeWidget brauchen noch bearbeitet wird.
                     colour = self.type_Farbe_List[self.comboBox_Fahrzeug.currentIndex()]
                     if (self.Klick_Time_Fahrzeug == 1):
                         for i in range(len(self.FahrzeugePunkte_Nets)):
@@ -303,19 +314,8 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                         self.drawingBoard_Strasse.drawStrasse(Polygon_Punkte)
                         self.statusBar.showMessage('Draw Strasse.')
 
-                    # #Erneuen die TreeWidget
-                    # #TODO: Die TreeWidget brauchen noch bearbeitet wird.
-                    # if (self.Klick_Time_Strasse == 1):
-                    #     root = QtWidgets.QTreeWidgetItem(self.treeView_Strasse)
-                    #     root.setText(0, 'Strasse')
-                    #     root.setText(1, str([drawX,drawY]))
-                    #     root.setSelected(True)
-                    # else:
-                    #     child1 = QtWidgets.QTreeWidgetItem(self.treeView_Strasse)
-                    #     child1.setText(0, 'Point %d'%self.Klick_Time_Strasse)
-                    #     child1.setText(1, str([drawX,drawY]))
-
             # erneue die pygame Inhalt in frame_Strasse
+            self.erneuen_Potenzielle_Fahrbahn_Nets()
             self.erneuen_Frame_Strasse()
 
         ########################################################
@@ -323,6 +323,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         ########################################################
         elif self.tabWidget.currentWidget()==self.tab_Fahrzeug:
             print('Heutige Tab ist tab_Fahrzeug')
+            self.event_Erneuen_Strassen(parameter.Strassen_Nets)
 
             # wenn wir Fahrzeug plazieren wollen
             if self.pushButton_Add_Fahrzeug.isChecked():
@@ -333,6 +334,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                     # print("Klick Time Fahrzeug is %d" % (self.Klick_Time_Fahrzeug))
 
             # erneue die pygame Inhalt in frame_Strasse
+            self.zeichnen_Potenzielle_Fahrbahn_Nets()
             self.erneuen_Frame_Fahrzeug()
 
 
@@ -343,6 +345,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
             self.drawingBoard_Simulation.surface.fill(BackGroundColor)
             self.event_Erneuen_Strassen(parameter.Strassen_Nets)
             print('Heutige Tab ist tab_Simulation')
+            self.statusBar.showMessage('Simulation.')
 
     def event_STOP_Simulation(self):
         parameter.Flag_STOP = True
@@ -356,8 +359,8 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 root.setText(0, 'Strasse %d' %(i+1))
             elif treeView == self.treeView_Fahrzeug:
                 root.setText(0, 'Fahrzeug %d' %(i+1))
-            #root.setText(1, str(Daten[i][j]))
-            #root.setSelected(True)
+            root.setText(1, str(Daten[i][0]))
+
             for j in range(len(Daten[i])-1):
                 child1 = QtWidgets.QTreeWidgetItem(root)#self.treeView_Fahrzeug)
                 child1.setText(0, 'Point %d' % (j+1))
@@ -368,7 +371,6 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         self.drawingBoard_Simulation.surface.fill(BackGroundColor)
         # print(Strass_Nets)
         for i in range(len(Strass_Nets)):
-            # #TODO Die neue Strassen kann nicht in Strassen_Nets gespeichert werden
             Points = list(Strass_Nets[i][1:len(Strass_Nets[i])])
             # print(Points)
             # print(len(Strass_Nets))
@@ -376,17 +378,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
             Bereite = int(Strass_Nets[i][0])
             Polygon_Punkte = self.Polygon_Punkte(points=Points, bereite=Bereite)
             self.drawingBoard_Simulation.drawStrasse(Polygon_Punkte)
-
-        for i in range(len(parameter.Potenzielle_Fahrbahn_Nets)):
-            x = []
-            y = []
-            if len(parameter.Potenzielle_Fahrbahn_Nets[i]) != 0:
-                for j in range(len(parameter.Potenzielle_Fahrbahn_Nets[i])):
-                    x.append(parameter.Potenzielle_Fahrbahn_Nets[i][j][0])
-                    y.append(parameter.Potenzielle_Fahrbahn_Nets[i][j][1])
-                self.drawingBoard_Fahrzeug.drawKurve(x, y, blue)
-
-        print(self.suchen_Standard_Punkte());
+        # print(self.suchen_Standard_Punkte());
 
     def event_Erneuen_Fahrzeugen(self,time):
 
@@ -405,20 +397,101 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 Points = [[parameter.Fahrbahn_Nets[i][time-1][0],parameter.Fahrbahn_Nets[i][time-1][1]],[drawX,drawY]]
             Richtung = self.Richtung(Points)+180
             self.drawingBoard_Simulation.drawFahrzeug(parameter.Fahrzeuge_Nets[i][0],drawX, drawY, Richtung, 20)
-        self.statusBar.showMessage('Simulation.')
+
         print((parameter.Fahrzeuge_Nets))
         print(len(parameter.Fahrzeuge_Nets),len(parameter.Fahrbahn_Nets))
 
         print(parameter.Strassen_Nets)
         # zeichnen die Schnittpunkte der Strasse
         Schnittpunkte = self.suchen_Kreuzung(parameter.Strassen_Nets)
-        for i in range(len(Schnittpunkte)):
-            self.drawingBoard_Fahrzeug.drawPoint(int(Schnittpunkte[i][2][0]), int(Schnittpunkte[i][2][1]), red)
+        # for i in range(len(Schnittpunkte)):
+        #     self.drawingBoard_Fahrzeug.drawPoint(int(Schnittpunkte[i][2][0]), int(Schnittpunkte[i][2][1]), red)
         print("***********************************")
         self.suchen_Punkte_Kreuzung(parameter.Strassen_Nets,Schnittpunkte)
         print("***********************************")
         # erneue die pygame Inhalt in frame_Simulation
         self.erneuen_Frame_Simulation()
+
+    def event_Erneuen_Strassen_Bereite(self):
+        temp = int(self.lineEdit_Str_Bereite.text())
+        item = self.treeView_Strasse.currentItem()
+        if item != None:
+            if item.text(0)[0] == 'S':
+                num = int(item.text(0)[-1]) - 1
+                parameter.Strassen_Nets[num][0] = temp
+            else:
+                self.statusBar.showMessage('Bitte Wählen Sie die Strasse statt Punkt.')
+
+        self.event_Erneuen_TreeWidget(self.treeView_Strasse, parameter.Strassen_Nets)
+        self.event_Erneuen_Strassen(parameter.Strassen_Nets)
+        self.erneuen_Frame_Strasse()
+
+    def event_Erneuen_Strassen_Nets(self):
+        temp = self.lineEdit_Str_Punkte.text()
+        item = self.treeView_Strasse.currentItem()
+
+        if item != None:
+            print(type(temp),temp)
+            print(item.text(1))
+            if item.text(0)[0] == 'S':
+                if int(temp) < 250 and int(temp)>=20:
+                    num = int(item.text(0)[-1]) - 1
+                    parameter.Strassen_Nets[num][0] = int(temp)
+                else:
+                    self.statusBar.showMessage('Bitte Wählen eine geeignete Breite der Strasse.(250>Bereite>0)')
+            elif item.text(0)[0] == 'P':
+                if len(temp) != 0:
+                    for i in range(len(temp)):
+                        if temp[i] == ',':
+                            temp = [int(temp[1:i]), int(temp[i + 1:-1])]
+                            print(temp)
+                            break;
+
+                    for i in range(len(parameter.Strassen_Nets)):
+                        for j in range(len(parameter.Strassen_Nets[i])):
+                            if item.text(1) == str(parameter.Strassen_Nets[i][j]):
+                                print(i,j)
+                                parameter.Strassen_Nets[i][j] = temp
+        else:
+            self.statusBar.showMessage('Bitte Wählen Sie ein Element in TreeWidget.')
+
+
+        self.event_Erneuen_TreeWidget(self.treeView_Strasse, parameter.Strassen_Nets)
+        self.event_Erneuen_Strassen(parameter.Strassen_Nets)
+        self.erneuen_Frame_Strasse()
+
+    def event_Erneuen_Fahrzeuge_Nets(self):
+        temp = self.lineEdit_Fahrzeug_Punkte.text()
+        item = self.treeView_Fahrzeug.currentItem()
+
+        if item != None:
+            print(type(temp),temp)
+            print(item.text(1))
+            if item.text(0)[0] == 'F':
+                if int(temp)>=0 and int(temp)<=7:
+                    num = int(item.text(0)[-1]) - 1
+                    parameter.Fahrzeuge_Nets[num][0] = int(temp)
+                else:
+                    self.statusBar.showMessage('Bitte Wählen Sie die richtige Fahzeug Type.(0-7)')
+            elif item.text(0)[0] == 'P':
+                if len(temp) != 0:
+                    for i in range(len(temp)):
+                        if temp[i] == ',':
+                            temp = [int(temp[1:i]), int(temp[i + 1:-1])]
+                            print(temp)
+                            break;
+
+                    for i in range(len(parameter.Fahrzeuge_Nets)):
+                        for j in range(len(parameter.Fahrzeuge_Nets[i])):
+                            if item.text(1) == str(parameter.Fahrzeuge_Nets[i][j]):
+                                print(i,j)
+                                parameter.Fahrzeuge_Nets[i][j] = temp
+        else:
+            self.statusBar.showMessage('Bitte Wählen Sie ein Element in TreeWidget.')
+
+        self.event_Erneuen_TreeWidget(self.treeView_Fahrzeug, parameter.Fahrzeuge_Nets)
+        self.event_Erneuen_Fahrzeugen(1)
+        self.erneuen_Frame_Fahrzeug()
 
     # def simulation_Animation(self):
     #     # print(max(len(parameter.Fahrbahn_Nets[0]),len(parameter.Fahrbahn_Nets[1])))
@@ -462,7 +535,6 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
     #
     #         self.drawingBoard_Simulation.fill(BackGroundColor)
     #         for j in range(len(parameter.Strassen_Nets)):
-    #             # #TODO Die neue Strassen kann nicht in Strassen_Nets gespeichert werden
     #             Points = list(parameter.Strassen_Nets[j][1:len(parameter.Strassen_Nets[j])])
     #             Bereite = int(parameter.Strassen_Nets[j][0])
     #             Polygon_Punkte = self.Polygon_Punkte(points=Points, bereite=Bereite)
@@ -497,48 +569,98 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
     def event_Daten_Speichern_Strassen(self):
         file_speichern_Strassen()
         self.statusBar.showMessage('Strassen Daten werden gespeichert.')
+        print(parameter.Strassen_Nets)
 
     def event_Daten_Speichern_Fahrzeugen(self):
         file_speichern_Fahrzeug()
         self.statusBar.showMessage('Fahrzeug Daten werden gespeichert.')
+        print(parameter.Fahrzeuge_Nets)
 
     def event_Daten_Load_Strassen(self):
-        file_load_Strassen()
-        self.statusBar.showMessage('Fahrzeug Daten werden geladen.')
+        File = self.lineEdit_Str_Doku_Simulation.text()
+        file_load_Strassen(File)
+        self.statusBar.showMessage('Strassen Daten werden geladen.')
 
     def event_Daten_Load_Fahrzeugen(self):
-        file_load_Fahrzeug()
+        #TODO: Noch Problem wenn Fahrzeug Laden.
+        File = self.lineEdit_FZ_Doku_Simulation.text()
+        file_load_Fahrzeug(File)
         self.statusBar.showMessage('Fahrzeug Daten werden geladen.')
         print(parameter.Fahrbahn_Nets)
         print(len(parameter.Fahrbahn_Nets))
 
     def event_Button_Losen_Strasse(self):
-        #TODO: Wie kann ein Item in TreeWidget lösen?
-        print(self.treeView_Strasse.currentItem())
+        item = self.treeView_Strasse.currentItem()
+        if item != None:
+            if item.text(0)[0] == 'S':
+                num = item.text(0)[-1]
+                del(parameter.Strassen_Nets[int(num)-1])
+            elif item.text(0)[0] == 'P':
+                self.statusBar.showMessage('Bitte Wählen Sie die Strasse statt Punkt.')
+                # for i in range(len(parameter.Strassen_Nets)):
+                #     for j in range(len(parameter.Strassen_Nets[i])):
+                #         if item.text(1) == str(parameter.Strassen_Nets[i][j]):
+                #             print(i,j)
+                #             print(parameter.Strassen_Nets[i][j])
+                #             print(parameter.Strassen_Nets)
+                #             if len(parameter.Strassen_Nets[i])<=3:
+                #                 del(parameter.Strassen_Nets[i])
+                #                 # parameter.Strassen_Nets.remove(parameter.Strassen_Nets[i])
+                #             else:
+                #                 del(parameter.Strassen_Nets[i])
+                #                 # parameter.Strassen_Nets[i].remove(parameter.Strassen_Nets[i][j])
+                #                 # del (parameter.Strassen_Nets[i][j])
+        self.event_Erneuen_TreeWidget(self.treeView_Strasse,parameter.Strassen_Nets)
+        self.event_Erneuen_Strassen(parameter.Strassen_Nets)
+        self.erneuen_Potenzielle_Fahrbahn_Nets()
+        self.erneuen_Frame_Strasse()
         #self.treeView_Strasse.removeItemWidget(self.treeView_Strasse.currentItem(),1)
 
     def event_Button_Losen_Fahrzeug(self):
-        print("abc")
+        item = self.treeView_Fahrzeug.currentItem()
+        print(item.text)
+        if item != None:
+            if item.text(0)[0] == 'F':
+                num = item.text(0)[-1]
+                del(parameter.Fahrzeuge_Nets[int(num)-1])
+            elif item.text(0)[0] == 'P':
+                self.statusBar.showMessage('Bitte Wählen Sie die Fahrzeug statt Punkt.')
+                # for i in range(len(parameter.Fahrzeuge_Nets)):
+                #     for j in range(len(parameter.Fahrzeuge_Nets[i])):
+                #         if item.text(1) == str(parameter.Fahrzeuge_Nets[i][j]):
+                #             print(i,j)
+                #             print(parameter.Fahrzeuge_Nets)
+                #             if len(parameter.Fahrzeuge_Nets[i])<=3:
+                #                 parameter.Fahrzeuge_Nets.remove(parameter.Fahrzeuge_Nets[i])
+                #             else:
+                #                 parameter.Fahrzeuge_Nets[i].remove(parameter.Fahrzeuge_Nets[i][j])
+        # print(parameter.Fahrzeuge_Nets)
+        self.event_Erneuen_TreeWidget(self.treeView_Fahrzeug ,parameter.Fahrzeuge_Nets)
+        self.event_Erneuen_Strassen(parameter.Strassen_Nets)
+        self.erneuen_Frame_Fahrzeug()
 
     def event_treeWidget_Strasse(self):
-        #TODO: Die Punkte Daten brauchen mit ENTER erneuen
         item = self.treeView_Strasse.currentItem()
-        # print(item.text(0),item.text(1))
         self.lineEdit_Str_Punkte.setText(item.text(1))
-        #TODO: Die TreeWidget brauchen noch bearbeitet wird.
-        #root = QtWidgets.QTreeWidgetItem(self.treeView_Strasse)
-        #root.setText(1, '[123,123]')
-        #self.treeView_Strasse.currentItemChanged(root)
 
     def event_treeWidget_Fahrzeug(self):
-        #TODO: Die Punkte Daten brauchen mit ENTER erneuen
         item = self.treeView_Fahrzeug.currentItem()
-        # print(item.text(0),item.text(1))
         self.lineEdit_Fahrzeug_Punkte.setText(item.text(1))
-        #TODO: Die TreeWidget brauchen noch bearbeitet wird.
-        #root = QtWidgets.QTreeWidgetItem(self.treeView_Fahrzeug)
-        #root.setText(1, '[123,123]')
-        #self.treeView_Strasse.currentItemChanged(root)
+
+        self.erneuen_Frame_Fahrzeug()
+        if item.text(0)[0] == 'F':
+            num = int(item.text(0)[-1]) - 1
+            # zeichnen die Kurve
+            x = []
+            y = []
+            points = parameter.Fahrbahn_Nets[num]
+            for i in range(len(points)):
+                x.append(points[i][0])
+                y.append(points[i][1])
+            colour = self.type_Farbe_List[self.comboBox_Fahrzeug.currentIndex()]
+            self.drawingBoard_Fahrzeug.drawKurve(x, y, colour)
+
+        self.erneuen_Frame_Fahrzeug()
 
     def erneuen_Frame_Strasse(self):
         # erneue die pygame Inhalt in frame_Strasse
@@ -655,6 +777,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 # self.drawingBoard_Strasse.drawPoint(int(x), int(y), yellow)
                 Strassen_Standard_Punkte[i][j]=[0]
                 Strassen_Standard_Punkte[i][j][0] = [int(x), int(y)]
+
             # Add die Endpunkt in die List
             points = [Strass_Nets[i][-2],Strass_Nets[i][-1]]
             points = self.Grenz_Punkte(points,Strass_Nets[i][0])
@@ -667,6 +790,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
         #     print(Strassen_Standard_Punkte)
         # print("=================================")
         # Standard Punkte finden
+        self.Schnitt_Standard_Punkte = [[[] for k in range(int(parameter.Strassen_Nets[l][0]/20))] for l in range(len(parameter.Strassen_Nets))]
         for i in range(len(Schnitt_Punkte)):
             # Suchen die Anzahl der Standard Punkte beides Strassen an eine Kreuzung
             num_Punkte_1 = int(Strass_Nets[Schnitt_Punkte[i][0][0]][0]/20)
@@ -708,7 +832,7 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
             #     self.drawingBoard_Strasse.drawPoint(int(grenz_Punkte1[0][k][0]), int(grenz_Punkte1[0][k][1]), yellow)
 
             standard_Punkte = [[[[0 for i in range(2)]for j in range(2)] for k in range(max(num_Punkte_1,num_Punkte_2))] for l in range(2)]
-            # TODO: BUG! Mehr Standard Punkte in Wendepunkt
+
             for j in range(num_Punkte_1):
             # Die StandardPunkte an der 1. Strasse
                 # Die 1. Punkt an der 1. Strasse
@@ -717,15 +841,19 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 # self.drawingBoard_Strasse.drawPoint(int(x), int(y), purpur)
                 standard_Punkte[0][j][0] = [x,y]
                 # print([x,y])
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].insert(-2,[int(x),int(y)])
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].insert(-2,[int(Schnitt_Punkte[i][2][0]),int(Schnitt_Punkte[i][2][1])])
+                # Add die linke Punkt der Schnittpunkt in der List
+                Strassen_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].insert(-1,[int(x),int(y)])
+                # Add die Schnittpunkt in der List
+                self.Schnitt_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].append([int(Schnitt_Punkte[i][2][0]),int(Schnitt_Punkte[i][2][1])])
+
                 # Die 2. Punkt an der 1. Strasse
                 x = schnittpunkt12[0] - (j+1)*(schnittpunkt12[0] - schnittpunkt22[0])/(num_Punkte_1+1)
                 y = schnittpunkt12[1] - (j+1)*(schnittpunkt12[1] - schnittpunkt22[1])/(num_Punkte_1+1)
                 # self.drawingBoard_Strasse.drawPoint(int(x), int(y), purpur)
                 standard_Punkte[0][j][1] = [x,y]
                 # print([x,y])
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].insert(-2,[int(x),int(y)])
+                # Add die rechte Punkt der Schnittpunkt in der List
+                Strassen_Standard_Punkte[Schnitt_Punkte[i][0][0]][j].insert(-1,[int(x),int(y)])
 
             for j in range(num_Punkte_2):
             # Die StandardPunkte an der 2. Strasse
@@ -733,40 +861,97 @@ class QTDesignWidget(QtWidgets.QMainWindow, Ui_MainWindow,math_Kurve,math_Strass
                 x = schnittpunkt11[0] - (j+1)*(schnittpunkt11[0] - schnittpunkt12[0])/(num_Punkte_2+1)
                 y = schnittpunkt11[1] - (j+1)*(schnittpunkt11[1] - schnittpunkt12[1])/(num_Punkte_2+1)
                 # self.drawingBoard_Strasse.drawPoint(int(x), int(y), purpur)
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].insert(-2,[int(x),int(y)])
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].insert(-2,[int(Schnitt_Punkte[i][2][0]),int(Schnitt_Punkte[i][2][1])])
+                # Add die linke Punkt der Schnittpunkt in der List
+                Strassen_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].insert(-1,[int(x),int(y)])
+                # Add die Schnittpunkt in der List
+                self.Schnitt_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].append([int(Schnitt_Punkte[i][2][0]),int(Schnitt_Punkte[i][2][1])])
                 standard_Punkte[1][j][0] = [x,y]
                 # print([x,y])
-                # Die 1. Punkt an der 2. Strasse
+
+                # Die 2. Punkt an der 2. Strasse
                 x = schnittpunkt21[0] - (j+1)*(schnittpunkt21[0] - schnittpunkt22[0])/(num_Punkte_2+1)
                 y = schnittpunkt21[1] - (j+1)*(schnittpunkt21[1] - schnittpunkt22[1])/(num_Punkte_2+1)
                 # self.drawingBoard_Strasse.drawPoint(int(x), int(y), purpur)
-                Strassen_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].insert(-2,[int(x),int(y)])
+                # Add die rechte Punkt der Schnittpunkt in der List
+                Strassen_Standard_Punkte[Schnitt_Punkte[i][1][0]][j].insert(-1,[int(x),int(y)])
                 standard_Punkte[1][j][1] = [x,y]
-        #         print([x,y])
-        #     print(standard_Punkte)
-        #     print(Strassen_Standard_Punkte)
-        #     print('--------------------------------')
-        # print("==================================")
+        # Schnitt_Standard_Punkte speichert alle SchnittPunkte an jedes Fahrbahn
+        print("Schnitt_Standard_Punkte sind %r"%self.Schnitt_Standard_Punkte)
+        #TODO: Die Reihnfolge ist falsch
+        temp_list = [[[] for j in range(len(parameter.Strassen_Nets[i])-2)] for i in range(len(parameter.Strassen_Nets))]
+        for i in range(len(self.Schnitt_Standard_Punkte)):
+        # Anzahl der Strassen
+            for j in range(len(self.Schnitt_Standard_Punkte[i][0])):
+            # Anzahl der Schnittpunkte an eine Strasse
+                # prufen die SchnittPunkt an welche Strasse
+                x = self.Schnitt_Standard_Punkte[i][0][j][0]
+                y = self.Schnitt_Standard_Punkte[i][0][j][1]
+                for k in range(len(parameter.Strassen_Nets[i])-2):
+                # Anzahl der GeradeLinie an eine Strasse
+                    x_1 = parameter.Strassen_Nets[i][k+1][0]
+                    y_1 = parameter.Strassen_Nets[i][k+1][1]
+                    x_2 = parameter.Strassen_Nets[i][k+2][0]
+                    y_2 = parameter.Strassen_Nets[i][k+2][1]
+                    print(i,j,k)
+                    print([x,y],[x_1,y_1],[x_2,y_2])
+                    if min(x_1,x_2)<=x<=max(x_1,x_2) and min(y_1,y_2)<=y<=max(y_1,y_2):
+                        if y == y_1 or y==y_2:
+                            temp = abs((x-x_1)*(y_2-y) - (x_2-x)*(y-y_1))
+                        else:
+                            temp = abs((x - x_1) / (y - y_1) - (x_2 - x) / (y_2 - y))
+                        print("temp ist %r"%temp)
+                        if temp == 0:
+                            temp_list[i][k].append([x,y])
+                            print("temp_list is %r"%temp_list)
+        print("temp_list ist %r"%temp_list)
+
 
         # Zeichnen die StandardPunkte bestimmter Bahn in bestimmten Strasse
+        # print("==================================")
         # print(Strassen_Standard_Punkte)
-        for i in range(len(Strassen_Standard_Punkte)):
-            for j in range(len(Strassen_Standard_Punkte[i])):
-                for k in range(len(Strassen_Standard_Punkte[i][j])):
-                    x = Strassen_Standard_Punkte[i][j][k][0]
-                    y = Strassen_Standard_Punkte[i][j][k][1]
-                    self.drawingBoard_Strasse.drawPoint((x), (y), purpur)
+        # print("==================================")
+        # for i in range(1):#range(len(Strassen_Standard_Punkte)):
+        #     for j in range(1):#range(len(Strassen_Standard_Punkte[i])):
+        #         print("==================================")
+        #         print(Strassen_Standard_Punkte[i][j])
+        #         print("==================================")
+        #         for k in range(len(Strassen_Standard_Punkte[i][j])):
+        #             x = Strassen_Standard_Punkte[i][j][k][0]
+        #             y = Strassen_Standard_Punkte[i][j][k][1]
+        #             self.drawingBoard_Strasse.drawPoint((x), (y), purpur)
 
         return  Strassen_Standard_Punkte
 
     def suchen_Standard_Punkte(self):
         # zeichnen die Schnittpunkte der Strasse
         Schnittpunkte = self.suchen_Kreuzung(parameter.Strassen_Nets)
-        for i in range(len(Schnittpunkte)):
-            self.drawingBoard_Fahrzeug.drawPoint(int(Schnittpunkte[i][2][0]), int(Schnittpunkte[i][2][1]), red)
+        # for i in range(len(Schnittpunkte)):
+        #     self.drawingBoard_Fahrzeug.drawPoint(int(Schnittpunkte[i][2][0]), int(Schnittpunkte[i][2][1]), red)
+        # geben die Standartpunkte zuruck
         return self.suchen_Punkte_Kreuzung(parameter.Strassen_Nets, Schnittpunkte)
 
+    def erneuen_Potenzielle_Fahrbahn_Nets(self):
+        parameter.Potenzielle_Fahrbahn_Nets = [[0 for i in range(int((parameter.Strassen_Nets[j][0]) / 20))] for j in
+                                     range(len(parameter.Strassen_Nets))]
+        standard_punkte = self.suchen_Standard_Punkte()
+        for i in range(len(standard_punkte)):
+            for j in range(len(standard_punkte[i])):
+                route_n = Route(standard_punkte[i][j],width=parameter.Strassen_Nets[i][0], accur = 4)
+                parameter.Potenzielle_Fahrbahn_Nets[i][j] = route_n.routepoints
+
+        # Zeichnen die Potenzielle Fahrbahn an der Strasse
+        self.zeichnen_Potenzielle_Fahrbahn_Nets()
+
+    def zeichnen_Potenzielle_Fahrbahn_Nets(self):
+        for i in range(len(parameter.Potenzielle_Fahrbahn_Nets)):
+            x = []
+            y = []
+            for i in range(len(parameter.Potenzielle_Fahrbahn_Nets)):
+                for j in range(len(parameter.Potenzielle_Fahrbahn_Nets[i])):
+                    for k in range(len(parameter.Potenzielle_Fahrbahn_Nets[i][j])):
+                        x.append(parameter.Potenzielle_Fahrbahn_Nets[i][j][k][0])
+                        y.append(parameter.Potenzielle_Fahrbahn_Nets[i][j][k][1])
+                    self.drawingBoard_Fahrzeug.drawKurve(x, y, dunkel_gray)
 
     def Fahrbahn_Verarbeiten(self,Fahrbahn_Net):
     # Jedes Fahrbahn in die List haben die gleiche Lange
@@ -822,7 +1007,7 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
         """
         pygame.transform.scale(self.surface, (width, height))
 
-    def getNearestPointWithinXY(self,x,y,abstandMax):
+    def getNearestPointWithinXY(self,x,y,abstandMax,streetPoints):
         """
         Gibt den nächsten Punkt auf der Karte zurück sollange dieser im Abstand von radiusMax liegt
         :param x: X Kordinaten
@@ -831,25 +1016,28 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
         :return: den nächsten Punkt
         """
         #was ein abfuck, diese Funktion ist super blöd aber ich habe keine Zeit mehr
-        #TODO : Diese Funktion schön machen
         possiblePoints=[]
         for k in range(0,abstandMax):
-            for j in range(len(self.streetPoints)):
-                for streetPoint in self.streetPoints[j]:
-                    if streetPoint[0]+k == x:
-                        possiblePoints.append(streetPoint) #möglich Lösung gefunden
-                    if streetPoint[0] - k == x:
-                        possiblePoints.append(streetPoint) #möglich Lösung gefunden
+            for j in range(len(streetPoints)):
+                for n in range(len(streetPoints[j])):
+                    for streetPoint in streetPoints[j][n]:
+                        # print("streetPoint is %r"%streetPoint)
+                        streetPoint = [int(streetPoint[0]),int(streetPoint[1])]
+                        if streetPoint[0]+k == int(x):
+                            possiblePoints.append(streetPoint) #möglich Lösung gefunden
+                        if streetPoint[0] - k == int(x):
+                            possiblePoints.append(streetPoint) #möglich Lösung gefunden
 
         for k in range(0, abstandMax):
-            for j in range(len(self.streetPoints)):
-                for streetPoint in possiblePoints:
-                    if streetPoint[1] + k == y:
-                        print("StreetPoint is %r"%streetPoint)
-                        return streetPoint
-                    if streetPoint[1] - k == y:
-                        print("StreetPoint is %r"%streetPoint)
-                        return streetPoint # lösung
+            for j in range(len(streetPoints)):
+                for n in range(len(streetPoints[j])):
+                    for streetPoint in possiblePoints:
+                        if streetPoint[1] + k == int(y):
+                            # print("StreetPoint is %r"%streetPoint)
+                            return streetPoint
+                        if streetPoint[1] - k == int(y):
+                            # print("StreetPoint is %r"%streetPoint)
+                            return streetPoint # lösung
 
         return None # wenn wir nix finden haben wir keine Lösung
 
@@ -874,7 +1062,6 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
             :param2 (int) : Y Kordinate auf der Map (Pixel)
         """
         #Soweit ich das sehe gibt es keine Möglichkeit den Punkt zu löschen, daher übermalen wir Ihn
-        #TODO Prüfen ob man Zeichnungen enfernen kann oder übermalen muss
         pygame.draw.circle(self.surface , (25,235,25), (x, y), 3) #crapy fix but who cares
 
     def drawKurve(self, x, y,colour):
@@ -926,6 +1113,9 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
         # Timer
         clock = pygame.time.Clock()
         refresh_rate = 100
+        print(parameter.Fahrzeuge_Nets)
+        print(parameter.Fahrbahn_Nets)
+        print(len(parameter.Fahrbahn_Nets),len(parameter.Fahrzeuge_Nets))
 
         for i in range(len(parameter.Fahrbahn_Nets[0]) - 10):
 
@@ -947,19 +1137,20 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
                     elif event.key == pygame.K_l:
                         print("K_1")
             state = pygame.key.get_pressed()
-
             self.surface.fill(BackGroundColor)
+
+            # Draw Strasse
             for j in range(len(parameter.Strassen_Nets)):
-                # #TODO Die neue Strassen kann nicht in Strassen_Nets gespeichert werden
                 Points = list(parameter.Strassen_Nets[j][1:len(parameter.Strassen_Nets[j])])
                 Bereite = int(parameter.Strassen_Nets[j][0])
                 Polygon_Punkte = self.Polygon_Punkte(points=Points, bereite=Bereite)
                 self.drawStrasse(Polygon_Punkte)
 
+            # Draw Fahrzeugen
             for j in range(len(parameter.Fahrbahn_Nets)):
                 # Die Fahrbahn_Nets speichern alle Positions-Punkte alles Fahrzeugen durch die ganze Simulation
-                drawX = parameter.Fahrbahn_Nets[j][i][0]
-                drawY = parameter.Fahrbahn_Nets[j][i][1]
+                drawX = (parameter.Fahrbahn_Nets[j][i][0])
+                drawY = (parameter.Fahrbahn_Nets[j][i][1])
                 if i < (len(parameter.Fahrbahn_Nets[j]) - 1):
                     Points = [[drawX, drawY],
                               [parameter.Fahrbahn_Nets[j][i + 1][0], parameter.Fahrbahn_Nets[j][i + 1][1]]]
@@ -969,9 +1160,6 @@ class PyGameDrawingBoard(math_Kurve,math_Strasse,Ui_MainWindow):
                 Richtung = self.Richtung(Points) + 180
                 self.drawFahrzeug(parameter.Fahrzeuge_Nets[j][0], drawX, drawY, Richtung, 20)
 
-            # self.drawFahrzeug(parameter.Fahrzeuge_Nets[0][0], parameter.Fahrbahn_Nets[0][j][0], parameter.Fahrbahn_Nets[0][j][1], 0, 20)
-            # print("************************")
-            # print(pygame.display.get_surface())
             # Update screen (Actually draw the picture in the window.)
             pygame.display.flip()
 

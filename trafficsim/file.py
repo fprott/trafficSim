@@ -1,13 +1,18 @@
 import linecache
 import parameter
+# from gui_neu import QTDesignWidget
+#
+# gui = QTDesignWidget
 
-def file_load_Strassen():
-    File = "Sim_Daten_Strassen.csv"
+def file_load_Strassen(File):
+    #File = gui.lineEdit_Str_Doku_Simulation.text()#"Sim_Daten_Strassen.csv"
+    if len(File) == 0 :
+        File = "Sim_Daten_Strassen.csv"
     file = open(File,"r")
     list = []
 
     for i in range(1, len(file.readlines()) + 1):
-        line = linecache.getline("Sim_Daten_Strassen.csv", i).split(',')
+        line = linecache.getline(File, i).split(',')
         print(line)
         list.append(line)
 
@@ -20,17 +25,17 @@ def file_load_Strassen():
             parameter.Strassen_Nets[num_Strassen].append(
                 [int(list[2 * num_Strassen][num_Punkte + 1]), int(list[2 * num_Strassen + 1][num_Punkte + 1])])
     print(parameter.Strassen_Nets)
-
     file.close();
 
-def file_load_Fahrzeug():
-    File = "Sim_Daten_Fahrzeug.csv"
+def file_load_Fahrzeug(File):
+    if len(File) == 0:
+        File = "Sim_Daten_Fahrzeug.csv"
     file = open(File,"r")
     list = []
     splitLine = [-1]
 
     for i in range(1, len(file.readlines()) + 1):
-        line = linecache.getline("Sim_Daten_Fahrzeug.csv", i).split(',')
+        line = linecache.getline(File, i).split(',')
         print(line)
         list.append(line)
 
@@ -58,7 +63,6 @@ def file_load_Fahrzeug():
             parameter.Fahrbahn_Nets[num_Fahrbahn].append([float(list[2 * num_Fahrbahn + splitLine[1] + 1][num_Punkte]),
                                                           float(list[2 * num_Fahrbahn + splitLine[1] + 2][num_Punkte])])
     print(len(parameter.Fahrbahn_Nets))
-
     file.close();
 
 def file_speichern_Strassen():
@@ -83,7 +87,6 @@ def file_speichern_Strassen():
         # print(inhalt_y)
 
     file.writelines("\n")
-
     file.close()
 
 
@@ -116,9 +119,9 @@ def file_speichern_Fahrzeug():
         inhalt_x = str()
         inhalt_y = str()
 
-        for num_Punkte in range(0, (len(parameter.Fahrbahn_Nets[num_Fahrzeuge]))):
-            inhalt_x = inhalt_x + str(parameter.Fahrbahn_Nets[num_Fahrzeuge][num_Punkte][0]).rstrip("\n") + ","
-            inhalt_y = inhalt_y + str(parameter.Fahrbahn_Nets[num_Fahrzeuge][num_Punkte][1]).rstrip("\n") + ","
+        for num_Punkte in range(0, (len(parameter.Fahrbahn_Nets[num_Fahrbahn]))):
+            inhalt_x = inhalt_x + str(parameter.Fahrbahn_Nets[num_Fahrbahn][num_Punkte][0]).rstrip("\n") + ","
+            inhalt_y = inhalt_y + str(parameter.Fahrbahn_Nets[num_Fahrbahn][num_Punkte][1]).rstrip("\n") + ","
 
         file.writelines(inhalt_x + "\n")
         file.writelines(inhalt_y + "\n")
@@ -126,8 +129,8 @@ def file_speichern_Fahrzeug():
         print(inhalt_y)
 
     file.writelines("\n")
-
     file.close()
 
-# if __name__ == '__main__':
-#     file_speichern()
+if __name__ == '__main__':
+    File = "Sim_Daten_Fahrzeug.csv"
+    file_load_Fahrzeug(File)

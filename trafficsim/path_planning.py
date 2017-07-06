@@ -377,36 +377,20 @@ class Path():
         startNode = Node(self.start,self.street,self.direction)
         stack.append(startNode.positon)
         self.set_visited(startNode.positon)
-        #print(stack)
 
         while stack != []:
-            #print(stack)
             pos = stack[len(stack)-1]  #get the latest node in STACK
             node = Node(pos,self.street,self.direction)
-            #print("node:")
-            #print(node.positon)
-            #print(ans)
             if node.positon == (self.end + [1]):
-                #return stack
-                #print("find an answer:")
-                #print(stack)
                 path = tuple(stack)
                 #此处stack堆栈不能直接保存
                 ans = ans + [path]
                 e = stack.pop()
-                #print(ans)
                 self.set_visited(e)
             else:
-                #print("node position")
-                #print(node.positon)
                 n = node.positon
                 child = self.get_unvisited_child(n,stack) # list_remove_list(node.get_lower_node(),visited)
-                #print("child")
-                #print(child)
-                #print("stack")
-                #print(stack)
-                #print("street")
-                #print(self.street)
+
                 if child == []:
                     e = stack.pop()
                     self.set_visited(e)
@@ -425,12 +409,8 @@ class Path():
                 else:
                     child_node = Node(child,self.street,self.direction)
                     stack.append(child_node.positon)
-                    #print("child node position")
-                    #print(child_node.positon)
                     p = child_node.positon
                     self.set_visited(p)
-                    #print(self.street)
-                    #self.set_visited([250,250])
                     node.set_visited()
 
         return ans
