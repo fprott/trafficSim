@@ -2,7 +2,6 @@ from mathe import *
 from route import *
 from random import randint
 
-
 class Car:
     """Car Klasse. Diese Klasse bietet die Grundlage aller Auto Objekte und soll nach möglichkeit geerbt werden"""
     def __init__(self, id, strecke, a_max, a_min, v_max, v_min, v, a, car_size, pos, route):
@@ -21,6 +20,13 @@ class Car:
         self.size = car_size
 
         self.route = route # nur ein POINTER auf Route, da Listen nicht deep-copy werden
+
+    def is_equal(self, other_car):
+        if self.id == other_car.id and self.a_min == other_car.a_min and self.a_max == other_car.a_max and self.v_min == other_car.v_min and self.v_max == other_car.v_max \
+            and self.strecke == other_car.strecke and self.a == other_car.a and self.v == other_car.v and self.pos == other_car.pos \
+            and self.size.width == other_car.size.width and self.size.length == other_car.size.length:
+            return True
+        return False
 
     def _set_v(self, new_v):
         if (new_v <= self.v_max):
@@ -100,13 +106,10 @@ class Car:
         """Kollision über Separating Axis Theorem ist exact aber langsam und funktioniert noch nicht richtig :D"""
         return 0
 
-    def get_next_car(self, dt, da):
-
-
-
+    def get_next_car(self, dt, a):
     #    new_pos = calculate_pos(self.pos, dt, self.v) # wir erechnen die neue Position
         #new_a = self.get_a_by_da(da)
-        new_a = da
+        new_a = a
         if self.v >= self.v_max and new_a > 0:
             new_a=0
         if self.v <= self.v_min and new_a < 0:
@@ -114,11 +117,11 @@ class Car:
 
         new_strecke = self.strecke+self.v*dt+new_a*dt*dt*0.5
         new_pos = self.route.get_new_pos_without_position_change(new_strecke) #errechnet nur neue position
-        new_v = self.v + da * dt  # wir erechnen die neue geschwindigkeit
+        new_v = self.v + new_a * dt  # wir erechnen die neue geschwindigkeit
 
         if new_v > self.v_max:
             new_v = self.v_max
-        if new_v < -self.v_min:
+        if new_v < self.v_min:
             new_v = self.v_min
         return Car(self.id, new_strecke,self.a_max, self.a_min, self.v_max,self.v_min, new_v, new_a, self.size, new_pos, self.route) #make the next car
 
@@ -155,19 +158,6 @@ class Car:
         Ry = self.pos.y + (Ox * math.sin(angle)) + (Oy * math.cos(angle))
         back_right = Point(Rx,Ry)
         return [forward_left,forward_right, back_left, back_right]
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def __str__(self):  # TODO mehr Werte
         return ("ID: "+str(self.id) + " current pos: "+str(self.pos)+" a: " + str(self.a)+" v: "+ str(self.v))
@@ -308,12 +298,12 @@ class CarSize():
         return self.length
 
 
-#myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(500.0,0.0)]), 2)
-#car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, 0.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
-#car_step1 = car_step0.get_next_car(1,60)
-#print(car_step1.v)
-#print(car_step1.strecke)
-#car_step1.v
-#car_step2 = car_step1.get_next_car(1,-60)
-#print(car_step2.v)
-#print(car_step2.strecke)
+# myRoute = Route(Route.castPointsToWangNotation([Point(0.0,0.0),Point(500.0,0.0)]), 2)
+# car_step0 = Car("test_1", 0.0, 60.0, -60.0, 200.0, -200.0, 0.0, 0.0, CarSize(10,0), myRoute.get_current_pos(), myRoute)
+# car_step1 = car_step0.get_next_car(1,60)
+# print(car_step1.v)
+# print(car_step1.strecke)
+# car_step1.v
+# car_step2 = car_step1.get_next_car(1,-60)
+# print(car_step2.v)
+# print(car_step2.strecke)
