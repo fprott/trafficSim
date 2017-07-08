@@ -160,7 +160,9 @@ class Senario():
                 cost = float('inf')
                 return cost
             for car in self.cars:
-                cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
+             #   cost+=1/(car.a+0.00001) # sehr simpler Algo der angepasst werden sollte
+                a_angepast = car.a - car.a_min + 0.00001 # wir wollen möglichst schnell fahren d.h. wir rechnen die negativen werte raus und somiren dann, + 0.00001 dammit das nie null wird
+                cost += 1/a_angepast
             return cost
 
         if(self.quality_function==QualityFunction.LEVI):

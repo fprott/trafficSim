@@ -5,7 +5,7 @@ import unittest
 class SchroedingerTest(unittest.TestCase):
 
     # Beispiel für einen Test
-    def test_no_crash_no_problem(self):
+    def dtest_no_crash_no_problem(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(100.0, 100.0)]), 2)
         myCar = Car("test_1", 0.0, 80.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
 
@@ -21,7 +21,7 @@ class SchroedingerTest(unittest.TestCase):
             for car in zp.cars:
                 self.assertEqual(car.a, car.a_max)
 
-    def test_one_crash_easy(self):
+    def dtest_one_crash_easy(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(1000.0, 1000.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 1000.0), Point(1000.0, 0.0)]), 2)
         myCar = Car("test_1", 0.0, 80.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
@@ -44,7 +44,7 @@ class SchroedingerTest(unittest.TestCase):
 
     #    self.assertEqual()
 
-    def test_crash_unavoidable(self):
+    def dtest_crash_unavoidable(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(100.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0, 0.0), Point(0.0, 0.0)]), 2)
         myCar = Car("test_1", 0.0, 80.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
@@ -62,7 +62,7 @@ class SchroedingerTest(unittest.TestCase):
             exeption = True
         self.assertTrue(exeption)
 
-    def test_long_cut_crash(self):
+    def dtest_long_cut_crash(self):
         # die route sollte einen sehr lange schnitfäche haben, außerdem sind die autos 4 x 4
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 25.0), Point(1000.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(1000.0, 50.0)]), 2)
@@ -77,7 +77,7 @@ class SchroedingerTest(unittest.TestCase):
         self.assertEqual(len(sc.possible_solutions),2)
         self.assertIsNotNone(solution)
 
-    def test_nearly_two_crashs(self):
+    def dtest_nearly_two_crashs(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(500.0, 500.0), Point(1000.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 500.0), Point(500.0, 0.0), Point(1000.0, 500.0)]), 2)
         myCar = Car("test_1", 0.0, 50.0, -50.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute.get_current_pos(), myRoute)
@@ -101,7 +101,7 @@ class SchroedingerTest(unittest.TestCase):
         # wenn man nur so fährt braucht man minimale zeit, ich denke wir sind nicht viel langsamer
         self.assertAlmostEqual(solution.get_costs(),best_solutions.get_costs(), delta=0.2) # der abstand zwischen den beiden ist maximal 0.2 sec pro crash
 
-    def test_two_crashs(self):
+    def dtest_two_crashs(self):
         # 1 crash
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(500.0, 500.0), Point(1000.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 500.0), Point(500.0, 0.0), Point(1000.0, 1000.0)]), 2)
@@ -125,7 +125,7 @@ class SchroedingerTest(unittest.TestCase):
         self.assertEqual(len(sc.possible_solutions), 4)
         self.assertIsNotNone(solutions)
 
-    def test_two_crashs_same_time(self):
+    def dtest_two_crashs_same_time(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(1000.0, 1000.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 1000.0), Point(1000.0, 0.0)]), 2)
         myRoute3 = Route(Route.castPointsToWangNotation([Point(0.0, 500.0), Point(1000.0, 500.0)]), 2)
@@ -153,6 +153,42 @@ class SchroedingerTest(unittest.TestCase):
 
     # def lotsa_cars(self):
 
+
+    # da wir alle möglichkeiten durchgehen wird das hier lange daueren. genaugenommen ist dieser Fall, mit dem crash_unavoidable der worst case was rechenzeit angeht.
+    def test_two_cars_behind_each_other(self):
+        # 2 cars
+        myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(300.0, 0.0)]), 2)
+        myRoute2 = Route(Route.castPointsToWangNotation([Point(50.0, 0.0), Point(350.0, 0.0)]), 2)
+        myCar = Car("test_1", 0.0, 80.0, -50.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
+        myCar2 = Car("test_2", 0.0, 50.0, -50.0, 90.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute2.get_current_pos(), myRoute2)
+        myCars = []
+        myCars.append(myCar)
+        myCars.append(myCar2)
+        sc = SchroedingersCrash(Zeitpunkt(0, myCars, None, 0.03))
+        sc.do_the_schroedinger()
+        best_solution = sc.get_best_solution()
+
+        self.assertIsNotNone(best_solution)
+        # wir erwarten dass das erste auto immer maximal fährt, zweite muss bremsen
+        self.assertIsNotNone(best_solution)
+        for zp in best_solution.zeitpunkte:
+            for car in zp.cars:
+                if car.id == "test_2":
+            #    print(car.a)
+                    self.assertEqual(car.a, car.a_max)
+            #print("------")
+        # # wir erwarten dass das erste auto immer maximal fährt, zweite muss bremsen
+        # # wir wissen aber nicht ob das im besten senario der Fall ist da mehere Senarios gleich schnell sein kann DENN
+        # # die Senarios werden durch das hintere auto limitiert d.h. es ist ein senario denkbar wo das erste auto bremst ohne das zweite zu beinflussen
+        # one_true = False
+        # for solution in sc.possible_solutions:
+        #     all_true = True
+        #     for zp in solution.zeitpunkte:
+        #         for car in zp.cars:
+        #             if car.id == "test_2":
+        #                 all_true = all_true and (car.a==car.a_max)
+        #     one_true = one_true or all_true
+        # self.assertTrue(one_true)
 if __name__ == "__main__":
     unittest.main()
 

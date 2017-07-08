@@ -35,6 +35,23 @@ class SchroedingersCrash():
         myScenario.build_self_with_max_a(start_zeitpunkt)
         self.scenarios.append(myScenario)
 
+    def get_best_solution_by_a(self):
+        best_cost = float('inf')
+        best_solution = None
+        cost = 0
+        for solution in self.possible_solutions:
+            for zp in solution.zeitpunkte:
+                for car in zp.cars:
+                    cost += 1/(car.a+0.001)
+
+            if best_cost > cost:
+                best_cost = cost
+                best_solution = solution
+
+        if best_solution == None:
+            raise NosolutionAvailableError("Schrödinger's Crash findet keine Lösungen. Bitte Eingabe überprüfen!")
+        return best_solution
+
     def get_best_solution(self):
         best_cost = float('inf')
         best_solution = None
@@ -120,10 +137,12 @@ class SchroedingersCrash():
         # print(zeitpunkt)
         # for zp in scenario.zeitpunkte:
         #     print(zp.parent)
-        if zeitpunkt == None:
+        if zeitpunkt is None:
             return False
         while zeitpunkt.time>brake_time:
             zeitpunkt = zeitpunkt.parent
+            if zeitpunkt is None:
+                return False
         #bau das ding neu auf
      #   print("geht")
         return scenario.rebuild_self_with_brake(zeitpunkt, crash_zeitpunkt, car_to_brake)
@@ -156,6 +175,7 @@ class Scenario():
         if len(self.zeitpunkte) != len(otherScenario.zeitpunkte):
             return False
 
+        i=0
         while i< len(self.zeitpunkte):
             zp_self = self.zeitpunkte[i]
             zp_other = otherScenario.zeitpunkte[i]
@@ -174,7 +194,8 @@ class Scenario():
                 car_other = zp_other.cars[j]
                 if not car_self.is_equal(car_other):
                     return False
-
+                j+=1
+            i+=1
         return True
 
     def build_self_with_max_a(self, start_zeitpunkt):

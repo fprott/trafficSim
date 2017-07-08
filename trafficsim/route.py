@@ -9,7 +9,7 @@ from mathe import *
 
 from parameter import *
 # Wangs Klasse wurde hierher verschoben !
-
+# getested, geht halbwegs XD
 
 #UPDATE 25/06/2017
 #get_next_pos input a negative Length
