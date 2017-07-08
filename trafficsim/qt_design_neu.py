@@ -50,7 +50,6 @@ class Ui_MainWindow(object):
         self.pushButton_Losen_Strasse = QtWidgets.QPushButton(self.tab_Strasse)
         self.pushButton_Losen_Strasse.setGeometry(QtCore.QRect(620, 10, 80, 23))
         self.pushButton_Losen_Strasse.setObjectName("pushButton_Losen_Strasse")
-        self.pushButton_Losen_Strasse.setCheckable(True)
 
         self.lineEdit_Str_Bereite = QtWidgets.QLineEdit(self.tab_Strasse)
         self.lineEdit_Str_Bereite.setGeometry(QtCore.QRect(720, 10, 30, 23))
@@ -65,24 +64,6 @@ class Ui_MainWindow(object):
         self.treeView_Strasse.setObjectName("treeView_Strasse")
         self.treeView_Strasse.setColumnCount(2)
         self.treeView_Strasse.setHeaderLabels(["Strasse","Points"])
-
-        root = QtWidgets.QTreeWidgetItem(self.treeView_Strasse)
-        root.setText(0, 'root')
-        root.setSelected(True)
-        child1 = QtWidgets.QTreeWidgetItem(root)
-        child1.setText(0, 'child1')
-        child1.setText(1, 'name1')
-        child2 = QtWidgets.QTreeWidgetItem(root)
-        child2.setText(0, 'child2')
-        child2.setText(1, 'name2')
-        child3 = QtWidgets.QTreeWidgetItem(root)
-        child3.setText(0, 'child3')
-        child4 = QtWidgets.QTreeWidgetItem(child3)
-        child4.setText(0, 'child4')
-        child4.setText(1, 'name4')
-        self.treeView_Strasse.setCurrentItem(root)
-        print(self.treeView_Strasse.selectedItems())
-        #self.treeView_Strasse.removeItemWidget(self.treeView_Strasse.takeTopLevelItem(2))#self.treeView_Strasse.selectedItems())
 
         self.pushButton_Speichen_Strasse = QtWidgets.QPushButton(self.tab_Strasse)
         self.pushButton_Speichen_Strasse.setGeometry(QtCore.QRect(520, 490, 75, 23))
@@ -157,6 +138,7 @@ class Ui_MainWindow(object):
         self.lineEdit_Str_Doku_Simulation = QtWidgets.QLineEdit(self.tab_Simulation)
         self.lineEdit_Str_Doku_Simulation.setGeometry(QtCore.QRect(520, 30, 201, 20))
         self.lineEdit_Str_Doku_Simulation.setObjectName("lineEdit_Str_Doku_Simulation")
+        self.lineEdit_Str_Doku_Simulation.setText("Sim_Daten_Strassen.csv")
 
         self.label_Str_Doku_Simulation = QtWidgets.QLabel(self.tab_Simulation)
         self.label_Str_Doku_Simulation.setGeometry(QtCore.QRect(520, 10, 101, 16))
@@ -165,6 +147,7 @@ class Ui_MainWindow(object):
         self.lineEdit_FZ_Doku_Simulation = QtWidgets.QLineEdit(self.tab_Simulation)
         self.lineEdit_FZ_Doku_Simulation.setGeometry(QtCore.QRect(520, 70, 201, 20))
         self.lineEdit_FZ_Doku_Simulation.setObjectName("lineEdit_FZ_Doku_Simulation")
+        self.lineEdit_FZ_Doku_Simulation.setText("Sim_Daten_Fahrzeug.csv")
 
         self.label_FZ_Doku_Simulation = QtWidgets.QLabel(self.tab_Simulation)
         self.label_FZ_Doku_Simulation.setGeometry(QtCore.QRect(520, 50, 111, 16))
@@ -173,6 +156,7 @@ class Ui_MainWindow(object):
         self.toolButton_Str_Doku_Simulation = QtWidgets.QToolButton(self.tab_Simulation)
         self.toolButton_Str_Doku_Simulation.setGeometry(QtCore.QRect(730, 30, 25, 19))
         self.toolButton_Str_Doku_Simulation.setObjectName("toolButton_Str_Doku_Simulation")
+
         self.toolButton_FZ_Doku_Simulation = QtWidgets.QToolButton(self.tab_Simulation)
         self.toolButton_FZ_Doku_Simulation.setGeometry(QtCore.QRect(730, 70, 25, 19))
         self.toolButton_FZ_Doku_Simulation.setObjectName("toolButton_FZ_Doku_Simulation")
@@ -190,13 +174,16 @@ class Ui_MainWindow(object):
         self.pushButton_Start_Simulation = QtWidgets.QPushButton(self.tab_Simulation)
         self.pushButton_Start_Simulation.setGeometry(QtCore.QRect(580, 490, 75, 23))
         self.pushButton_Start_Simulation.setObjectName("pushButton_Start_Simulation")
+        # self.pushButton_Start_Simulation.setCheckable(True)
+
         self.pushButton_Stop_Simulation = QtWidgets.QPushButton(self.tab_Simulation)
         self.pushButton_Stop_Simulation.setGeometry(QtCore.QRect(670, 490, 75, 23))
         self.pushButton_Stop_Simulation.setObjectName("pushButton_Stop_Simulation")
 
-        self.listWidget_Simulation = QtWidgets.QListWidget(self.tab_Simulation)
+        self.listWidget_Simulation = QtWidgets.QPlainTextEdit(self.tab_Simulation)
         self.listWidget_Simulation.setGeometry(QtCore.QRect(520, 140, 231, 341))
         self.listWidget_Simulation.setObjectName("listWidget_Simulation")
+        # self.listWidget_Simulation.setPlaceholderText("Test Simulation")
         self.tabWidget.addTab(self.tab_Simulation, "")
 
         #MainWindow

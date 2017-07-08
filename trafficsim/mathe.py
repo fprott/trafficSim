@@ -20,6 +20,42 @@ def calculate_pos(old_pos, dt, v):
     """
     return old_pos+((v*dt),(v*dt)) # FIXME das braucht noch ne richtungsvektor !!!
 
+
+
+def calculate_length(list):
+
+    x = [p[0] for p in list]
+    y = [p[1] for p in list]
+    d = sum(((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2) ** 0.5 for i in (range(len(x) - 1)))
+
+    return d
+
+
+
+def list_remove_list(a,b):
+# remove the elements of list b from list a
+
+    if b == []:
+        return a
+    else:
+        for i in range(len(b)):
+            a.remove(b[i])
+
+    return a
+
+
+
+def list_and_list(a,b):
+# find the same elements in list a and b
+
+    l = []
+    for i in range(len(b)):
+        for j in range(len(a)):
+            if b[i] == a[j]:
+                l.append(b[i])
+
+    return l
+
 #Die funktionierien und sind frei nutzbar!!!
 class Line(list):
     """
@@ -75,7 +111,7 @@ class math_Kurve():
 
          return (f(n) / (f(n - i) * f(i))) * (t ** (n - i)) * (1 - t) ** i
 
-     def Bezier_Kurve(self,points=object, nTimes: object = 1001) ->object: #Based on car class, the exact number of curves is object-1!!!!!!!!
+     def Bezier_Kurve(self,points=object, nTimes: object = 250) ->object: #Based on car class, the exact number of curves is object-1!!!!!!!!
          """
             Given a set of control points, return the
             bezier curve defined by the control points.
@@ -154,7 +190,7 @@ class math_Strasse():
              y = a2 / b2 * x + c2 / b2
          elif(a1 == 0) and (b2 == 0):
              x = ((b2 * c1) / (a2 * b1) - c2 / a2) / (1 - (a1 * b2) / (a2 * b1))
-             y = a1 / b1 * x + c1 / b1
+             y = -(a1 / b1 * x + c1 / b1)
          elif(b2 == 0):
              x = ((b2 * c1) / (a2 * b1) - c2 / a2) / (1 - (a1 * b2) / (a2 * b1))
              y = -a1 / b1 * x - c1 / b1
@@ -170,7 +206,7 @@ class math_Strasse():
          #rechnen die Rand Punkte jeder gerade Strasse
          grenz_punkte=np.zeros(shape=((len(points)-1),4,2))
          for i in range(len(points)-1):
-             richtung = self.Richtung(self=self,points=[points[i],points[i+1]])
+             richtung = self.Richtung(points=[points[i],points[i+1]])
              grenz_punkte[i][0][0] = points[i][0]-(breite/2)*math.cos(np.radians(richtung))  # Ober Links_x
              grenz_punkte[i][0][1] = points[i][1]+(breite/2)*math.sin(np.radians(richtung))  # Ober Links_y
              grenz_punkte[i][1][0] = points[i][0]+(breite/2)*math.cos(np.radians(richtung))  # Unten Links_x
@@ -185,12 +221,12 @@ class math_Strasse():
          #verbinden jeder Strasse
          schnittspunkte=np.zeros(shape=(len(points)-1,2,2))
          for i in range(len(points)-1):
-             line_11 = self.line_function(self=self,points=[points[i][0],points[i][2]])
-             line_21 = self.line_function(self=self,points=[points[i+1][0],points[i+1][2]])
-             schnittspunkte[i][0] = self.Schnittspunkte(self=self,linie_1=line_11,linie_2=line_21)
-             line_12 = self.line_function(self=self,points=[points[i][1],points[i][3]])
-             line_22 = self.line_function(self=self,points=[points[i+1][1],points[i+1][3]])
-             schnittspunkte[i][1] = self.Schnittspunkte(self=self,linie_1=line_12,linie_2=line_22)
+             line_11 = self.line_function(points=[points[i][0],points[i][2]])
+             line_21 = self.line_function(points=[points[i+1][0],points[i+1][2]])
+             schnittspunkte[i][0] = self.Schnittspunkte(linie_1=line_11,linie_2=line_21)
+             line_12 = self.line_function(points=[points[i][1],points[i][3]])
+             line_22 = self.line_function(points=[points[i+1][1],points[i+1][3]])
+             schnittspunkte[i][1] = self.Schnittspunkte(linie_1=line_12,linie_2=line_22)
 
          grenz_punkte = np.zeros(shape=(2*len(points)+2,2))
          k = 0
@@ -209,8 +245,8 @@ class math_Strasse():
 
      def Polygon_Punkte(self,points,bereite):
          #als die Eingabe der Polygon Zeichnung
-         grenz_punkte = self.Grenz_Punkte(self=self,points=points,breite=bereite)
-         return self.Grenz_Punkte_Strasse(self=self,points=grenz_punkte)
+         grenz_punkte = self.Grenz_Punkte(points=points,breite=bereite)
+         return self.Grenz_Punkte_Strasse(points=grenz_punkte)
 
 #class Polygon():
 #    def main_strasse(self):
