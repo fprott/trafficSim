@@ -4,7 +4,7 @@ import unittest
 
 class ASternTest(unittest.TestCase):
 
-    def test_no_crash_no_problem(self):
+    def dtest_no_crash_no_problem(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(100.0, 100.0)]), 2)
         myCar = Car("test_1", 0.0, 80.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
 
@@ -19,7 +19,7 @@ class ASternTest(unittest.TestCase):
             for car in node.cars:
                 self.assertEqual(car.a, car.a_max)
 
-    def test_one_crash_easy(self):
+    def dtest_one_crash_easy(self):
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(1000.0, 1000.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(0.0, 1000.0), Point(1000.0, 0.0)]), 2)
         myCar = Car("test_1", 0.0, 80.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 2), myRoute.get_current_pos(), myRoute)
@@ -50,7 +50,7 @@ class ASternTest(unittest.TestCase):
     # ACHTUNG: es ist nicht empfehlenswert diesen Test mit weniger als 16 GB Ram auszuführen !
     # JEDER einzelne Knoten muss durchgegangen werden. Das sind Millionen
     # Kleine Anmerkung, der Test ist super um kappute Speicherbereiche zu finden ;D
-    def test_crash_unavoidable(self): #this will and must take forever :D
+    def dtest_crash_unavoidable(self): #this will and must take forever :D
         myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(100.0, 0.0)]), 2)
         myRoute2 = Route(Route.castPointsToWangNotation([Point(100.0, 0.0), Point(0.0, 0.0)]), 2)
         myCar = Car("test_1", 0.0, 50.0, -60.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute.get_current_pos(), myRoute)
@@ -159,6 +159,27 @@ class ASternTest(unittest.TestCase):
     #     self.assertAlmostEqual(solution.get_costs(),best_solutions.get_costs(), delta=0.4) # der abstand zwischen den beiden ist maximal 0.1 sec pro crash
 
     # def lotsa_cars(self):
+    def test_two_cars_behind_each_other(self):
+        # 2 caers
+        myRoute = Route(Route.castPointsToWangNotation([Point(0.0, 0.0), Point(300.0, 0.0)]), 2)
+        myRoute2 = Route(Route.castPointsToWangNotation([Point(50.0, 0.0), Point(350.0, 0.0)]), 2)
+        myCar = Car("test_1", 0.0, 80.0, -50.0, 120.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute.get_current_pos(),
+                    myRoute)
+        myCar2 = Car("test_2", 0.0, 50.0, -50.0, 90.0, 0.0, 0.0, 0.0, CarSize(4, 4), myRoute2.get_current_pos(),
+                     myRoute2)
+        myCars = []
+        myCars.append(myCar)
+        myCars.append(myCar2)
+        mySenario = Senario(None, 0, myCars)
+        myGraph = Graph(mySenario)
+        best_solution = myGraph.calluclate_best_senarios()
+
+        # wir erwarten dass das erste auto immer maximal fährt, zweite muss bremsen
+        self.assertIsNotNone(best_solution)
+        for node in best_solution.nodes:
+            for car in node.cars:
+                if car.id == "test_2":
+                    self.assertEqual(car.a, car.a_max)
 
 if __name__ == "__main__":
     unittest.main()
