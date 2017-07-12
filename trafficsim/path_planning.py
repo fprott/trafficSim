@@ -4,12 +4,99 @@ import parameter
 
 
 
+def reorder_streets(strassennetz, schnittpunkte):
+    # ***********Beispiel************
+    """
+    Strassen_Nets = [
+        [20, [0, 250], [400, 250], [300, 480]],
+        [20, [250, 0], [250, 400], [50, 460]],
+        [40, [200, 1], [400, 490]]
+    ]
 
-class Graph():
-    """To generate a tree stucture"""
-    def __init__(self):
+    Schnitt_Punkte = [
+        [[0, 1], [0, 2], [400, 250]],
+        [[0, 1], [1, 1], [250, 250]],
+        [[0, 1], [2, 1], [301.8, 250]],
+        [[0, 2], [2, 1], [349.4, 366.3]],
+        [[1, 1], [1, 2], [250, 400]],
+        [[1, 1], [2, 1], [250, 123.25]]
+    ]
+    """
 
-        pass
+    ans = strassennetz
+    neu_schnitt_punkte = schnittpunkte
+
+    for i in range(len(schnittpunkte)):
+        info1 = schnittpunkte[i][0]
+        info2 = schnittpunkte[i][1]
+        pos = schnittpunkte[i][2]
+        neu_schnitt_punkte[i][0].append(strassennetz[info1[0]][info1[1]])
+        neu_schnitt_punkte[i][1].append(strassennetz[info2[0]][info2[1]])
+
+    print(neu_schnitt_punkte)
+
+    for i in range(len(schnittpunkte)):
+        info1 = schnittpunkte[i][0]
+        info2 = schnittpunkte[i][1]
+        point = schnittpunkte[i][2]
+
+        #print("schnittpunkt",point)
+
+        if info1[0] == info2[0]:
+            pass
+        else:
+            for j in range(1,len(ans[info1[0]])):
+                k = j
+                if ans[info1[0]][j] == info1[2]:
+                    if j == len(ans[info1[0]])-1:
+                        ans[info1[0]].insert(j + 1, point)
+                    else:
+                        streetpoint = ans[info1[0]][j]
+                        #print(ans[info1[0]][j+1])
+                        lp = calculate_length([streetpoint,point])
+                        lx = calculate_length([streetpoint,ans[info1[0]][j]])
+                        #print("lp1",lp)
+                        #print("lx1",lx)
+                        while lx < lp:
+                            #print("k", k)
+                            #print("len", len(ans[info2[0]]))
+                            if k == len(ans[info1[0]]):
+                                ans[info1[0]].insert(k + 1, point)
+                                break
+                            else:
+                                k = k+1
+                                lx = calculate_length([streetpoint, ans[info1[0]][k]])
+                                #print("lp", lp)
+                                #print("lx", lx)
+                        ans[info1[0]].insert(k,point)
+
+            for j in range(1, len(ans[info2[0]])):
+                k = j
+                if ans[info2[0]][j] == info2[2]:
+                    if j == len(ans[info2[0]]) - 1:
+                        ans[info2[0]].insert(j + 1, point)
+                    else:
+                        streetpoint = ans[info2[0]][j]
+                        lp = calculate_length([streetpoint, point])
+                        lx = calculate_length([streetpoint, ans[info2[0]][j]])
+                        #print("lp1", lp)
+                        #print("lx1", lx)
+                        while lx < lp:
+                            #print("k",k)
+                            #print("len",len(ans[info2[0]]))
+                            if k == len(ans[info2[0]]):
+                                ans[info2[0]].insert(k + 1, point)
+                                break
+                            else:
+                                k = k + 1
+                                lx = calculate_length([streetpoint, ans[info2[0]][k]])
+                                #print("lp", lp)
+                                #print("lx", lx)
+                        #print("k",k)
+                        ans[info2[0]].insert(k, point)
+        #print(ans)
+
+    return ans
 
 
 
