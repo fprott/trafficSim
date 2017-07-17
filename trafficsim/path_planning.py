@@ -1,102 +1,10 @@
 from mathe import *
 import math
-import parameter
+#import parameter
 
 
 
-def reorder_streets(strassennetz, schnittpunkte):
-    # ***********Beispiel************
-    """
-    Strassen_Nets = [
-        [20, [0, 250], [400, 250], [300, 480]],
-        [20, [250, 0], [250, 400], [50, 460]],
-        [40, [200, 1], [400, 490]]
-    ]
 
-    Schnitt_Punkte = [
-        [[0, 1], [0, 2], [400, 250]],
-        [[0, 1], [1, 1], [250, 250]],
-        [[0, 1], [2, 1], [301.8, 250]],
-        [[0, 2], [2, 1], [349.4, 366.3]],
-        [[1, 1], [1, 2], [250, 400]],
-        [[1, 1], [2, 1], [250, 123.25]]
-    ]
-    """
-
-    ans = strassennetz
-    neu_schnitt_punkte = schnittpunkte
-
-    for i in range(len(schnittpunkte)):
-        info1 = schnittpunkte[i][0]
-        info2 = schnittpunkte[i][1]
-        pos = schnittpunkte[i][2]
-        neu_schnitt_punkte[i][0].append(strassennetz[info1[0]][info1[1]])
-        neu_schnitt_punkte[i][1].append(strassennetz[info2[0]][info2[1]])
-
-    print(neu_schnitt_punkte)
-
-    for i in range(len(schnittpunkte)):
-        info1 = schnittpunkte[i][0]
-        info2 = schnittpunkte[i][1]
-        point = schnittpunkte[i][2]
-
-        #print("schnittpunkt",point)
-
-        if info1[0] == info2[0]:
-            pass
-        else:
-            for j in range(1,len(ans[info1[0]])):
-                k = j
-                if ans[info1[0]][j] == info1[2]:
-                    if j == len(ans[info1[0]])-1:
-                        ans[info1[0]].insert(j + 1, point)
-                    else:
-                        streetpoint = ans[info1[0]][j]
-                        #print(ans[info1[0]][j+1])
-                        lp = calculate_length([streetpoint,point])
-                        lx = calculate_length([streetpoint,ans[info1[0]][j]])
-                        #print("lp1",lp)
-                        #print("lx1",lx)
-                        while lx < lp:
-                            #print("k", k)
-                            #print("len", len(ans[info2[0]]))
-                            if k == len(ans[info1[0]]):
-                                ans[info1[0]].insert(k + 1, point)
-                                break
-                            else:
-                                k = k+1
-                                lx = calculate_length([streetpoint, ans[info1[0]][k]])
-                                #print("lp", lp)
-                                #print("lx", lx)
-                        ans[info1[0]].insert(k,point)
-
-            for j in range(1, len(ans[info2[0]])):
-                k = j
-                if ans[info2[0]][j] == info2[2]:
-                    if j == len(ans[info2[0]]) - 1:
-                        ans[info2[0]].insert(j + 1, point)
-                    else:
-                        streetpoint = ans[info2[0]][j]
-                        lp = calculate_length([streetpoint, point])
-                        lx = calculate_length([streetpoint, ans[info2[0]][j]])
-                        #print("lp1", lp)
-                        #print("lx1", lx)
-                        while lx < lp:
-                            #print("k",k)
-                            #print("len",len(ans[info2[0]]))
-                            if k == len(ans[info2[0]]):
-                                ans[info2[0]].insert(k + 1, point)
-                                break
-                            else:
-                                k = k + 1
-                                lx = calculate_length([streetpoint, ans[info2[0]][k]])
-                                #print("lp", lp)
-                                #print("lx", lx)
-                        #print("k",k)
-                        ans[info2[0]].insert(k, point)
-        #print(ans)
-
-    return ans
 
 
 
@@ -161,13 +69,92 @@ class Node():
 
 
 class Path():
-    def __init__(self,start,end,street):
-        """start/end=[x,y]"""
+    def __init__(self,start,end,Strassen_Nets,Schnitt_Punkte):
+        # All parameters to define a CLASS PATH are given from GUI, example as above*********************
+        """
+        Strassen_Nets = [
+            [20, [0, 250], [400, 250], [300, 480]],
+            [20, [250, 0], [250, 400], [50, 460]],
+            [40, [200, 1], [400, 490]]
+        ]
+
+        Schnitt_Punkte = [
+            [[0, 1], [0, 2], [400, 250]],
+            [[0, 1], [1, 1], [250, 250]],
+            [[0, 1], [2, 1], [301.8, 250]],
+            [[0, 2], [2, 1], [349.4, 366.3]],
+            [[1, 1], [1, 2], [250, 400]],
+            [[1, 1], [2, 1], [250, 123.25]]
+        ]
+        Startpunkt = [0, 250]
+        Endpunkt = [300, 480]
+        """
+
         self.start = start
         self.end = end
-        self.street = street
+        self.street = self.reorder_streets(Strassen_Nets,Schnitt_Punkte)
         self.direction = self.get_direction()
         pass
+
+    def reorder_streets(self, strassennetz, schnittpunkte):
+
+        ans = strassennetz
+        neu_schnitt_punkte = schnittpunkte
+
+        for i in range(len(neu_schnitt_punkte)):
+            info1 = neu_schnitt_punkte[i][0]
+            info2 = neu_schnitt_punkte[i][1]
+            pos = neu_schnitt_punkte[i][2]
+            neu_schnitt_punkte[i][0].append(strassennetz[info1[0]][info1[1]])
+            neu_schnitt_punkte[i][1].append(strassennetz[info2[0]][info2[1]])
+
+        for i in range(len(neu_schnitt_punkte)):
+            info1 = neu_schnitt_punkte[i][0]
+            info2 = neu_schnitt_punkte[i][1]
+            point = neu_schnitt_punkte[i][2]
+
+            if info1[0] == info2[0]:
+                pass
+            else:
+                for j in range(1, len(ans[info1[0]])):
+                    k = j
+
+                    if ans[info1[0]][j] == info1[2]:
+                        if j == len(ans[info1[0]]) - 1:
+                            ans[info1[0]].insert(j + 1, point)
+                        else:
+                            streetpoint = ans[info1[0]][j]
+                            lp = calculate_length([streetpoint, point])
+                            lx = calculate_length([streetpoint, ans[info1[0]][j]])
+                            while lx < lp:
+                                if k == len(ans[info1[0]]):
+                                    ans[info1[0]].insert(k + 1, point)
+                                    break
+                                else:
+                                    k = k + 1
+                                    lx = calculate_length([streetpoint, ans[info1[0]][k]])
+
+                            ans[info1[0]].insert(k, point)
+
+                for j in range(1, len(ans[info2[0]])):
+                    k = j
+                    if ans[info2[0]][j] == info2[2]:
+                        if j == len(ans[info2[0]]) - 1:
+                            ans[info2[0]].insert(j + 1, point)
+                        else:
+                            streetpoint = ans[info2[0]][j]
+                            lp = calculate_length([streetpoint, point])
+                            lx = calculate_length([streetpoint, ans[info2[0]][j]])
+                            while lx < lp:
+                                if k == len(ans[info2[0]]):
+                                    ans[info2[0]].insert(k + 1, point)
+                                    break
+                                else:
+                                    k = k + 1
+                                    lx = calculate_length([streetpoint, ans[info2[0]][k]])
+                            ans[info2[0]].insert(k, point)
+
+        return ans
 
     def get_direction(self):
         #TODO
@@ -211,15 +198,15 @@ class Path():
 
 
         Node1 = Node(pos,self.street,self.direction)
+        #print(Node1.positon)
+        #print(self.street)
         all_child = Node1.get_lower_node()
 
+        #print("allchild")
+        #print(self.street)
         #print(all_child)
 
         child_without_stack = list_remove_list(all_child,list_and_list(all_child,stack))
-
-        #print(list_and_list(all_child,stack))
-        #print("child without stack")
-        #print(child_without_stack)
 
         for i in range(len(child_without_stack)):
 
@@ -472,16 +459,26 @@ class Path():
                 path = tuple(stack)
                 #此处stack堆栈不能直接保存
                 ans = ans + [path]
+                #print("get ONE")
+                #print(path)
                 e = stack.pop()
                 self.set_visited(e)
             else:
                 n = node.positon
+                #print("node")
+                #print(n)
+                #print("stack")
+                #print(stack)
+
                 child = self.get_unvisited_child(n,stack) # list_remove_list(node.get_lower_node(),visited)
+                #print("child")
+                #print(child)
 
                 if child == []:
                     e = stack.pop()
                     self.set_visited(e)
                     self.clear_visited(e,stack)
+                    #print(stack)
                     """
                     # 删除visited里面所有e的child
                     last_node = Node(e, self.street, self.direction)
@@ -573,4 +570,27 @@ def depthFirstSearch( start, goal ):
             else:
                 child.setVisited()
                 stack.push( child )
+"""
+
+#****************Beispiel*************************
+"""
+if __name__ == "__main__":
+    Strassen_Nets = [
+        [20, [0, 250], [400, 250], [300, 480]],
+        [20, [250, 0], [250, 400], [50, 460]],
+        [40, [200, 1], [400, 490]]
+    ]
+
+    Schnitt_Punkte = [
+        [[0, 1], [0, 2], [400, 250]],
+        [[0, 1], [1, 1], [250, 250]],
+        [[0, 1], [2, 1], [301.8, 250]],
+        [[0, 2], [2, 1], [349.4, 366.3]],
+        [[1, 1], [1, 2], [250, 400]],
+        [[1, 1], [2, 1], [250, 123.25]]
+    ]
+
+    street = reorder_streets(Strassen_Nets,Schnitt_Punkte)
+    
+    print(street)
 """
