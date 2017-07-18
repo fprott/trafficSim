@@ -29,16 +29,25 @@ Startpunkt = [250,0]
 Endpunkt = [0,250]
 """
 
+#import copy
+#streets = copy.deepcopy(Strassen_Nets)
+#points = copy.deepcopy(Schnitt_Punkte)
+#print(streets)
+#print(points)
+
+
 from path_planning import *
-Path1 = Path(Startpunkt, Endpunkt, Strassen_Nets, Schnitt_Punkte)
+Path1 = Path(Startpunkt, Endpunkt, Strassen_Nets=Strassen_Nets, Schnitt_Punkte=Schnitt_Punkte)
 # All parameters to define a CLASS PATH are given from GUI, example as above*********************
 Strassen_Nets_mit_Schnitt_Punkte = Path1.street
 
 print(Strassen_Nets_mit_Schnitt_Punkte)
 print(Path1.get_path())
 
-#print(Strassen_Nets)
-#print(Schnitt_Punkte)
+print(Strassen_Nets)
+print(Schnitt_Punkte)
+#print(streets)
+#print(points)
 
 
 Fahrzeuge_Nets = [

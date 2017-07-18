@@ -89,17 +89,23 @@ class Path():
         Startpunkt = [0, 250]
         Endpunkt = [300, 480]
         """
+        import copy
 
         self.start = start
         self.end = end
-        self.street = self.reorder_streets(Strassen_Nets,Schnitt_Punkte)
+        self.SN = copy.deepcopy(Strassen_Nets)
+        self.SP = copy.deepcopy(Schnitt_Punkte)
+        self.street = self.reorder_streets(self.SN,self.SP)
         self.direction = self.get_direction()
         pass
 
-    def reorder_streets(self, strassennetz, schnittpunkte):
+    def reorder_streets(self, street, points):
 
-        ans = strassennetz
-        neu_schnitt_punkte = schnittpunkte
+        ans = street.copy()
+        neu_schnitt_punkte = points.copy()
+        strassennetz = street.copy()
+        schnittpunkte = points.copy()
+
 
         for i in range(len(neu_schnitt_punkte)):
             info1 = neu_schnitt_punkte[i][0]
